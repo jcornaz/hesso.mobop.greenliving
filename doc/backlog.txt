@@ -9,4 +9,4 @@ En tant qu'utilisateur je peux :
  - facilement savoir combien je peux me permettre de dépenser
  - comparer mon budget à mes dépenses réelles
  - voir des statistiques de dépenses (graphiques)
- - plannifier des transactions (dépenses et approvisionnement) qui s'executeront automatiquement mensuellement à un jour donné du mois
+ - planifier des transactions (dépenses et approvisionnement) qui s'executeront automatiquement mensuellement à un jour donné du mois
