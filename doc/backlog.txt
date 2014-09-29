@@ -10,3 +10,4 @@ En tant qu'utilisateur je peux :
  - comparer mon budget à mes dépenses réelles
  - voir des statistiques de dépenses (graphiques)
  - planifier des transactions (dépenses et approvisionnement) qui s'executeront automatiquement mensuellement à un jour donné du mois
+ - déplacer de l'argent allouée à une entrée de budget dans une autre entrée (transfert de budget exceptionnel)
