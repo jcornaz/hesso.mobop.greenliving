@@ -5,5 +5,6 @@ import java.util.Set;
 
 public class Budget {
 	private Set<BudgetEntry> entries = new HashSet<BudgetEntry>();
+
 	private int dayOfMonth;
 }
