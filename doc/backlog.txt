@@ -1,0 +1,13 @@
+Fonctionnalités (backlog)
+
+En tant qu'utilisateur je peux :
+ - définir un budget mensuel en définissant combien je touche et quel jour du mois
+ - créer / modifier / supprimer des "entrée de budget" en choisissant combien je souhaite dépenser au maximum
+ - facilement voir si j'ai budgeté plus ou moins d'argent que je n'en gagne
+ - enregistrer mes transactions (dépenses et approvisionnements)
+ - facilement savoir si je suis en train de dépasser mon budget
+ - facilement savoir combien je peux me permettre de dépenser
+ - comparer mon budget à mes dépenses réelles
+ - planifier des transactions (dépenses et approvisionnement) qui s'executeront mensuellement à un jour donné du mois
+ - planifier des transactions futures ponctuelles
+ - déplacer de l'argent alloué d'une entrée de budget dans une autre entrée (transfert de budget exceptionnel)
