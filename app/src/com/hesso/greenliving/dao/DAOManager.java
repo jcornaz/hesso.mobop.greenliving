@@ -3,7 +3,7 @@ package com.hesso.greenliving.dao;
 import com.hesso.greenliving.model.Budget;
 
 public final class DAOManager {
-	
+
 	private DAOManager() {
 	}
 
