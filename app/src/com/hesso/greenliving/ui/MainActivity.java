@@ -1,4 +1,9 @@
-package com.hesso.greenliving;
+package com.hesso.greenliving.ui;
+
+import com.hesso.greenliving.R;
+import com.hesso.greenliving.R.id;
+import com.hesso.greenliving.R.layout;
+import com.hesso.greenliving.R.menu;
 
 import android.app.Activity;
 import android.os.Bundle;
