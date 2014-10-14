@@ -10,4 +10,8 @@ public class BudgetEntry {
 	private double targetAmount;
 	private Set<ScheduledTransaction> scheduledTransactions = new HashSet<ScheduledTransaction>();
 	private List<Transaction> transactions = new LinkedList<Transaction>();
+
+	public CharSequence getName() {
+		return this.name;
+	}
 }
