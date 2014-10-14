@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name">GreenLiving</string>
+    <string name="budget_from">Budget from</string>
+    <string name="budget_to">Budget to</string>
+    <string name="amount">Amount</string>
+
+</resources>
