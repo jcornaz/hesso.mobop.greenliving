@@ -37,7 +37,7 @@ public class TransactioListAdapter extends ArrayAdapter<Transaction> {
 
 	@Override
 	public long getItemId(int position) {
-		return this.getItem(position).getID();
+		return this.getItem(position).getId();
 	}
 
 	@Override

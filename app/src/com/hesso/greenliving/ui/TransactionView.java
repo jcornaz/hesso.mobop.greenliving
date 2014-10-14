@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.BudgetEntry;
 import com.hesso.greenliving.model.Transaction;
+import com.hesso.greenliving.model.Transfert;
 
 public class TransactionView extends RelativeLayout {
 
@@ -42,11 +43,12 @@ public class TransactionView extends RelativeLayout {
 		this.amount.setText(DEC_FORMAT.format(this.transaction.getAmount()));
 		this.from.setText(this.transaction.getBudgetEntry().getName());
 
-		BudgetEntry to = this.transaction.getBudgetEntryDestination();
-		if (to != null) {
+		if (item instanceof Transfert) {
+			Transfert transfer = (Transfert) item;
 			this.to.setVisibility(View.VISIBLE);
-			;
-			this.to.setText(to.getName());
+			this.to.setText(transfer.getDestinationEntry().getName());
+		} else {
+			this.to.setVisibility(View.INVISIBLE);
 		}
 	}
 
