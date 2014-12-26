@@ -7,15 +7,12 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hesso.greenliving.R;
-import com.hesso.greenliving.model.BudgetEntry;
 import com.hesso.greenliving.model.Transaction;
-import com.hesso.greenliving.model.Transfert;
 
-public class TransactionView extends RelativeLayout {
+public class TransactionView extends View {
 
 	private static final DecimalFormat DEC_FORMAT = new DecimalFormat("#0.00");
 
@@ -41,12 +38,11 @@ public class TransactionView extends RelativeLayout {
 		this.transaction = item;
 
 		this.amount.setText(DEC_FORMAT.format(this.transaction.getAmount()));
-		this.from.setText(this.transaction.getBudgetEntry().getName());
+		this.from.setText(this.transaction.getSourceEntry().getName());
 
-		if (item instanceof Transfert) {
-			Transfert transfer = (Transfert) item;
+		if (item.isTransfert()) {
 			this.to.setVisibility(View.VISIBLE);
-			this.to.setText(transfer.getDestinationEntry().getName());
+			this.to.setText(item.getDestinationEntry().getName());
 		} else {
 			this.to.setVisibility(View.INVISIBLE);
 		}

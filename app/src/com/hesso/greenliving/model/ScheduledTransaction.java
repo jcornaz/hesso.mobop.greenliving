@@ -1,22 +1,51 @@
 package com.hesso.greenliving.model;
 
-public class ScheduledTransaction {
-	private int dayOfMonth;
-	private double amount;
+import java.math.BigDecimal;
 
-	public int getDayOfMonth() {
-		return dayOfMonth;
-	}
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-	public void setDayOfMonth(int dayOfMonth) {
-		this.dayOfMonth = dayOfMonth;
-	}
+@DatabaseTable (tableName = "scheduled_transactions" )
+public class ScheduledTransaction extends Entity {
 
-	public double getAmount() {
-		return amount;
-	}
+    private static final long serialVersionUID = 7070488132832129999L;
 
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
+    @DatabaseField (canBeNull = false, foreign = true )
+    private BudgetEntry entry;
+
+    @DatabaseField (canBeNull = false )
+    private int dayOfMonth;
+
+    @DatabaseField (canBeNull = false )
+    private BigDecimal amount;
+
+    public BudgetEntry getEntry() {
+	return entry;
+    }
+
+    public void setEntry( BudgetEntry entry ) {
+	this.entry = entry;
+    }
+
+    public ScheduledTransaction() {
+    }
+
+    public ScheduledTransaction( BudgetEntry entry, int dayOfMonth, BigDecimal amount ) {
+    }
+
+    public int getDayOfMonth() {
+	return dayOfMonth;
+    }
+
+    public void setDayOfMonth( int dayOfMonth ) {
+	this.dayOfMonth = dayOfMonth;
+    }
+
+    public BigDecimal getAmount() {
+	return amount;
+    }
+
+    public void setAmount( BigDecimal amount ) {
+	this.amount = amount;
+    }
 }

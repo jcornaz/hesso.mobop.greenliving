@@ -1,14 +1,11 @@
 package com.hesso.greenliving.ui;
 
-import com.hesso.greenliving.R;
-import com.hesso.greenliving.R.id;
-import com.hesso.greenliving.R.layout;
-import com.hesso.greenliving.R.menu;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.hesso.greenliving.R;
 
 
 public class MainActivity extends Activity {

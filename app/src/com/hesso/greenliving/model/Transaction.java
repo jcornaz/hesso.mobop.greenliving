@@ -1,42 +1,89 @@
 package com.hesso.greenliving.model;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
-public class Transaction {
-	private BudgetEntry budgetEntry;
-	private long id;
-	private Date date;
-	private double amount;
+import org.joda.time.DateTime;
 
-	public long getId() {
-		return this.id;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable (tableName = "transactions" )
+public class Transaction extends Entity {
+    private static final long serialVersionUID = -3676967997552222140L;
+
+    @DatabaseField (canBeNull = false, foreign = true )
+    private BudgetEntry sourceEntry;
+
+    @DatabaseField (canBeNull = true, foreign = true )
+    private BudgetEntry destinationEntry;
+
+    @DatabaseField (canBeNull = false )
+    private DateTime date;
+
+    @DatabaseField (canBeNull = false )
+    private BigDecimal amount;
+
+    public Transaction() {
+    }
+
+    public Transaction( BudgetEntry sourceEntry, DateTime date, BigDecimal amount ) {
+	this.setSourceEntry( sourceEntry );
+	this.setDestinationEntry( destinationEntry );
+	this.setAmount( amount );
+    }
+
+    public DateTime getDate() {
+	return date;
+    }
+
+    public void setDate( DateTime date ) {
+	if( !this.date.equals( date ) ) {
+	    this.date = date;
+	    this.setChanged();
 	}
+    }
 
-	public BudgetEntry getBudgetEntry() {
-		return this.budgetEntry;
-	}
+    public BudgetEntry getSourceEntry() {
+	return this.sourceEntry;
+    }
 
-	public Date getDate() {
-		return date;
+    public void setSourceEntry( BudgetEntry budgetEntry ) {
+	if( this.sourceEntry != budgetEntry ) {
+	    this.sourceEntry.removeOutgoingTransaction( this );
+	    this.sourceEntry = budgetEntry;
+	    this.sourceEntry.addOutgoingTransaction( this );
+	    this.setChanged();
 	}
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public BudgetEntry getDestinationEntry() {
+	return this.destinationEntry;
+    }
 
-	public void setBudgetEntry(BudgetEntry budgetEntry) {
-		this.budgetEntry = budgetEntry;
+    public void setDestinationEntry( BudgetEntry budgetEntry ) {
+	if( this.destinationEntry != budgetEntry ) {
+	    this.destinationEntry.removeIncomingTransaction( this );
+	    this.destinationEntry = budgetEntry;
+	    this.destinationEntry.addIncomingTransaction( this );
+	    this.setChanged();
 	}
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public BigDecimal getAmount() {
+	return this.amount;
+    }
 
-	public void setAmount(double amount) {
-		this.amount = amount;
+    public void setAmount( BigDecimal amount ) {
+	if( amount.doubleValue() < 0 ) {
+	    BudgetEntry source = this.getSourceEntry();
+	    this.setSourceEntry( this.getDestinationEntry() );
+	    this.setDestinationEntry( source );
 	}
+	this.amount = amount.abs();
+	this.setChanged();
+    }
 
-	public double getAmount() {
-		return this.amount;
-	}
+    public boolean isTransfert() {
+	return this.destinationEntry != null;
+    }
 }
