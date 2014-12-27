@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hesso.greenliving.R;
+import com.hesso.greenliving.model.BudgetEntry;
 import com.hesso.greenliving.model.Transaction;
 
 public class TransactionView extends View {
@@ -36,9 +37,15 @@ public class TransactionView extends View {
 
     public void setItem( Transaction item ) {
 	this.transaction = item;
+	BudgetEntry fromEntry = this.transaction.getSourceEntry();
+	if( fromEntry == null ) {
+	    this.from.setText( this.getContext().getString( R.string.refill ) );
+	    ;
+	} else {
+	    this.from.setText( fromEntry.getName() );
+	}
 
 	this.amount.setText( DEC_FORMAT.format( this.transaction.getAmount() ) );
-	this.from.setText( this.transaction.getSourceEntry().getName() );
 
 	if( item.isTransfert() ) {
 	    this.to.setVisibility( View.VISIBLE );

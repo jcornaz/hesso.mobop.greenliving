@@ -8,4 +8,5 @@
     <string name="fragment_transactions_name">Transactions</string>
     
     <string name="from">From:</string>
+    <string name="refill">Refill</string>
 </resources>

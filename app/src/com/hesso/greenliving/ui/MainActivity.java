@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hesso.greenliving.R;
+import com.hesso.greenliving.test.MockupManager;
 
 //Fragments swiping working !!! Add fragments in createFragments()
 
@@ -58,6 +59,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	// select tab on swipe
 	viewPager.setOnPageChangeListener( this );
+	
+	// Crée un modèle factice
+	MockupManager.createFakeModel();
     }
 
     private void createFragments() {

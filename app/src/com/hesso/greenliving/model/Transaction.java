@@ -1,7 +1,5 @@
 package com.hesso.greenliving.model;
 
-import java.math.BigDecimal;
-
 import org.joda.time.DateTime;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -21,12 +19,12 @@ public class Transaction extends Entity {
     private DateTime date;
 
     @DatabaseField (canBeNull = false )
-    private BigDecimal amount;
+    private double amount;
 
     public Transaction() {
     }
 
-    public Transaction( BudgetEntry sourceEntry, DateTime date, BigDecimal amount ) {
+    public Transaction( BudgetEntry sourceEntry, BudgetEntry destinationEntry, DateTime date, double amount ) {
 	this.setSourceEntry( sourceEntry );
 	this.setDestinationEntry( destinationEntry );
 	this.setAmount( amount );
@@ -49,9 +47,13 @@ public class Transaction extends Entity {
 
     public void setSourceEntry( BudgetEntry budgetEntry ) {
 	if( this.sourceEntry != budgetEntry ) {
-	    this.sourceEntry.removeOutgoingTransaction( this );
+	    if( this.sourceEntry != null ) {
+		this.sourceEntry.removeOutgoingTransaction( this );
+	    }
 	    this.sourceEntry = budgetEntry;
-	    this.sourceEntry.addOutgoingTransaction( this );
+	    if( this.sourceEntry != null ) {
+		this.sourceEntry.addOutgoingTransaction( this );
+	    }
 	    this.setChanged();
 	}
     }
@@ -62,24 +64,28 @@ public class Transaction extends Entity {
 
     public void setDestinationEntry( BudgetEntry budgetEntry ) {
 	if( this.destinationEntry != budgetEntry ) {
-	    this.destinationEntry.removeIncomingTransaction( this );
+	    if( this.destinationEntry != null ) {
+		this.destinationEntry.removeIncomingTransaction( this );
+	    }
 	    this.destinationEntry = budgetEntry;
-	    this.destinationEntry.addIncomingTransaction( this );
+	    if( this.destinationEntry != null ) {
+		this.destinationEntry.addIncomingTransaction( this );
+	    }
 	    this.setChanged();
 	}
     }
 
-    public BigDecimal getAmount() {
+    public double getAmount() {
 	return this.amount;
     }
 
-    public void setAmount( BigDecimal amount ) {
-	if( amount.doubleValue() < 0 ) {
+    public void setAmount( double amount ) {
+	if( amount < 0 ) {
 	    BudgetEntry source = this.getSourceEntry();
 	    this.setSourceEntry( this.getDestinationEntry() );
 	    this.setDestinationEntry( source );
 	}
-	this.amount = amount.abs();
+	this.amount = Math.abs( amount );
 	this.setChanged();
     }
 

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -34,7 +35,7 @@ public class Budget extends Entity {
     private BigDecimal target = new BigDecimal( 0 );
 
     @ForeignCollectionField
-    private Collection<BudgetEntry> entries;
+    private Set<BudgetEntry> entries = new HashSet<BudgetEntry>();
 
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
@@ -97,5 +98,11 @@ public class Budget extends Entity {
 
     public void setId( long id ) {
 	super.setId( id );
+    }
+
+    public BudgetEntry createEntry( String name, double target ) {
+	BudgetEntry res = new BudgetEntry( name, target );
+	this.addEntry( res );
+	return res;
     }
 }

@@ -51,6 +51,7 @@ public final class R {
         public static final int fragment_transactions_name=0x7f040007;
         public static final int from=0x7f040008;
         public static final int hello_world=0x7f040004;
+        public static final int refill=0x7f040009;
     }
     public static final class style {
         /** 

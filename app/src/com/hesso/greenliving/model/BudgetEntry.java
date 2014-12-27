@@ -1,9 +1,10 @@
 package com.hesso.greenliving.model;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
+
+import org.joda.time.DateTime;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -20,7 +21,7 @@ public class BudgetEntry extends Entity {
     private String name;
 
     @DatabaseField (canBeNull = false )
-    private BigDecimal targetAmount;
+    private double targetAmount;
 
     @ForeignCollectionField (eager = true )
     private Collection<ScheduledTransaction> scheduledTransactions = new HashSet<ScheduledTransaction>();
@@ -34,7 +35,7 @@ public class BudgetEntry extends Entity {
     public BudgetEntry() {
     }
 
-    public BudgetEntry( String name, BigDecimal targetAmount ) {
+    public BudgetEntry( String name, double targetAmount ) {
 	this.name = name;
 	this.targetAmount = targetAmount;
     }
@@ -52,11 +53,11 @@ public class BudgetEntry extends Entity {
 	this.setChanged();
     }
 
-    public BigDecimal getTargetAmount() {
+    public double getTargetAmount() {
 	return this.targetAmount;
     }
 
-    public void setTargetAmount( BigDecimal targetAmount ) {
+    public void setTargetAmount( double targetAmount ) {
 	this.targetAmount = targetAmount;
 	this.setChanged();
     }
@@ -112,5 +113,17 @@ public class BudgetEntry extends Entity {
 	    this.setChanged();
 	}
 	return res;
+    }
+
+    public void fill( double amount ) {
+	new Transaction( null, this, DateTime.now(), amount );
+    }
+
+    public void expense( double amount ) {
+	new Transaction( this, null, DateTime.now(), amount );
+    }
+
+    public void transfert( double amount, BudgetEntry destination ) {
+	new Transaction( this, destination, DateTime.now(), amount );
     }
 }
