@@ -16,7 +16,7 @@ public class BudgetEntriesDao extends EntitiesDao<BudgetEntry> {
     private Map<BudgetEntry, Set<Transaction>> persistedTransactions = new HashMap<BudgetEntry, Set<Transaction>>();
     private Map<BudgetEntry, Set<ScheduledTransaction>> persistedSchedules = new HashMap<BudgetEntry, Set<ScheduledTransaction>>();
 
-    public BudgetEntriesDao( Dao<BudgetEntry, Integer> dao ) {
+    public BudgetEntriesDao( Dao<BudgetEntry, Long> dao ) {
 	super( dao );
 	this.transactionsDao = PersistenceManager.getInstance().getTransactionsDao();
 	this.schedulesDao = PersistenceManager.getInstance().getSchedulesDao();

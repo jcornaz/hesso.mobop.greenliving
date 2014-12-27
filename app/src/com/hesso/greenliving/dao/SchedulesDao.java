@@ -5,7 +5,7 @@ import com.j256.ormlite.dao.Dao;
 
 public class SchedulesDao extends EntitiesDao<ScheduledTransaction> {
 
-    public SchedulesDao( Dao<ScheduledTransaction, Integer> dao ) {
+    public SchedulesDao( Dao<ScheduledTransaction, Long> dao ) {
 	super( dao );
     }
 

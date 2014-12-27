@@ -33,11 +33,11 @@ import com.j256.ormlite.support.DatabaseConnection;
 import com.j256.ormlite.support.DatabaseResults;
 import com.j256.ormlite.table.ObjectFactory;
 
-public abstract class EntitiesDao<EntityType extends Entity> implements Observer, Dao<EntityType, Integer> {
+public abstract class EntitiesDao<EntityType extends Entity> implements Observer, Dao<EntityType, Long> {
 
-    private Dao<EntityType, Integer> dao;
+    private Dao<EntityType, Long> dao;
 
-    public EntitiesDao( Dao<EntityType, Integer> dao ) {
+    public EntitiesDao( Dao<EntityType, Long> dao ) {
 	this.dao = dao;
     }
 
@@ -134,7 +134,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     }
 
     @Override
-    public EntityType queryForId( Integer id ) throws SQLException {
+    public EntityType queryForId( Long id ) throws SQLException {
 	return this.dao.queryForId( id );
     }
 
@@ -179,17 +179,17 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     }
 
     @Override
-    public QueryBuilder<EntityType, Integer> queryBuilder() {
+    public QueryBuilder<EntityType, Long> queryBuilder() {
 	return this.dao.queryBuilder();
     }
 
     @Override
-    public UpdateBuilder<EntityType, Integer> updateBuilder() {
+    public UpdateBuilder<EntityType, Long> updateBuilder() {
 	return this.dao.updateBuilder();
     }
 
     @Override
-    public DeleteBuilder<EntityType, Integer> deleteBuilder() {
+    public DeleteBuilder<EntityType, Long> deleteBuilder() {
 	return this.dao.deleteBuilder();
     }
 
@@ -219,7 +219,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     }
 
     @Override
-    public int updateId( EntityType data, Integer newId ) throws SQLException {
+    public int updateId( EntityType data, Long newId ) throws SQLException {
 	return this.dao.updateId( data, newId );
     }
 
@@ -234,12 +234,12 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     }
 
     @Override
-    public int deleteById( Integer id ) throws SQLException {
+    public int deleteById( Long id ) throws SQLException {
 	return this.dao.deleteById( id );
     }
 
     @Override
-    public int deleteIds( Collection<Integer> ids ) throws SQLException {
+    public int deleteIds( Collection<Long> ids ) throws SQLException {
 	return this.dao.deleteIds( ids );
     }
 
@@ -339,7 +339,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     }
 
     @Override
-    public Integer extractId( EntityType data ) throws SQLException {
+    public Long extractId( EntityType data ) throws SQLException {
 	return this.dao.extractId( data );
     }
 
@@ -419,7 +419,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     }
 
     @Override
-    public boolean idExists( Integer id ) throws SQLException {
+    public boolean idExists( Long id ) throws SQLException {
 	return this.dao.idExists( id );
     }
 

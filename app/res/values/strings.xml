@@ -10,4 +10,8 @@
     <string name="from">From:</string>
     <string name="refill">Refill</string>
     <string name="to">To:</string>
+    <string name="entry_name">Entry name</string>
+    <string name="current_amount">Current Amount</string>
+    <string name="target_amount">Target amount</string>
+    <string name="slash">/</string>
 </resources>

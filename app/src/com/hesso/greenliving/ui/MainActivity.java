@@ -5,7 +5,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.backup.SharedPreferencesBackupHelper;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -14,11 +14,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hesso.greenliving.R;
-import com.hesso.greenliving.test.MockupManager;
+import com.hesso.greenliving.test.TestManager;
 
 //Fragments swiping working !!! Add fragments in createFragments()
 
@@ -31,14 +32,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	@Override
 	public Fragment getItem( int index ) {
-	    return fragments.get( index );
+	    return MainActivity.this.fragments.get( index );
 	}
 
 	@Override
 	public int getCount() {
-	    return fragments.size();
+	    return MainActivity.this.fragments.size();
 	}
-
     }
 
     private List<AbstractFragment> fragments = new ArrayList<AbstractFragment>();
@@ -53,25 +53,27 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
-	setContentView( R.layout.activity_main );
-	// Initialization :
-	actionBar = getActionBar();
-	actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
-	viewPager = (ViewPager) findViewById( R.id.pager );
 
-	createFragments();
-	populateTabs();
-	pagerAdapter = new PagerAdapter( getSupportFragmentManager() );
-	viewPager.setAdapter( pagerAdapter );
+	Log.d( "debug", "MainActivity#onCreate" );
+
+	this.setContentView( R.layout.activity_main );
+	// Initialization :
+	this.actionBar = this.getActionBar();
+	this.actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
+	this.viewPager = (ViewPager) this.findViewById( R.id.pager );
+
+	this.createFragments();
+	this.populateTabs();
+	this.pagerAdapter = new PagerAdapter( this.getSupportFragmentManager() );
+	this.viewPager.setAdapter( this.pagerAdapter );
 
 	// select tab on swipe
-	viewPager.setOnPageChangeListener( this );
-	
+	this.viewPager.setOnPageChangeListener( this );
+
 	// Create a fake model
-	SharedPreferences prefs = this.getSharedPreferences( "GreenLiving", MODE_PRIVATE );
-	if( prefs.getBoolean( "create_model", true ) )
-	{
-	    MockupManager.createFakeModel();
+	SharedPreferences prefs = this.getSharedPreferences( "GreenLiving", Context.MODE_PRIVATE );
+	if( prefs.getBoolean( "create_model", true ) ) {
+	    TestManager.createFakeModel();
 	    Editor editor = prefs.edit();
 	    editor.putBoolean( "create_model", false );
 	    editor.commit();
@@ -79,15 +81,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void createFragments() {
-	fragments.add( new FragmentBudget() );
-	fragments.add( new FragmentTransactions() );
+	Log.d( "debug", "MainActivity#createFragments" );
+	this.fragments.add( new FragmentBudget() );
+	this.fragments.add( new FragmentTransactions() );
 	// Add new Fragments here
     }
 
     private void populateTabs() {
-	for( AbstractFragment fragment : fragments ) {
+	for( AbstractFragment fragment : this.fragments ) {
 	    // tabs with text OR icons
-	    actionBar.addTab( actionBar.newTab().setText( fragment.getNameId() ).setTabListener( this ) );
+	    this.actionBar.addTab( this.actionBar.newTab().setText( fragment.getNameId() ).setTabListener( this ) );
 	    // actionBar.addTab(actionBar.newTab().setIcon(fragment.getIconId()).setTabListener(this));
 	}
     }
@@ -96,7 +99,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public boolean onCreateOptionsMenu( Menu menu ) {
 	// Inflate the menu; this adds items to the action bar if it is present.
-	getMenuInflater().inflate( R.menu.main, menu );
+	this.getMenuInflater().inflate( R.menu.main, menu );
 	return true;
     }
 
@@ -115,7 +118,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     // Manage tabs (ActionBar.TabListener)
     @Override
     public void onTabSelected( Tab tab, android.app.FragmentTransaction ft ) {
-	viewPager.setCurrentItem( tab.getPosition() );
+	this.viewPager.setCurrentItem( tab.getPosition() );
     }
 
     @Override
@@ -137,7 +140,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void onPageSelected( int position ) {
-	actionBar.setSelectedNavigationItem( position );
+	this.actionBar.setSelectedNavigationItem( position );
     }
 
 }

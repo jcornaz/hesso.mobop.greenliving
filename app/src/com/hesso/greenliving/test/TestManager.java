@@ -3,11 +3,16 @@ package com.hesso.greenliving.test;
 import com.hesso.greenliving.model.Budget;
 import com.hesso.greenliving.model.BudgetEntry;
 
-public class MockupManager {
+// TODO Classe à supprimer dans la version finale
+public class TestManager {
+
     public static void createFakeModel() {
-	BudgetEntry rent = Budget.getInstance().createEntry( "Rent", 800 );
-	BudgetEntry meals = Budget.getInstance().createEntry( "Meals", 200 );
-	BudgetEntry groceries = Budget.getInstance().createEntry( "Groceries", 50 );
+
+	Budget budget = Budget.getInstance();
+
+	BudgetEntry rent = budget.createEntry( "Rent", 800 );
+	BudgetEntry meals = budget.createEntry( "Meals", 200 );
+	BudgetEntry groceries = budget.createEntry( "Groceries", 50 );
 
 	rent.fill( 800 );
 	rent.expense( 300 );

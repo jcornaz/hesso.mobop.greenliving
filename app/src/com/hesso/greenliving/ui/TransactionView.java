@@ -14,14 +14,12 @@ import android.widget.TextView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Transaction;
 
-public class TransactionView extends LinearLayout {
+public class TransactionView extends LinearLayout implements EntityView<Transaction> {
 
     private static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
 
     private static final int COLOR_FILL = Color.rgb( 0, 128, 0 );
-
     private static final int COLOR_EXPENSE = Color.rgb( 181, 13, 13 );
-
     private static final int COLOR_TRANSFER = Color.BLACK;
 
     public static TransactionView inflate( ViewGroup parent ) {
@@ -35,8 +33,6 @@ public class TransactionView extends LinearLayout {
     private TextView amount;
     private LinearLayout budgetToLayout;
 
-    private boolean initialized = false;
-
     public TransactionView( Context context ) {
 	super( context );
     }
@@ -49,18 +45,18 @@ public class TransactionView extends LinearLayout {
 	super( context, attrs, defStyle );
     }
 
-    private void init() {
+    @Override
+    protected void onFinishInflate() {
+	super.onFinishInflate();
+
 	this.budgetToLayout = (LinearLayout) this.findViewById( R.id.budgetToLayout );
 	this.from = (TextView) this.findViewById( R.id.budgetFrom );
 	this.to = (TextView) this.findViewById( R.id.budgetTo );
 	this.amount = (TextView) this.findViewById( R.id.amount );
-	this.initialized = true;
     }
 
-    public void setItem( Transaction item ) {
-	if( !this.initialized )
-	    this.init();
-
+    @Override
+    public void setModel( Transaction item ) {
 	this.transaction = item;
 
 	if( this.transaction.hasSource() ) {
@@ -93,9 +89,5 @@ public class TransactionView extends LinearLayout {
 
 	this.amount.setText( DEC_FORMAT.format( this.transaction.getAmount() ) );
 	this.amount.setTextColor( color );
-    }
-
-    public Transaction getItem() {
-	return this.transaction;
     }
 }

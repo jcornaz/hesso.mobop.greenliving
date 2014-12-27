@@ -13,7 +13,7 @@ public class BudgetDao extends EntitiesDao<Budget> {
     private BudgetEntriesDao entriesDao;
     private Map<Budget, Set<BudgetEntry>> persistedEntries = new HashMap<Budget, Set<BudgetEntry>>();
 
-    public BudgetDao( Dao<Budget, Integer> dao ) {
+    public BudgetDao( Dao<Budget, Long> dao ) {
 	super( dao );
 	this.entriesDao = PersistenceManager.getInstance().getEntriesDao();
     }

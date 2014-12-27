@@ -132,4 +132,18 @@ public class BudgetEntry extends Entity {
 	this.notifyObservers();
 	this.budget.notifyObservers();
     }
+
+    public double getCurrentAmount() {
+	double res = 0;
+
+	for( Transaction transaction : this.incomingTransactions ) {
+	    res += transaction.getAmount();
+	}
+
+	for( Transaction transaction : this.outgoingTransactions ) {
+	    res += transaction.getAmount();
+	}
+
+	return res;
+    }
 }

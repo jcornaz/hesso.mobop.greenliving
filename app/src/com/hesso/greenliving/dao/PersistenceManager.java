@@ -52,10 +52,10 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	super( context, DB_NAME, null, DB_VERSION );
 
 	try {
-	    this.budgetDao = new BudgetDao( (Dao<Budget, Integer>) this.getDao( Budget.class ) );
-	    this.entriesDao = new BudgetEntriesDao( (Dao<BudgetEntry, Integer>) this.getDao( BudgetEntry.class ) );
-	    this.transactionsDao = new TransactionsDao( (Dao<Transaction, Integer>) this.getDao( Transaction.class ) );
-	    this.schedulesDao = new SchedulesDao( (Dao<ScheduledTransaction, Integer>) this.getDao( ScheduledTransaction.class ) );
+	    this.budgetDao = new BudgetDao( (Dao<Budget, Long>) this.getDao( Budget.class ) );
+	    this.entriesDao = new BudgetEntriesDao( (Dao<BudgetEntry, Long>) this.getDao( BudgetEntry.class ) );
+	    this.transactionsDao = new TransactionsDao( (Dao<Transaction, Long>) this.getDao( Transaction.class ) );
+	    this.schedulesDao = new SchedulesDao( (Dao<ScheduledTransaction, Long>) this.getDao( ScheduledTransaction.class ) );
 	} catch( SQLException e ) {
 	    throw new RuntimeException( e );
 	}
