@@ -5,16 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Transaction;
 
 public class TransactionListAdapter extends ArrayAdapter<Transaction> {
 
-    public TransactionListAdapter( Context context, int resource, int textViewResourceId ) {
-	super( context, resource, textViewResourceId );
-    }
-
-    public TransactionListAdapter( Context context, int resource ) {
-	super( context, resource );
+    public TransactionListAdapter( Context context ) {
+	super( context, R.layout.item_transaction );
     }
 
     @Override
@@ -31,11 +28,10 @@ public class TransactionListAdapter extends ArrayAdapter<Transaction> {
     public View getView( int position, View convertView, ViewGroup parent ) {
 	TransactionView res;
 
-	if( !(convertView instanceof TransactionView) ) {
+	if( convertView instanceof TransactionView ) {
 	    res = (TransactionView) convertView;
 	} else {
 	    res = TransactionView.inflate( parent );
-	    res = (TransactionView) convertView;
 	}
 
 	res.setItem( this.getItem( position ) );

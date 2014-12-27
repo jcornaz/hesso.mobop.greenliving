@@ -8,10 +8,16 @@ import com.j256.ormlite.field.DatabaseField;
 public abstract class Entity extends Observable implements Serializable {
     private static final long serialVersionUID = -110511284436795169L;
 
+    private static Long autoIncrement = 1l;
+
     @DatabaseField (id = true, generatedId = true )
     private long id;
 
     public Entity() {
+	synchronized( autoIncrement ) {
+	    this.id = autoIncrement;
+	    autoIncrement++;
+	}
     }
 
     public long getId() {

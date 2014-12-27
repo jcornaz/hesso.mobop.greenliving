@@ -37,8 +37,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
     }
-    
-    private List<AFragment> fragments = new ArrayList<AFragment>();
+
+    private List<AbstractFragment> fragments = new ArrayList<AbstractFragment>();
     private PagerAdapter pagerAdapter;
     private ActionBar actionBar;
     private ViewPager viewPager;
@@ -59,8 +59,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	// select tab on swipe
 	viewPager.setOnPageChangeListener( this );
-	
-	// Crée un modèle factice
+
+	// Création d'un modèle factice
 	MockupManager.createFakeModel();
     }
 
@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void populateTabs() {
-	for( AFragment fragment : fragments ) {
+	for( AbstractFragment fragment : fragments ) {
 	    // tabs with text OR icons
 	    actionBar.addTab( actionBar.newTab().setText( fragment.getNameId() ).setTabListener( this ) );
 	    // actionBar.addTab(actionBar.newTab().setIcon(fragment.getIconId()).setTabListener(this));
