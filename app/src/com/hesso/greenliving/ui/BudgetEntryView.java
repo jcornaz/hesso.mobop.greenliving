@@ -69,7 +69,7 @@ public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetE
 	double currentAmount = this.budgetEntry.getCurrentAmount();
 
 	this.entryNameView.setText( this.budgetEntry.getName() );
-	this.currentAmountView.setTag( String.valueOf( currentAmount ) );
+	this.currentAmountView.setText( String.valueOf( currentAmount ) );
 	this.targetAmountView.setText( String.valueOf( targetAmount ) );
 
 	if( targetAmount != 0 ) {
