@@ -30,8 +30,8 @@ public class FragmentBudget extends AbstractFragment implements Observer {
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-	Log.d("debug", "FragmentBudget#onCreateView");
-	
+	Log.d( "debug", "FragmentBudget#onCreateView" );
+
 	ListView res = (ListView) inflater.inflate( R.layout.frag_budget_entries, container, false );
 	this.adapter = new BudgetEntryListAdapter( container.getContext() );
 
@@ -45,6 +45,8 @@ public class FragmentBudget extends AbstractFragment implements Observer {
 
     @Override
     public void update( Observable observable, Object data ) {
+	Log.d( "debug", "FragmentBudget#update" );
+
 	this.adapter.setList( Budget.getInstance().getEntries() );
     }
 }

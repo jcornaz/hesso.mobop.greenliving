@@ -13,7 +13,7 @@ public class BudgetEntryListAdapter extends EntityListAdapter<BudgetEntry, Budge
     }
 
     @Override
-    protected BudgetEntryView inflate( ViewGroup parent ) {
+    protected BudgetEntryView inflateItem( ViewGroup parent ) {
 	return BudgetEntryView.inflate( parent );
     }
 }

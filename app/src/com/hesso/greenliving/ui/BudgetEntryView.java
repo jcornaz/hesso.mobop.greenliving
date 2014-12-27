@@ -1,5 +1,7 @@
 package com.hesso.greenliving.ui;
 
+import java.util.Observable;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,7 +14,7 @@ import android.widget.TextView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.BudgetEntry;
 
-public class BudgetEntryView extends LinearLayout implements EntityView<BudgetEntry> {
+public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetEntry> {
 
     private static final int PROGRESSBAR_SIZE = 1000;
 
@@ -30,7 +32,7 @@ public class BudgetEntryView extends LinearLayout implements EntityView<BudgetEn
     @Override
     protected void onFinishInflate() {
 	super.onFinishInflate();
-
+	this.entryNameView = (TextView) this.findViewById( R.id.entryName );
 	this.targetAmountView = (TextView) this.findViewById( R.id.targetAmount );
 	this.currentAmountView = (TextView) this.findViewById( R.id.currentAmount );
 	this.progressBarView = (ProgressBar) this.findViewById( R.id.progressBar );
@@ -51,8 +53,18 @@ public class BudgetEntryView extends LinearLayout implements EntityView<BudgetEn
 
     @Override
     public void setModel( BudgetEntry entry ) {
-	this.budgetEntry = entry;
+	if( this.budgetEntry != entry ) {
+	    this.budgetEntry = entry;
+	    if( this.budgetEntry != null ) {
+		this.budgetEntry.deleteObserver( this );
+	    }
+	    this.budgetEntry.addObserver( this );
+	    this.update( this.budgetEntry, this );
+	}
+    }
 
+    @Override
+    public void update( Observable observable, Object data ) {
 	double targetAmount = this.budgetEntry.getTargetAmount();
 	double currentAmount = this.budgetEntry.getCurrentAmount();
 

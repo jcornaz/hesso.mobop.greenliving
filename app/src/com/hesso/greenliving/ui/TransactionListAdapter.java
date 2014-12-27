@@ -13,7 +13,7 @@ public class TransactionListAdapter extends EntityListAdapter<Transaction, Trans
     }
 
     @Override
-    protected TransactionView inflate( ViewGroup parent ) {
+    protected TransactionView inflateItem( ViewGroup parent ) {
 	return TransactionView.inflate( parent );
     }
 }

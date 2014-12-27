@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 
 import com.hesso.greenliving.model.Entity;
 
-public abstract class EntityListAdapter<EntityType extends Entity, ViewType extends EntityView<EntityType>> extends ArrayAdapter<EntityType> {
+public abstract class EntityListAdapter<EntityType extends Entity, ViewType extends IEntityView<EntityType>> extends ArrayAdapter<EntityType> {
 
     private Set<EntityType> entities = new HashSet<EntityType>();
 
@@ -61,7 +61,7 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
 	if( convertView != null ) {
 	    res = (ViewType) convertView;
 	} else {
-	    res = this.inflate( parent );
+	    res = this.inflateItem( parent );
 	}
 
 	res.setModel( this.getItem( position ) );
@@ -69,5 +69,5 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
 	return (View) res;
     }
 
-    protected abstract ViewType inflate( ViewGroup parent );
+    protected abstract ViewType inflateItem( ViewGroup parent );
 }

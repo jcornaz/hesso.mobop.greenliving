@@ -5,9 +5,6 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,6 +21,8 @@ import com.hesso.greenliving.test.TestManager;
 //Fragments swiping working !!! Add fragments in createFragments()
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+
+    private static boolean createModel = true;
 
     private class PagerAdapter extends FragmentPagerAdapter {
 	public PagerAdapter( FragmentManager fm ) {
@@ -71,12 +70,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	this.viewPager.setOnPageChangeListener( this );
 
 	// Create a fake model
-	SharedPreferences prefs = this.getSharedPreferences( "GreenLiving", Context.MODE_PRIVATE );
-	if( prefs.getBoolean( "create_model", true ) ) {
+	if( createModel ) {
 	    TestManager.createFakeModel();
-	    Editor editor = prefs.edit();
-	    editor.putBoolean( "create_model", false );
-	    editor.commit();
+	    createModel = false;
 	}
     }
 

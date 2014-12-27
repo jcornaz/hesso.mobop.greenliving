@@ -1,6 +1,7 @@
 package com.hesso.greenliving.ui;
 
 import java.text.DecimalFormat;
+import java.util.Observable;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Transaction;
 
-public class TransactionView extends LinearLayout implements EntityView<Transaction> {
+public class TransactionView extends LinearLayout implements IEntityView<Transaction> {
 
     private static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
 
@@ -57,8 +58,18 @@ public class TransactionView extends LinearLayout implements EntityView<Transact
 
     @Override
     public void setModel( Transaction item ) {
-	this.transaction = item;
+	if( this.transaction != item ) {
+	    if( this.transaction != null ) {
+		this.transaction.deleteObserver( this );
+	    }
+	    this.transaction = item;
+	    this.transaction.addObserver( this );
+	    this.update( this.transaction, this );
+	}
+    }
 
+    @Override
+    public void update( Observable observable, Object data ) {
 	if( this.transaction.hasSource() ) {
 	    this.from.setText( this.transaction.getSourceEntry().getName() );
 	} else {
@@ -67,7 +78,7 @@ public class TransactionView extends LinearLayout implements EntityView<Transact
 
 	if( this.transaction.hasDestination() ) {
 	    this.budgetToLayout.setVisibility( View.VISIBLE );
-	    this.to.setText( item.getDestinationEntry().getName() );
+	    this.to.setText( this.transaction.getDestinationEntry().getName() );
 
 	} else {
 	    this.budgetToLayout.setVisibility( View.INVISIBLE );
