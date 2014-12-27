@@ -5,7 +5,9 @@ import java.util.Observable;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -14,7 +16,7 @@ import android.widget.TextView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.BudgetEntry;
 
-public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetEntry> {
+public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetEntry>, OnTouchListener {
 
     private static final int PROGRESSBAR_SIZE = 1000;
 
@@ -29,6 +31,8 @@ public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetE
     private TextView currentAmountView;
     private ProgressBar progressBarView;
 
+    private MainActivity mainActivity;
+
     @Override
     protected void onFinishInflate() {
 	super.onFinishInflate();
@@ -37,6 +41,7 @@ public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetE
 	this.currentAmountView = (TextView) this.findViewById( R.id.currentAmount );
 	this.progressBarView = (ProgressBar) this.findViewById( R.id.progressBar );
 	this.progressBarView.setMax( PROGRESSBAR_SIZE );
+	this.setOnTouchListener( this );
     }
 
     public BudgetEntryView( Context context, AttributeSet attrs, int defStyle ) {
@@ -78,5 +83,16 @@ public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetE
 	} else {
 	    this.progressBarView.setVisibility( View.INVISIBLE );
 	}
+    }
+
+    @Override
+    public boolean onTouch( View v, MotionEvent event ) {
+	this.mainActivity.openTransactions( this.budgetEntry );
+	return true;
+    }
+
+    @Override
+    public void setMainActivity( MainActivity mainActivity ) {
+	this.mainActivity = mainActivity;
     }
 }

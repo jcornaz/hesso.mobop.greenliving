@@ -13,28 +13,36 @@ import com.hesso.greenliving.model.Entity;
 
 public abstract class EntityListAdapter<EntityType extends Entity, ViewType extends IEntityView<EntityType>> extends ArrayAdapter<EntityType> {
 
-    private Set<EntityType> entities = new HashSet<EntityType>();
+    protected Set<EntityType> entities = new HashSet<EntityType>();
+    private MainActivity mainActivity;
 
-    public EntityListAdapter( Context context, int resource ) {
+    public EntityListAdapter( MainActivity mainActivity, Context context, int resource ) {
 	super( context, resource );
+	this.mainActivity = mainActivity;
     }
 
     public void setList( Collection<EntityType> entities ) {
-	Set<EntityType> toDelete = new HashSet<EntityType>( this.entities );
+	Set<EntityType> toRemove = new HashSet<EntityType>( this.entities );
 
 	for( EntityType entity : entities ) {
-	    if( !toDelete.remove( entity ) ) {
+	    if( !toRemove.remove( entity ) ) {
 		this.add( entity );
 	    }
 	}
 
-	this.remove( toDelete );
+	this.remove( toRemove );
     }
 
     private void remove( Collection<EntityType> transactions ) {
 	for( EntityType transaction : transactions ) {
 	    this.remove( transaction );
 	}
+    }
+
+    @Override
+    public void remove( EntityType entity ) {
+	super.remove( entity );
+	this.entities.remove( entity );
     }
 
     @Override
@@ -65,6 +73,7 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
 	}
 
 	res.setModel( this.getItem( position ) );
+	res.setMainActivity( this.mainActivity );
 
 	return (View) res;
     }

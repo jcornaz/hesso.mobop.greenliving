@@ -1,6 +1,5 @@
 package com.hesso.greenliving.ui;
 
-import java.text.DecimalFormat;
 import java.util.Observable;
 
 import android.content.Context;
@@ -16,8 +15,6 @@ import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Transaction;
 
 public class TransactionView extends LinearLayout implements IEntityView<Transaction> {
-
-    private static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
 
     private static final int COLOR_FILL = Color.rgb( 0, 128, 0 );
     private static final int COLOR_EXPENSE = Color.rgb( 181, 13, 13 );
@@ -98,7 +95,11 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
 	    break;
 	}
 
-	this.amount.setText( DEC_FORMAT.format( this.transaction.getAmount() ) );
+	this.amount.setText( MainActivity.DEC_FORMAT.format( this.transaction.getAmount() ) );
 	this.amount.setTextColor( color );
+    }
+
+    @Override
+    public void setMainActivity( MainActivity mainActivity ) {
     }
 }

@@ -1,5 +1,6 @@
 package com.hesso.greenliving.ui;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +17,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hesso.greenliving.R;
+import com.hesso.greenliving.model.BudgetEntry;
 import com.hesso.greenliving.test.TestManager;
 
 //Fragments swiping working !!! Add fragments in createFragments()
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+
+    static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
 
     private static boolean createModel = true;
 
@@ -44,6 +48,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private PagerAdapter pagerAdapter;
     private ActionBar actionBar;
     private ViewPager viewPager;
+    private FragmentTransactions transactionFragment;
 
     public MainActivity() {
 	super();
@@ -77,9 +82,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void createFragments() {
-	Log.d( "debug", "MainActivity#createFragments" );
-	this.fragments.add( new FragmentBudget() );
-	this.fragments.add( new FragmentTransactions() );
+	this.transactionFragment = new FragmentTransactions( this );
+
+	this.fragments.add( new FragmentBudget( this ) );
+	this.fragments.add( this.transactionFragment );
 	// Add new Fragments here
     }
 
@@ -137,6 +143,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onPageSelected( int position ) {
 	this.actionBar.setSelectedNavigationItem( position );
+	Log.i( "position", String.valueOf( position ) );
+	if( position != this.fragments.indexOf( this.transactionFragment ) ) {
+	    this.transactionFragment.setBudgetEntry( null );
+	}
     }
 
+    public void openTransactions( BudgetEntry budgetEntry ) {
+	this.viewPager.setCurrentItem( this.fragments.indexOf( this.transactionFragment ) );
+	this.transactionFragment.setBudgetEntry( budgetEntry );
+    }
 }

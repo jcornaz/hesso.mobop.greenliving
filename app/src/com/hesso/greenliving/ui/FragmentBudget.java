@@ -16,6 +16,15 @@ import com.hesso.greenliving.model.Budget;
 public class FragmentBudget extends AbstractFragment implements Observer {
 
     private BudgetEntryListAdapter adapter;
+    private MainActivity mainActivity;
+    
+    public FragmentBudget()
+    {}
+    
+    public FragmentBudget( MainActivity mainActivity ) {
+	this();
+	this.mainActivity = mainActivity;
+    }
 
     @Override
     public int getNameId() {
@@ -33,7 +42,7 @@ public class FragmentBudget extends AbstractFragment implements Observer {
 	Log.d( "debug", "FragmentBudget#onCreateView" );
 
 	ListView res = (ListView) inflater.inflate( R.layout.frag_budget_entries, container, false );
-	this.adapter = new BudgetEntryListAdapter( container.getContext() );
+	this.adapter = new BudgetEntryListAdapter( this.mainActivity, container.getContext() );
 
 	res.setAdapter( this.adapter );
 

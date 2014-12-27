@@ -8,8 +8,8 @@ import com.hesso.greenliving.model.Transaction;
 
 public class TransactionListAdapter extends EntityListAdapter<Transaction, TransactionView> {
 
-    public TransactionListAdapter( Context context ) {
-	super( context, R.layout.item_transaction );
+    public TransactionListAdapter( MainActivity mainActivity, Context context ) {
+	super( mainActivity, context, R.layout.item_transaction );
     }
 
     @Override

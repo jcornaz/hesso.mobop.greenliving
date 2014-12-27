@@ -8,8 +8,8 @@ import com.hesso.greenliving.model.BudgetEntry;
 
 public class BudgetEntryListAdapter extends EntityListAdapter<BudgetEntry, BudgetEntryView> {
 
-    public BudgetEntryListAdapter( Context context ) {
-	super( context, R.layout.item_budget );
+    public BudgetEntryListAdapter( MainActivity mainActivity, Context context ) {
+	super( mainActivity, context, R.layout.item_budget );
     }
 
     @Override

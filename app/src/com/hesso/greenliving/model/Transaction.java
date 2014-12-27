@@ -114,4 +114,20 @@ public class Transaction extends Entity {
 	}
 	return res;
     }
+
+    public boolean contains( BudgetEntry budgetEntry ) {
+	if( this.sourceEntry != null ) {
+	    if( this.sourceEntry.equals( budgetEntry ) ) {
+		return true;
+	    }
+	}
+
+	if( this.destinationEntry != null ) {
+	    if( this.destinationEntry.equals( budgetEntry ) ) {
+		return true;
+	    }
+	}
+
+	return false;
+    }
 }
