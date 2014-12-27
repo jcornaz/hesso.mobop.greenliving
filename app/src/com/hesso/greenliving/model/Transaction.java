@@ -10,6 +10,9 @@ public class Transaction extends Entity {
     private static final long serialVersionUID = -3676967997552222140L;
 
     @DatabaseField (canBeNull = false, foreign = true )
+    private Budget budget = Budget.getInstance();
+
+    @DatabaseField (canBeNull = false, foreign = true )
     private BudgetEntry sourceEntry;
 
     @DatabaseField (canBeNull = true, foreign = true )
@@ -28,6 +31,7 @@ public class Transaction extends Entity {
 	this.setSourceEntry( sourceEntry );
 	this.setDestinationEntry( destinationEntry );
 	this.setAmount( amount );
+	this.budget.addTransaction( this );
     }
 
     public DateTime getDate() {
@@ -89,7 +93,25 @@ public class Transaction extends Entity {
 	this.setChanged();
     }
 
-    public boolean isTransfert() {
+    public boolean hasDestination() {
 	return this.destinationEntry != null;
+    }
+
+    public boolean hasSource() {
+	return this.sourceEntry != null;
+    }
+
+    public TransctionType getType() {
+	TransctionType res;
+	if( this.hasSource() && this.hasDestination() ) {
+	    if( this.hasDestination() ) {
+		res = TransctionType.TRANSFER;
+	    } else {
+		res = TransctionType.EXPENSE;
+	    }
+	} else {
+	    res = TransctionType.FILL;
+	}
+	return res;
     }
 }

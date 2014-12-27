@@ -116,14 +116,20 @@ public class BudgetEntry extends Entity {
     }
 
     public void fill( double amount ) {
-	new Transaction( null, this, DateTime.now(), amount );
+	new Transaction( null, this, DateTime.now(), amount ).notifyObservers();
+	this.notifyObservers();
+	this.budget.notifyObservers();
     }
 
     public void expense( double amount ) {
-	new Transaction( this, null, DateTime.now(), amount );
+	new Transaction( this, null, DateTime.now(), amount ).notifyObservers();
+	this.notifyObservers();
+	this.budget.notifyObservers();
     }
 
     public void transfert( double amount, BudgetEntry destination ) {
-	new Transaction( this, destination, DateTime.now(), amount );
+	new Transaction( this, destination, DateTime.now(), amount ).notifyObservers();
+	this.notifyObservers();
+	this.budget.notifyObservers();
     }
 }

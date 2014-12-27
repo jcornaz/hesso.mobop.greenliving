@@ -3,7 +3,6 @@ package com.hesso.greenliving.model;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -35,6 +34,8 @@ public class Budget extends Entity {
 
     @ForeignCollectionField
     private Set<BudgetEntry> entries = new HashSet<BudgetEntry>();
+
+    private Set<Transaction> transactions = new HashSet<Transaction>();
 
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
@@ -86,22 +87,24 @@ public class Budget extends Entity {
     }
 
     public Collection<Transaction> getTransactions() {
-	Collection<Transaction> res = new LinkedList<Transaction>();
-
-	for( BudgetEntry entry : this.entries ) {
-	    res.addAll( entry.getOutgoingTransactions() );
-	}
-
-	return res;
+	return new HashSet<Transaction>( this.transactions );
     }
 
+    @Override
     public void setId( long id ) {
 	super.setId( id );
+    }
+
+    public void addTransaction( Transaction transaction ) {
+	this.transactions.add( transaction );
+	this.setChanged();
     }
 
     public BudgetEntry createEntry( String name, double target ) {
 	BudgetEntry res = new BudgetEntry( name, target );
 	this.addEntry( res );
+	res.notifyObservers();
+	this.notifyObservers();
 	return res;
     }
 }

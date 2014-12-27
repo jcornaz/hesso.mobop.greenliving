@@ -10,10 +10,10 @@ public class MockupManager {
 	BudgetEntry groceries = Budget.getInstance().createEntry( "Groceries", 50 );
 
 	rent.fill( 800 );
-	rent.expense( -300 );
+	rent.expense( 300 );
 
 	meals.fill( 300 );
-	meals.expense( -50 );
+	meals.expense( 50 );
 
 	meals.transfert( 20, groceries );
     }

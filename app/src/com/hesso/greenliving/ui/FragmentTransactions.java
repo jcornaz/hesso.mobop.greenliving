@@ -1,5 +1,8 @@
 package com.hesso.greenliving.ui;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +12,7 @@ import android.widget.ListView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Budget;
 
-public class FragmentTransactions extends AbstractFragment {
+public class FragmentTransactions extends AbstractFragment implements Observer {
 
     private TransactionListAdapter adapter;
 
@@ -29,7 +32,15 @@ public class FragmentTransactions extends AbstractFragment {
 	ListView res = (ListView) inflater.inflate( R.layout.frag_transactions, container, false );
 	this.adapter = new TransactionListAdapter( container.getContext() );
 	res.setAdapter( this.adapter );
-	this.adapter.addAll( Budget.getInstance().getTransactions() );
+	
+	Budget.getInstance().addObserver( this );
+	this.update( Budget.getInstance(), this );
+	
 	return res;
+    }
+
+    @Override
+    public void update( Observable observable, Object data ) {
+	this.adapter.setList( Budget.getInstance().getTransactions() );
     }
 }

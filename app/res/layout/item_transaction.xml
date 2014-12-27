@@ -17,7 +17,7 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:paddingEnd="10dp"
                 android:paddingStart="0dp"
@@ -27,18 +27,33 @@
                 android:id="@+id/budgetFrom"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/budget_from" />
+                android:text="@string/budget_from"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <!-- La prochaine vue est par défaut invisible, car utile uniquement pour les transfert -->
         <!-- C'est à l'adapter de la rendre visible et de lui donner un contenu explicite pour l'utilisateur -->
 
-        <TextView
-            android:id="@+id/budgetTo"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/budgetToLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/budget_to"
-            android:visibility="invisible" />
+            android:orientation="horizontal"
+            android:visibility="invisible" >
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingStart="0dp"
+                android:text="@string/to" />
+
+            <TextView
+                android:id="@+id/budgetTo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/budget_to" />
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
@@ -47,6 +62,7 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:text="@string/amount"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
 </com.hesso.greenliving.ui.TransactionView>

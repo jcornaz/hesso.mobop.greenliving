@@ -5,6 +5,9 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.backup.SharedPreferencesBackupHelper;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -43,6 +46,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private ActionBar actionBar;
     private ViewPager viewPager;
 
+    public MainActivity() {
+	super();
+    }
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
@@ -59,9 +66,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	// select tab on swipe
 	viewPager.setOnPageChangeListener( this );
-
-	// Création d'un modèle factice
-	MockupManager.createFakeModel();
+	
+	// Create a fake model
+	SharedPreferences prefs = this.getSharedPreferences( "GreenLiving", MODE_PRIVATE );
+	if( prefs.getBoolean( "create_model", true ) )
+	{
+	    MockupManager.createFakeModel();
+	    Editor editor = prefs.edit();
+	    editor.putBoolean( "create_model", false );
+	    editor.commit();
+	}
     }
 
     private void createFragments() {
