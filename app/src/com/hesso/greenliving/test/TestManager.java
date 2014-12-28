@@ -1,7 +1,7 @@
 package com.hesso.greenliving.test;
 
 import com.hesso.greenliving.model.Budget;
-import com.hesso.greenliving.model.BudgetEntry;
+import com.hesso.greenliving.model.Account;
 
 // TODO Classe à supprimer dans la version finale
 public class TestManager {
@@ -10,9 +10,9 @@ public class TestManager {
 
 	Budget budget = Budget.getInstance();
 
-	BudgetEntry rent = budget.createEntry( "Rent", 800 );
-	BudgetEntry meals = budget.createEntry( "Meals", 200 );
-	BudgetEntry groceries = budget.createEntry( "Groceries", 50 );
+	Account rent = budget.createEntry( "Rent", 800 );
+	Account meals = budget.createEntry( "Meals", 200 );
+	Account groceries = budget.createEntry( "Groceries", 50 );
 
 	rent.fill( 800 );
 	rent.expense( 300 );

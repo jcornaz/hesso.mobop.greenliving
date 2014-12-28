@@ -12,18 +12,18 @@ import android.widget.ListView;
 
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Budget;
-import com.hesso.greenliving.model.BudgetEntry;
+import com.hesso.greenliving.model.Account;
 
-public class FragmentTransactions extends AbstractFragment implements Observer {
+public class TransactionsFragment extends AbstractFragment implements Observer {
 
     private TransactionListAdapter adapter;
     private MainActivity mainActivity;
-    private BudgetEntry budgetEntry;
+    private Account budgetEntry;
 
-    public FragmentTransactions() {
+    public TransactionsFragment() {
     }
 
-    public FragmentTransactions( MainActivity mainActivity ) {
+    public TransactionsFragment( MainActivity mainActivity ) {
 	this();
 	this.mainActivity = mainActivity;
     }
@@ -61,7 +61,7 @@ public class FragmentTransactions extends AbstractFragment implements Observer {
 	}
     }
 
-    public void setBudgetEntry( BudgetEntry budgetEntry ) {
+    public void setBudgetEntry( Account budgetEntry ) {
 	if( this.budgetEntry != null ) {
 	    this.budgetEntry.deleteObserver( this );
 	} else {

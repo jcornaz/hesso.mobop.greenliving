@@ -33,7 +33,7 @@ public class Budget extends Entity {
     private BigDecimal target = new BigDecimal( 0 );
 
     @ForeignCollectionField
-    private Set<BudgetEntry> entries = new HashSet<BudgetEntry>();
+    private Set<Account> accounts = new HashSet<Account>();
 
     private Set<Transaction> transactions = new HashSet<Transaction>();
 
@@ -42,12 +42,12 @@ public class Budget extends Entity {
 	this.setTarget( DEFAULT_TARGET );
     }
 
-    public Set<BudgetEntry> getEntries() {
-	return new HashSet<BudgetEntry>( this.entries );
+    public Set<Account> getEntries() {
+	return new HashSet<Account>( this.accounts );
     }
 
-    public boolean addEntry( BudgetEntry entry ) {
-	boolean res = this.entries.add( entry );
+    private boolean addAccount( Account account ) {
+	boolean res = this.accounts.add( account );
 
 	if( res )
 	    this.setChanged();
@@ -55,8 +55,8 @@ public class Budget extends Entity {
 	return res;
     }
 
-    public boolean removeEntry( BudgetEntry entry ) {
-	boolean res = this.entries.remove( entry );
+    private boolean removeAccount( Account account ) {
+	boolean res = this.accounts.remove( account );
 
 	if( res )
 	    this.setChanged();
@@ -100,9 +100,9 @@ public class Budget extends Entity {
 	this.setChanged();
     }
 
-    public BudgetEntry createEntry( String name, double target ) {
-	BudgetEntry res = new BudgetEntry( name, target );
-	this.addEntry( res );
+    public Account createEntry( String name, double target ) {
+	Account res = new Account( name, target );
+	this.addAccount( res );
 	res.notifyObservers();
 	this.notifyObservers();
 	return res;

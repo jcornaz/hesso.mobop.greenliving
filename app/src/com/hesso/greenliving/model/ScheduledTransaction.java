@@ -11,7 +11,7 @@ public class ScheduledTransaction extends Entity {
     private static final long serialVersionUID = 7070488132832129999L;
 
     @DatabaseField (canBeNull = false, foreign = true )
-    private BudgetEntry entry;
+    private Account entry;
 
     @DatabaseField (canBeNull = false )
     private int dayOfMonth;
@@ -19,18 +19,18 @@ public class ScheduledTransaction extends Entity {
     @DatabaseField (canBeNull = false )
     private BigDecimal amount;
 
-    public BudgetEntry getEntry() {
+    public Account getEntry() {
 	return entry;
     }
 
-    public void setEntry( BudgetEntry entry ) {
+    public void setEntry( Account entry ) {
 	this.entry = entry;
     }
 
     public ScheduledTransaction() {
     }
 
-    public ScheduledTransaction( BudgetEntry entry, int dayOfMonth, BigDecimal amount ) {
+    public ScheduledTransaction( Account entry, int dayOfMonth, BigDecimal amount ) {
     }
 
     public int getDayOfMonth() {

@@ -13,10 +13,10 @@ public class Transaction extends Entity {
     private Budget budget = Budget.getInstance();
 
     @DatabaseField (canBeNull = false, foreign = true )
-    private BudgetEntry sourceEntry;
+    private Account sourceAccount;
 
     @DatabaseField (canBeNull = true, foreign = true )
-    private BudgetEntry destinationEntry;
+    private Account destinationAccount;
 
     @DatabaseField (canBeNull = false )
     private DateTime date;
@@ -27,9 +27,9 @@ public class Transaction extends Entity {
     public Transaction() {
     }
 
-    public Transaction( BudgetEntry sourceEntry, BudgetEntry destinationEntry, DateTime date, double amount ) {
-	this.setSourceEntry( sourceEntry );
-	this.setDestinationEntry( destinationEntry );
+    public Transaction( Account sourceEntry, Account destinationEntry, DateTime date, double amount ) {
+	this.setSourceAccount( sourceEntry );
+	this.setDestinationAccount( destinationEntry );
 	this.setAmount( amount );
 	this.budget.addTransaction( this );
     }
@@ -45,35 +45,35 @@ public class Transaction extends Entity {
 	}
     }
 
-    public BudgetEntry getSourceEntry() {
-	return this.sourceEntry;
+    public Account getSourceAccount() {
+	return this.sourceAccount;
     }
 
-    public void setSourceEntry( BudgetEntry budgetEntry ) {
-	if( this.sourceEntry != budgetEntry ) {
-	    if( this.sourceEntry != null ) {
-		this.sourceEntry.removeOutgoingTransaction( this );
+    public void setSourceAccount( Account budgetEntry ) {
+	if( this.sourceAccount != budgetEntry ) {
+	    if( this.sourceAccount != null ) {
+		this.sourceAccount.removeOutgoingTransaction( this );
 	    }
-	    this.sourceEntry = budgetEntry;
-	    if( this.sourceEntry != null ) {
-		this.sourceEntry.addOutgoingTransaction( this );
+	    this.sourceAccount = budgetEntry;
+	    if( this.sourceAccount != null ) {
+		this.sourceAccount.addOutgoingTransaction( this );
 	    }
 	    this.setChanged();
 	}
     }
 
-    public BudgetEntry getDestinationEntry() {
-	return this.destinationEntry;
+    public Account getDestinationAccount() {
+	return this.destinationAccount;
     }
 
-    public void setDestinationEntry( BudgetEntry budgetEntry ) {
-	if( this.destinationEntry != budgetEntry ) {
-	    if( this.destinationEntry != null ) {
-		this.destinationEntry.removeIncomingTransaction( this );
+    public void setDestinationAccount( Account budgetEntry ) {
+	if( this.destinationAccount != budgetEntry ) {
+	    if( this.destinationAccount != null ) {
+		this.destinationAccount.removeIncomingTransaction( this );
 	    }
-	    this.destinationEntry = budgetEntry;
-	    if( this.destinationEntry != null ) {
-		this.destinationEntry.addIncomingTransaction( this );
+	    this.destinationAccount = budgetEntry;
+	    if( this.destinationAccount != null ) {
+		this.destinationAccount.addIncomingTransaction( this );
 	    }
 	    this.setChanged();
 	}
@@ -85,20 +85,20 @@ public class Transaction extends Entity {
 
     public void setAmount( double amount ) {
 	if( amount < 0 ) {
-	    BudgetEntry source = this.getSourceEntry();
-	    this.setSourceEntry( this.getDestinationEntry() );
-	    this.setDestinationEntry( source );
+	    Account source = this.getSourceAccount();
+	    this.setSourceAccount( this.getDestinationAccount() );
+	    this.setDestinationAccount( source );
 	}
 	this.amount = Math.abs( amount );
 	this.setChanged();
     }
 
     public boolean hasDestination() {
-	return this.destinationEntry != null;
+	return this.destinationAccount != null;
     }
 
     public boolean hasSource() {
-	return this.sourceEntry != null;
+	return this.sourceAccount != null;
     }
 
     public TransctionType getType() {
@@ -115,15 +115,15 @@ public class Transaction extends Entity {
 	return res;
     }
 
-    public boolean contains( BudgetEntry budgetEntry ) {
-	if( this.sourceEntry != null ) {
-	    if( this.sourceEntry.equals( budgetEntry ) ) {
+    public boolean contains( Account budgetAccount ) {
+	if( this.sourceAccount != null ) {
+	    if( this.sourceAccount.equals( budgetAccount ) ) {
 		return true;
 	    }
 	}
 
-	if( this.destinationEntry != null ) {
-	    if( this.destinationEntry.equals( budgetEntry ) ) {
+	if( this.destinationAccount != null ) {
+	    if( this.destinationAccount.equals( budgetAccount ) ) {
 		return true;
 	    }
 	}

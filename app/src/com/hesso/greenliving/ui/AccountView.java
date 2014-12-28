@@ -13,17 +13,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hesso.greenliving.R;
-import com.hesso.greenliving.model.BudgetEntry;
+import com.hesso.greenliving.model.Account;
 
-public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetEntry>, OnClickListener {
+public class AccountView extends LinearLayout implements IEntityView<Account>, OnClickListener {
 
     private static final int PROGRESSBAR_SIZE = 1000;
 
-    public static BudgetEntryView inflate( ViewGroup parent ) {
-	return (BudgetEntryView) LayoutInflater.from( parent.getContext() ).inflate( R.layout.item_budget, parent, false );
+    public static AccountView inflate( ViewGroup parent ) {
+	return (AccountView) LayoutInflater.from( parent.getContext() ).inflate( R.layout.item_account, parent, false );
     }
 
-    private BudgetEntry budgetEntry;
+    private Account budgetEntry;
 
     private TextView entryNameView;
     private TextView targetAmountView;
@@ -43,20 +43,20 @@ public class BudgetEntryView extends LinearLayout implements IEntityView<BudgetE
 	this.setOnClickListener( this );
     }
 
-    public BudgetEntryView( Context context, AttributeSet attrs, int defStyle ) {
+    public AccountView( Context context, AttributeSet attrs, int defStyle ) {
 	super( context, attrs, defStyle );
     }
 
-    public BudgetEntryView( Context context, AttributeSet attrs ) {
+    public AccountView( Context context, AttributeSet attrs ) {
 	super( context, attrs );
     }
 
-    public BudgetEntryView( Context context ) {
+    public AccountView( Context context ) {
 	super( context );
     }
 
     @Override
-    public void setModel( BudgetEntry entry ) {
+    public void setModel( Account entry ) {
 	if( this.budgetEntry != entry ) {
 	    this.budgetEntry = entry;
 	    if( this.budgetEntry != null ) {

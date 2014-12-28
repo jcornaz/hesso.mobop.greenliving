@@ -17,7 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hesso.greenliving.R;
-import com.hesso.greenliving.model.BudgetEntry;
+import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.test.TestManager;
 
 //Fragments swiping working !!! Add fragments in createFragments()
@@ -48,7 +48,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private PagerAdapter pagerAdapter;
     private ActionBar actionBar;
     private ViewPager viewPager;
-    private FragmentTransactions transactionFragment;
+    private TransactionsFragment transactionFragment;
 
     public MainActivity() {
 	super();
@@ -82,9 +82,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void createFragments() {
-	this.transactionFragment = new FragmentTransactions( this );
+	this.transactionFragment = new TransactionsFragment( this );
 
-	this.fragments.add( new FragmentBudget( this ) );
+	this.fragments.add( new AccountFragment( this ) );
 	this.fragments.add( this.transactionFragment );
 	// Add new Fragments here
     }
@@ -149,7 +149,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
     }
 
-    public void openTransactions( BudgetEntry budgetEntry ) {
+    public void openTransactions( Account budgetEntry ) {
 	this.viewPager.setCurrentItem( this.fragments.indexOf( this.transactionFragment ) );
 	this.transactionFragment.setBudgetEntry( budgetEntry );
     }

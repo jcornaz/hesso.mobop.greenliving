@@ -11,7 +11,7 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable (tableName = "entries" )
-public class BudgetEntry extends Entity {
+public class Account extends Entity {
     private static final long serialVersionUID = -7764049582155718184L;
 
     @DatabaseField (canBeNull = false, foreign = true )
@@ -32,10 +32,10 @@ public class BudgetEntry extends Entity {
     @ForeignCollectionField (eager = true, foreignFieldName = "budgetTo" )
     private Collection<Transaction> incomingTransactions = new LinkedList<Transaction>();
 
-    public BudgetEntry() {
+    public Account() {
     }
 
-    public BudgetEntry( String name, double targetAmount ) {
+    public Account( String name, double targetAmount ) {
 	this.name = name;
 	this.targetAmount = targetAmount;
     }
@@ -127,7 +127,7 @@ public class BudgetEntry extends Entity {
 	this.budget.notifyObservers();
     }
 
-    public void transfert( double amount, BudgetEntry destination ) {
+    public void transfert( double amount, Account destination ) {
 	new Transaction( this, destination, DateTime.now(), amount ).notifyObservers();
 	this.notifyObservers();
 	this.budget.notifyObservers();

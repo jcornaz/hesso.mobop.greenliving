@@ -68,14 +68,14 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
     @Override
     public void update( Observable observable, Object data ) {
 	if( this.transaction.hasSource() ) {
-	    this.from.setText( this.transaction.getSourceEntry().getName() );
+	    this.from.setText( this.transaction.getSourceAccount().getName() );
 	} else {
 	    this.from.setText( this.getContext().getString( R.string.refill ) );
 	}
 
 	if( this.transaction.hasDestination() ) {
 	    this.budgetToLayout.setVisibility( View.VISIBLE );
-	    this.to.setText( this.transaction.getDestinationEntry().getName() );
+	    this.to.setText( this.transaction.getDestinationAccount().getName() );
 
 	} else {
 	    this.budgetToLayout.setVisibility( View.INVISIBLE );
