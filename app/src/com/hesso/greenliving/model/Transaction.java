@@ -103,7 +103,7 @@ public class Transaction extends Entity {
 
     public TransctionType getType() {
 	TransctionType res;
-	if( this.hasSource() && this.hasDestination() ) {
+	if( this.hasSource() ) {
 	    if( this.hasDestination() ) {
 		res = TransctionType.TRANSFER;
 	    } else {
