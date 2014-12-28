@@ -130,4 +130,16 @@ public class Transaction extends Entity {
 
 	return false;
     }
+
+    @Override
+    protected void destroy() {
+
+	if( this.hasSource() ) {
+	    this.sourceAccount.removeOutgoingTransaction( this );
+	}
+
+	if( this.hasDestination() ) {
+	    this.destinationAccount.removeIncomingTransaction( this );
+	}
+    }
 }

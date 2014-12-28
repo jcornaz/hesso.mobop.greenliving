@@ -11,7 +11,7 @@ public class ScheduledTransaction extends Entity {
     private static final long serialVersionUID = 7070488132832129999L;
 
     @DatabaseField (canBeNull = false, foreign = true )
-    private Account entry;
+    private Account account;
 
     @DatabaseField (canBeNull = false )
     private int dayOfMonth;
@@ -20,11 +20,11 @@ public class ScheduledTransaction extends Entity {
     private BigDecimal amount;
 
     public Account getEntry() {
-	return entry;
+	return account;
     }
 
     public void setEntry( Account entry ) {
-	this.entry = entry;
+	this.account = entry;
     }
 
     public ScheduledTransaction() {
@@ -47,5 +47,10 @@ public class ScheduledTransaction extends Entity {
 
     public void setAmount( BigDecimal amount ) {
 	this.amount = amount;
+    }
+
+    @Override
+    protected void destroy() {
+	this.account.removeScheduledTransaction( this );
     }
 }

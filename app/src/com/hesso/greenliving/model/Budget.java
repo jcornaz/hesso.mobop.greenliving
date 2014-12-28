@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -55,7 +56,7 @@ public class Budget extends Entity {
 	return res;
     }
 
-    private boolean removeAccount( Account account ) {
+    public boolean removeAccount( Account account ) {
 	boolean res = this.accounts.remove( account );
 
 	if( res )
@@ -90,11 +91,6 @@ public class Budget extends Entity {
 	return new HashSet<Transaction>( this.transactions );
     }
 
-    @Override
-    public void setId( long id ) {
-	super.setId( id );
-    }
-
     public void addTransaction( Transaction transaction ) {
 	this.transactions.add( transaction );
 	this.setChanged();
@@ -106,5 +102,15 @@ public class Budget extends Entity {
 	res.notifyObservers();
 	this.notifyObservers();
 	return res;
+    }
+
+    @Override
+    public void setId( long id ) {
+	super.setId( id );
+    }
+
+    @Override
+    public void destroy() {
+	throw new NotSupportedOperationException();
     }
 }

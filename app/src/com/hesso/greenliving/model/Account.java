@@ -115,6 +115,22 @@ public class Account extends Entity {
 	return res;
     }
 
+    public boolean removeScheduledTransaction( ScheduledTransaction schedule ) {
+	boolean res = this.scheduledTransactions.remove( schedule );
+	if( res ) {
+	    this.setChanged();
+	}
+	return res;
+    }
+
+    public boolean addScheduledTransaction( ScheduledTransaction schedule ) {
+	boolean res = this.scheduledTransactions.add( schedule );
+	if( res ) {
+	    this.setChanged();
+	}
+	return res;
+    }
+
     public void fill( double amount ) {
 	new Transaction( null, this, DateTime.now(), amount ).notifyObservers();
 	this.notifyObservers();
@@ -145,5 +161,18 @@ public class Account extends Entity {
 	}
 
 	return res;
+    }
+
+    @Override
+    public void destroy() {
+	this.budget.removeAccount( this );
+
+	for( Transaction transaction : this.outgoingTransactions ) {
+	    transaction.delete();
+	}
+
+	for( Transaction transaction : this.incomingTransactions ) {
+	    transaction.delete();
+	}
     }
 }

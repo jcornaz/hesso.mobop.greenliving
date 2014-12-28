@@ -13,6 +13,8 @@ public abstract class Entity extends Observable implements Serializable {
     @DatabaseField (id = true, generatedId = true )
     private long id;
 
+    private boolean isDeleted = false;
+
     public Entity() {
 	synchronized( autoIncrement ) {
 	    this.id = autoIncrement;
@@ -27,6 +29,19 @@ public abstract class Entity extends Observable implements Serializable {
     protected void setId( long id ) {
 	this.id = id;
     }
+
+    public boolean isDeleted() {
+	return this.isDeleted;
+    }
+
+    public void delete() {
+	this.destroy();
+	this.isDeleted = true;
+	this.setChanged();
+	this.notifyObservers();
+    }
+
+    protected abstract void destroy();
 
     @Override
     public int hashCode() {
@@ -49,5 +64,4 @@ public abstract class Entity extends Observable implements Serializable {
 	    return false;
 	return true;
     }
-
 }
