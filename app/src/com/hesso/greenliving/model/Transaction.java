@@ -1,5 +1,7 @@
 package com.hesso.greenliving.model;
 
+import java.util.Date;
+
 import org.joda.time.DateTime;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -19,7 +21,7 @@ public class Transaction extends Entity {
     private Account destinationAccount;
 
     @DatabaseField (canBeNull = false )
-    private DateTime date;
+    private Date date;
 
     @DatabaseField (canBeNull = false )
     private double amount;
@@ -35,12 +37,12 @@ public class Transaction extends Entity {
     }
 
     public DateTime getDate() {
-	return date;
+	return new DateTime( this.date );
     }
 
     public void setDate( DateTime date ) {
 	if( !this.date.equals( date ) ) {
-	    this.date = date;
+	    this.date = date.toDate();
 	    this.setChanged();
 	}
     }
@@ -136,10 +138,15 @@ public class Transaction extends Entity {
 
 	if( this.hasSource() ) {
 	    this.sourceAccount.removeOutgoingTransaction( this );
+	    this.sourceAccount.notifyObservers();
 	}
 
 	if( this.hasDestination() ) {
 	    this.destinationAccount.removeIncomingTransaction( this );
+	    this.destinationAccount.notifyObservers();
 	}
+
+	this.budget.removeTransaction( this );
+	this.budget.notifyObservers();
     }
 }

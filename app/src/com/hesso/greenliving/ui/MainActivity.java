@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hesso.greenliving.R;
+import com.hesso.greenliving.dao.PersistenceManager;
 import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.test.TestManager;
 
@@ -25,8 +26,6 @@ import com.hesso.greenliving.test.TestManager;
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
 
     static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
-
-    private static boolean createModel = true;
 
     private class PagerAdapter extends FragmentPagerAdapter {
 	public PagerAdapter( FragmentManager fm ) {
@@ -50,10 +49,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private ViewPager viewPager;
     private TransactionsFragment transactionFragment;
 
-    public MainActivity() {
-	super();
-    }
-
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
@@ -74,10 +69,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	// select tab on swipe
 	this.viewPager.setOnPageChangeListener( this );
 
-	// Create a fake model
-	if( createModel ) {
+	if( savedInstanceState == null ) {
+
+	    // Start persistence
+	    PersistenceManager.start( this );
+
+	    // Create a fake model
 	    TestManager.createFakeModel();
-	    createModel = false;
 	}
     }
 

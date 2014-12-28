@@ -26,10 +26,10 @@ public class Account extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<ScheduledTransaction> scheduledTransactions = new HashSet<ScheduledTransaction>();
 
-    @ForeignCollectionField (eager = true, foreignFieldName = "budgetFrom" )
+    @ForeignCollectionField (eager = true, foreignFieldName = "sourceAccount" )
     private Collection<Transaction> outgoingTransactions = new LinkedList<Transaction>();
 
-    @ForeignCollectionField (eager = true, foreignFieldName = "budgetTo" )
+    @ForeignCollectionField (eager = true, foreignFieldName = "destinationAccount" )
     private Collection<Transaction> incomingTransactions = new LinkedList<Transaction>();
 
     public Account() {
@@ -165,7 +165,6 @@ public class Account extends Entity {
 
     @Override
     public void destroy() {
-	this.budget.removeAccount( this );
 
 	for( Transaction transaction : this.outgoingTransactions ) {
 	    transaction.delete();
@@ -174,5 +173,8 @@ public class Account extends Entity {
 	for( Transaction transaction : this.incomingTransactions ) {
 	    transaction.delete();
 	}
+
+	this.budget.removeAccount( this );
+	this.budget.notifyObservers();
     }
 }

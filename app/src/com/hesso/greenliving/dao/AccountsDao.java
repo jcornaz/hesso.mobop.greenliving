@@ -16,10 +16,10 @@ public class AccountsDao extends EntitiesDao<Account> {
     private Map<Account, Set<Transaction>> persistedTransactions = new HashMap<Account, Set<Transaction>>();
     private Map<Account, Set<ScheduledTransaction>> persistedSchedules = new HashMap<Account, Set<ScheduledTransaction>>();
 
-    public AccountsDao( Dao<Account, Long> dao ) {
+    public AccountsDao( Dao<Account, Long> dao, TransactionsDao transactionsDao , SchedulesDao schedulesDao  ) {
 	super( dao );
-	this.transactionsDao = PersistenceManager.getInstance().getTransactionsDao();
-	this.schedulesDao = PersistenceManager.getInstance().getSchedulesDao();
+	this.transactionsDao = transactionsDao;
+	this.schedulesDao = schedulesDao;
     }
 
     @Override

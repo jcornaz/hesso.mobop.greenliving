@@ -33,10 +33,11 @@ public class Budget extends Entity {
     @DatabaseField (canBeNull = false )
     private BigDecimal target = new BigDecimal( 0 );
 
-    @ForeignCollectionField
-    private Set<Account> accounts = new HashSet<Account>();
+    @ForeignCollectionField (eager = true )
+    private Collection<Account> accounts = new HashSet<Account>();
 
-    private Set<Transaction> transactions = new HashSet<Transaction>();
+    @ForeignCollectionField (eager = true )
+    private Collection<Transaction> transactions = new HashSet<Transaction>();
 
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
@@ -91,9 +92,22 @@ public class Budget extends Entity {
 	return new HashSet<Transaction>( this.transactions );
     }
 
-    public void addTransaction( Transaction transaction ) {
-	this.transactions.add( transaction );
-	this.setChanged();
+    public boolean addTransaction( Transaction transaction ) {
+	boolean res = this.transactions.add( transaction );
+
+	if( res )
+	    this.setChanged();
+
+	return res;
+    }
+
+    public boolean removeTransaction( Transaction transaction ) {
+	boolean res = this.transactions.remove( transaction );
+
+	if( res )
+	    this.setChanged();
+
+	return res;
     }
 
     public Account createEntry( String name, double target ) {
@@ -111,6 +125,7 @@ public class Budget extends Entity {
 
     @Override
     public void destroy() {
+	// Le budget ne peut pas être supprimé
 	throw new NotSupportedOperationException();
     }
 }

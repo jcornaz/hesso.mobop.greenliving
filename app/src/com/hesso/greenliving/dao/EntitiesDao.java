@@ -88,8 +88,12 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     public void update( Observable observable, Object data ) {
 	try {
 	    EntityType entity = (EntityType) observable;
-	    this.dao.update( entity );
-	    this.updateChildrenList( entity );
+	    if( entity.isDeleted() ) {
+		this.dao.delete( entity );
+	    } else {
+		this.dao.update( entity );
+		this.updateChildrenList( entity );
+	    }
 	} catch( SQLException e ) {
 	    throw new RuntimeException( e );
 	}
