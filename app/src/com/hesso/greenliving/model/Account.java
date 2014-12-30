@@ -175,4 +175,9 @@ public class Account extends Entity {
 	    transaction.delete();
 	}
     }
+    
+    @Override
+    public String toString() {
+    	return name;
+    }
 }
