@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -26,6 +27,8 @@ import com.hesso.greenliving.test.TestManager;
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
 
     static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
+
+    private static boolean createModel = true;
 
     private class PagerAdapter extends FragmentPagerAdapter {
 	public PagerAdapter( FragmentManager fm ) {
@@ -49,11 +52,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private ViewPager viewPager;
     private TransactionsFragment transactionFragment;
 
+    public MainActivity() {
+	super();
+    }
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
 
 	Log.d( "debug", "MainActivity#onCreate" );
+	PersistenceManager.start( this );
 
 	this.setContentView( R.layout.activity_main );
 	// Initialization :
@@ -69,14 +77,23 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	// select tab on swipe
 	this.viewPager.setOnPageChangeListener( this );
 
-	if( savedInstanceState == null ) {
-
-	    // Start persistence
-	    PersistenceManager.start( this );
-
-	    // Create a fake model
+	// Create a fake model
+	if( createModel ) {
 	    TestManager.createFakeModel();
+	    createModel = false;
 	}
+	/*
+	 * Intent i = new Intent(this, DialogAccount.class); startActivity(i);
+	 */
+	/*
+	 * Intent i = new Intent(this, DialogBudget.class); startActivity(i);
+	 */
+	/*
+	 * Intent i = new Intent(this, DialogCreditExpense.class);
+	 * startActivity(i);
+	 */
+	Intent i = new Intent( this, DialogTransfer.class );
+	startActivity( i );
     }
 
     private void createFragments() {

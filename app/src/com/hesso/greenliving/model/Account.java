@@ -177,4 +177,9 @@ public class Account extends Entity {
 	this.budget.removeAccount( this );
 	this.budget.notifyObservers();
     }
+    
+    @Override
+    public String toString() {
+    	return name;
+    }
 }
