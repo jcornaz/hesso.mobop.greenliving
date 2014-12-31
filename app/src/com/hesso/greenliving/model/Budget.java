@@ -116,7 +116,7 @@ public class Budget extends Entity {
 	return res;
     }
 
-    public Account createEntry( String name, double target ) {
+    public Account createAccount( String name, double target ) {
 	Account res = new Account( name, target );
 	this.addAccount( res );
 	res.notifyObservers();

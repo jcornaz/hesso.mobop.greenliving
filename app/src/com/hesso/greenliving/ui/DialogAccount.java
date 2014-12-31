@@ -26,7 +26,7 @@ public class DialogAccount extends Activity {
 			String accountName = editTextAccountName.getText().toString();
 			double amount = Double.valueOf(editTextTargetAmount.getText().toString());
 			Budget budget = Budget.getInstance();
-			budget.createEntry(accountName, amount);
+			budget.createAccount(accountName, amount);
 			finish();
 		} else 
 			Toast.makeText(this, "Please fill Account name and Target amount", Toast.LENGTH_LONG).show();
