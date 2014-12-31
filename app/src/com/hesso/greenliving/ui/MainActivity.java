@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -14,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hesso.greenliving.R;
@@ -65,6 +63,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// Initialization :
 		this.actionBar = this.getActionBar();
 		this.actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
+		/*this.actionBar.setDisplayShowHomeEnabled(false);
+		this.actionBar.setDisplayShowTitleEnabled(false);*/
 		this.viewPager = (ViewPager) this.findViewById( R.id.pager );
 
 		this.createFragments();
@@ -80,14 +80,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 			TestManager.createFakeModel();
 			createModel = false;
 		}
-		/*Intent i = new Intent(this, DialogAccount.class);
-		startActivity(i);*/
-		/*Intent i = new Intent(this, DialogBudget.class);
-		startActivity(i);*/
-		/*Intent i = new Intent(this, DialogCreditExpense.class);
-		startActivity(i);*/
-		Intent i = new Intent(this, DialogTransfer.class);
-		startActivity(i);
 	}
 
 	private void createFragments() {
@@ -107,12 +99,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 	// Options menu (todo)
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu( Menu menu ) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		this.getMenuInflater().inflate( R.menu.main, menu );
 		return true;
-	}
+	}*/
 
 	@Override
 	public boolean onOptionsItemSelected( MenuItem item ) {
