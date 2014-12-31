@@ -90,7 +90,7 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
 	case EXPENSE:
 	    color = COLOR_EXPENSE;
 	    break;
-	case FILL:
+	case CREDIT:
 	    color = COLOR_FILL;
 	    break;
 	}

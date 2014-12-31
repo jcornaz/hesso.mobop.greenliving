@@ -1,5 +1,5 @@
 package com.hesso.greenliving.model;
 
 public enum TransctionType {
-    TRANSFER, EXPENSE, FILL
+    TRANSFER, EXPENSE, CREDIT
 }

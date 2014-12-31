@@ -14,7 +14,7 @@ public class Transaction extends Entity {
     @DatabaseField (canBeNull = false, foreign = true )
     private Budget budget = Budget.getInstance();
 
-    @DatabaseField (canBeNull = false, foreign = true )
+    @DatabaseField (canBeNull = true, foreign = true )
     private Account sourceAccount;
 
     @DatabaseField (canBeNull = true, foreign = true )
@@ -112,7 +112,7 @@ public class Transaction extends Entity {
 		res = TransctionType.EXPENSE;
 	    }
 	} else {
-	    res = TransctionType.FILL;
+	    res = TransctionType.CREDIT;
 	}
 	return res;
     }

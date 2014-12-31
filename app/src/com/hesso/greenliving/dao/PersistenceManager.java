@@ -7,8 +7,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.hesso.greenliving.model.Budget;
 import com.hesso.greenliving.model.Account;
+import com.hesso.greenliving.model.Budget;
 import com.hesso.greenliving.model.ScheduledTransaction;
 import com.hesso.greenliving.model.Transaction;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -19,7 +19,7 @@ import com.j256.ormlite.table.TableUtils;
 public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 
     private static final String DB_NAME = "greenliving.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 7;
     private static PersistenceManager instance;
     private BudgetDao budgetDao;
     private AccountsDao entriesDao;
@@ -47,9 +47,12 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	instance = null;
     }
 
-    @SuppressWarnings ("unchecked" )
     private PersistenceManager( Context context ) {
 	super( context, DB_NAME, null, DB_VERSION );
+    }
+
+    @SuppressWarnings ("unchecked" )
+    private void doStart() {
 
 	try {
 	    this.transactionsDao = new TransactionsDao( (Dao<Transaction, Long>) this.getDao( Transaction.class ) );
@@ -59,9 +62,7 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	} catch( SQLException e ) {
 	    throw new RuntimeException( e );
 	}
-    }
 
-    private void doStart() {
 	try {
 	    Budget currentBudget = Budget.getInstance();
 	    List<Budget> existingBudgets = this.budgetDao.queryForAll();
@@ -90,7 +91,7 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	    TableUtils.createTable( connectionSource, Account.class );
 	    TableUtils.createTable( connectionSource, ScheduledTransaction.class );
 	    TableUtils.createTable( connectionSource, Transaction.class );
-	    Log.i( this.getClass().getName(), "tables created" );
+	    Log.i( this.getClass().getSimpleName(), "tables created" );
 	} catch( SQLException e ) {
 	    throw new RuntimeException( e );
 	}
@@ -99,12 +100,13 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade( SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion ) {
 
+	Log.d( this.getClass().getSimpleName(), "upgrading database from version " + oldVersion + " to " + newVersion );
 	try {
 	    TableUtils.dropTable( connectionSource, Budget.class, true );
 	    TableUtils.dropTable( connectionSource, Account.class, true );
 	    TableUtils.dropTable( connectionSource, ScheduledTransaction.class, true );
 	    TableUtils.dropTable( connectionSource, Transaction.class, true );
-	    Log.i( this.getClass().getName(), "tables droped" );
+	    Log.i( this.getClass().getSimpleName(), "tables droped" );
 	} catch( SQLException e ) {
 	    throw new RuntimeException( e );
 	}

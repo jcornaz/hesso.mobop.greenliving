@@ -43,7 +43,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 
     public void persist( EntityType entity ) {
 	try {
-	    this.dao.createOrUpdate( entity );
+	    this.createOrUpdate( entity );
 	    entity.addObserver( this );
 	    this.updateChildrenList( entity );
 	} catch( SQLException e ) {
@@ -71,13 +71,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	int res = 0;
 
 	for( EntityType entity : entities ) {
-	    entity.deleteObserver( this );
-	}
-
-	try {
-	    this.dao.delete( entities );
-	} catch( SQLException e ) {
-	    throw new RuntimeException( e );
+	    res += this.delete( entity );
 	}
 
 	return res;
@@ -89,9 +83,9 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	try {
 	    EntityType entity = (EntityType) observable;
 	    if( entity.isDeleted() ) {
-		this.dao.delete( entity );
+		this.delete( entity );
 	    } else {
-		this.dao.update( entity );
+		this.update( entity );
 		this.updateChildrenList( entity );
 	    }
 	} catch( SQLException e ) {
@@ -101,24 +95,17 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 
     protected <T extends Entity> void updateChildrenList( EntityType parentEntity, EntitiesDao<T> childrenDao, Map<EntityType, Set<T>> persistedMap, Collection<T> existingList ) {
 	Set<T> children = persistedMap.get( parentEntity );
-	Set<T> toDelete = new HashSet<T>();
 
 	if( children == null ) {
 	    children = new HashSet<T>();
 	    persistedMap.put( parentEntity, children );
-	} else {
-	    toDelete.addAll( children );
 	}
 
 	for( T child : existingList ) {
-	    if( !toDelete.remove( child ) ) {
-		if( children.add( child ) ) {
-		    childrenDao.persist( child );
-		}
+	    if( children.add( child ) ) {
+		childrenDao.persist( child );
 	    }
 	}
-
-	childrenDao.delete( toDelete );
     }
 
     protected <T extends Entity> void deleteChildren( EntityType parentEntity, EntitiesDao<T> childrenDao, Map<EntityType, Set<T>> persistedMap ) {
