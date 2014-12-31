@@ -32,7 +32,7 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
     }
 
     public static void start( Context context ) {
-	if( instance != null ) {
+	if( instance == null ) {
 	    instance = new PersistenceManager( context );
 	    instance.doStart();
 	}

@@ -2,6 +2,8 @@ package com.hesso.greenliving.test;
 
 import java.sql.SQLException;
 
+import android.util.Log;
+
 import com.hesso.greenliving.dao.PersistenceManager;
 import com.hesso.greenliving.exception.UnexpectedException;
 import com.hesso.greenliving.model.Account;
@@ -14,6 +16,8 @@ public class TestManager {
 	PersistenceManager persistence = PersistenceManager.getInstance();
 	try {
 	    if( persistence == null || persistence.getTransactionsDao().queryForAll().isEmpty() ) {
+
+		Log.i( TestManager.class.getSimpleName(), "Creating fake model" );
 
 		Budget budget = Budget.getInstance();
 
