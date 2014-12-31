@@ -3,9 +3,14 @@ package com.hesso.greenliving.ui;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -13,7 +18,7 @@ import android.widget.ListView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Budget;
 
-public class AccountFragment extends AbstractFragment implements Observer {
+public class AccountFragment extends AbstractFragment implements Observer, OnMenuItemClickListener {
 
     private AccountListAdapter adapter;
     private MainActivity mainActivity;
@@ -48,8 +53,17 @@ public class AccountFragment extends AbstractFragment implements Observer {
 
 	Budget.getInstance().addObserver( this );
 	this.update( Budget.getInstance(), this );
-
+	this.setHasOptionsMenu(true);
 	return res;
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	super.onCreateOptionsMenu(menu, inflater);
+    	inflater.inflate(R.menu.account, menu);
+    	for(int i = 0 ; i < menu.size() ; i++) {
+    		menu.getItem(i).setOnMenuItemClickListener(this);
+    	}
     }
 
     @Override
@@ -58,4 +72,20 @@ public class AccountFragment extends AbstractFragment implements Observer {
 
 	this.adapter.setList( Budget.getInstance().getEntries() );
     }
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.menu_account_new_account:
+			Intent i = new Intent(this.mainActivity, DialogAccount.class);
+			startActivity(i);
+			break;
+		case R.id.menu_account_new_budget:
+			Intent j = new Intent(this.mainActivity, DialogBudget.class);
+			startActivity(j);
+			break;
+			//Todo : settings and about
+		}
+		return false;
+	}
 }
