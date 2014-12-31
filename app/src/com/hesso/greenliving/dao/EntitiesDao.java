@@ -10,6 +10,7 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import com.hesso.greenliving.exception.UnexpectedException;
 import com.hesso.greenliving.model.Entity;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.CloseableWrappedIterable;
@@ -47,7 +48,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	    entity.addObserver( this );
 	    this.updateChildrenList( entity );
 	} catch( SQLException e ) {
-	    throw new RuntimeException( e );
+	    throw new UnexpectedException( e );
 	}
     }
 
@@ -60,7 +61,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	    this.deleteChildren( entity );
 	    res = this.dao.delete( entity );
 	} catch( SQLException e ) {
-	    throw new RuntimeException( e );
+	    throw new UnexpectedException( e );
 	}
 
 	return res;
@@ -89,7 +90,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 		this.updateChildrenList( entity );
 	    }
 	} catch( SQLException e ) {
-	    throw new RuntimeException( e );
+	    throw new UnexpectedException( e );
 	}
     }
 

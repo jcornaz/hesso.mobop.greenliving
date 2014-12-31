@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -21,18 +22,20 @@ public class Transaction extends Entity {
     private Account destinationAccount;
 
     @DatabaseField (canBeNull = false )
-    private Date date;
-
-    @DatabaseField (canBeNull = false )
     private double amount;
+
+    @DatabaseField (canBeNull = false, dataType = DataType.DATE )
+    private Date date;
 
     public Transaction() {
     }
 
     public Transaction( Account sourceEntry, Account destinationEntry, DateTime date, double amount ) {
+	this();
 	this.setSourceAccount( sourceEntry );
 	this.setDestinationAccount( destinationEntry );
 	this.setAmount( amount );
+	this.setDate( date );
 	this.budget.addTransaction( this );
     }
 
@@ -41,7 +44,11 @@ public class Transaction extends Entity {
     }
 
     public void setDate( DateTime date ) {
-	if( !this.date.equals( date ) ) {
+	if( date == null ) {
+	    throw new NullPointerException( "transaction date cannot be null" );
+	}
+
+	if( this.date == null || !this.date.equals( date ) ) {
 	    this.date = date.toDate();
 	    this.setChanged();
 	}

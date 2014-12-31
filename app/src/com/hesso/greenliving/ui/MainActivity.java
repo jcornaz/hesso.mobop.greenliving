@@ -26,9 +26,7 @@ import com.hesso.greenliving.test.TestManager;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
 
-    static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
-
-    private static boolean createModel = true;
+    public static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
 
     private class PagerAdapter extends FragmentPagerAdapter {
 	public PagerAdapter( FragmentManager fm ) {
@@ -61,7 +59,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	super.onCreate( savedInstanceState );
 
 	Log.d( "debug", "MainActivity#onCreate" );
-	PersistenceManager.start( this );
 
 	this.setContentView( R.layout.activity_main );
 	// Initialization :
@@ -77,11 +74,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	// select tab on swipe
 	this.viewPager.setOnPageChangeListener( this );
 
-	// Create a fake model
-	if( createModel ) {
-	    TestManager.createFakeModel();
-	    createModel = false;
-	}
+	PersistenceManager.start( this );
+
+	// TODO à supprimer une fois l'app terminée
+	TestManager.createFakeModelIfNecessary();
+
 	/*
 	 * Intent i = new Intent(this, DialogAccount.class); startActivity(i);
 	 */
