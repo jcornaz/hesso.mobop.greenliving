@@ -15,16 +15,20 @@ import com.hesso.greenliving.model.Budget;
 public class DialogBudget extends Activity {
 	private EditText editTextIncome;
 	private NumberPicker numberPickerDay;
+	private Budget budget;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.dialog_budget);
+		budget = Budget.getInstance();
 		editTextIncome = (EditText) this.findViewById(R.id.dialog_budget_edittext_income);
+		editTextIncome.setText(budget.getTarget().toString());
+		
 		numberPickerDay = (NumberPicker) this.findViewById(R.id.dialog_budget_numberpicker_day_of_month);
-		numberPickerDay.setValue(1);
 		numberPickerDay.setMinValue(1);
 		numberPickerDay.setMaxValue(31);
+		numberPickerDay.setValue(budget.getDayOfMonth());
 	}
 	
 	public void onClickCancel(View v) {
@@ -37,10 +41,8 @@ public class DialogBudget extends Activity {
 		if(editTextIncome.getText().length() != 0) {
 			target = new BigDecimal(editTextIncome.getText().toString());
 			dayOfMonth = numberPickerDay.getValue();
-			Budget budget = Budget.getInstance();
 			budget.setDayOfMonth(dayOfMonth);
 			budget.setTarget(target);
-			//Save
 			finish();
 		} else {
 			Toast.makeText(this, "Please type an income", Toast.LENGTH_LONG).show();

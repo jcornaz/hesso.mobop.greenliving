@@ -13,7 +13,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Budget extends Entity {
     private static final long serialVersionUID = 8240495679280473832L;
 
-    private static final BigDecimal DEFAULT_TARGET = new BigDecimal( 0 );
+    private static final BigDecimal DEFAULT_TARGET = new BigDecimal(1000);
     private static final int DEFAULT_DAY_OF_MONTH = 25;
 
     private static Budget instance;
