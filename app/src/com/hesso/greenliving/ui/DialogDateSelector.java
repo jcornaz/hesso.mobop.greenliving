@@ -18,12 +18,14 @@ public class DialogDateSelector extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.dialog_date_selector);
+		long nowMillis = DateTime.now().getMillis();
 		datePicker = (DatePicker) this.findViewById(R.id.dialog_date_selector_picker);
+		datePicker.setMinDate(nowMillis - 1000);
 		long d = this.getIntent().getLongExtra("date", -1);
-		if(d != -1) 
+		if(d > nowMillis) 
 			date = new DateTime(d);
 		else
-			date = new DateTime(DateTime.now());
+			date = new DateTime(nowMillis);
 		
 		updateDatePicker();
 	}

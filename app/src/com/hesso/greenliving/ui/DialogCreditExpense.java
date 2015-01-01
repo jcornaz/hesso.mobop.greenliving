@@ -12,20 +12,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.model.Budget;
 
-public class DialogCreditExpense extends Activity {
+public class DialogCreditExpense extends Activity implements OnCheckedChangeListener {
     private EditText editTextAmount;
     private Spinner spinnerAccount;
     private Switch switchExpenseCredit;
     private Button buttonDate;
+    private TextView textViewFromTo;
     private DateTime date;
     private List<Account> accounts;
     private static final int REQUESTCODE_DATE_SELECTION = 42;
@@ -41,10 +45,12 @@ public class DialogCreditExpense extends Activity {
 	spinnerAccount = (Spinner) this.findViewById( R.id.dialog_credit_expense_spinner_account );
 	switchExpenseCredit = (Switch) this.findViewById( R.id.dialog_credit_expense_switch_expense_credit );
 	buttonDate = (Button) this.findViewById( R.id.dialog_credit_expense_button_date );
+	textViewFromTo = (TextView) this.findViewById(R.id.dialog_credit_expense_textview_from);
 	setDateToButton();
 	accounts = new LinkedList<Account>( Budget.getInstance().getAccounts() );
 	ArrayAdapter<Account> adapter = new ArrayAdapter<Account>( this, android.R.layout.simple_spinner_dropdown_item, accounts );
 	spinnerAccount.setAdapter( adapter );
+	switchExpenseCredit.setOnCheckedChangeListener(this);
     }
 
     public void onClickDate( View v ) {
@@ -92,4 +98,14 @@ public class DialogCreditExpense extends Activity {
     public void onClickCancel( View v ) {
 	finish();
     }
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if(isChecked) {
+			this.textViewFromTo.setText(R.string.to);
+		} else {
+			this.textViewFromTo.setText(R.string.from);
+		}
+		
+	}
 }

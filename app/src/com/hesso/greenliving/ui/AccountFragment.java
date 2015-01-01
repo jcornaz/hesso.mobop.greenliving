@@ -44,7 +44,7 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 
 		this.accountsListView = (ListView) inflater.inflate( R.layout.frag_accounts, container, false );
 		this.adapter = new AccountListAdapter(container.getContext());
-
+		//this.adapter.setList(Budget.getInstance().getAccounts());
 		this.accountsListView.setAdapter(this.adapter);
 		this.accountsListView.setOnItemLongClickListener(this);
 
@@ -72,8 +72,9 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 	@Override
 	public void update( Observable observable, Object data ) {
 		Log.d( "debug", "FragmentBudget#update" );
-
-		this.adapter.setList( Budget.getInstance().getAccounts() );
+		//this.adapter.notifyDataSetChanged();
+		this.adapter.setList(Budget.getInstance().getAccounts());
+		this.adapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -117,7 +118,6 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 	    for(int i = 0 ; i < menu.size() ; i++) {
 	    	menu.getItem(i).setOnMenuItemClickListener(this);
 	    }
-	    
 		return false;
 	}
 }
