@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +18,6 @@ import android.util.Log;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.dao.PersistenceManager;
 import com.hesso.greenliving.model.Account;
-import com.hesso.greenliving.test.TestManager;
 
 //Fragments swiping working !!! Add fragments in createFragments()
 
@@ -60,7 +60,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
-
+	//Lock portrait
+	this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	instance = this;
 
 	Log.d( "debug", "MainActivity#onCreate" );
@@ -83,7 +84,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	PersistenceManager.start( this );
 
 	// TODO à supprimer une fois l'app terminée
-	TestManager.createFakeModelIfNecessary();
+	//TestManager.createFakeModelIfNecessary();
 
 
 	// this.startActivity( new Intent( this, DialogCreditExpense.class ) );

@@ -88,14 +88,18 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 			Intent j = new Intent(getActivity(), DialogBudget.class);
 			startActivity(j);
 			break;
-			//Todo : settings and about
+		case R.id.menu_account_help:
+			Intent k = new Intent(getActivity(), DialogAccountHelp.class);
+			startActivity(k);
+			break;
+			//Todo : settings
 			
 		case R.id.menu_account_list_update:
 			Account account = (Account)accountsListView.getItemAtPosition(itemLongClickPosition);
-			Intent k = new Intent(getActivity(), DialogAccount.class);
-			k.putExtra("is_update", true);
-			k.putExtra("account", account);
-			startActivity(k);
+			Intent m = new Intent(getActivity(), DialogAccount.class);
+			m.putExtra("is_update", true);
+			m.putExtra("account", account);
+			startActivity(m);
 			break;
 			
 		case R.id.menu_account_list_delete:

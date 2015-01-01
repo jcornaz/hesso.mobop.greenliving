@@ -47,6 +47,11 @@
             android:theme="@android:style/Theme.Holo.Dialog"
             android:label="Transfer">
         </activity>
+        <activity 
+            android:name="com.hesso.greenliving.ui.DialogAccountHelp"
+            android:theme="@android:style/Theme.Holo.Dialog"
+            android:label="Help">
+        </activity>
     </application>
 
 </manifest>

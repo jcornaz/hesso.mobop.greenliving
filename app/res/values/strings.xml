@@ -24,6 +24,10 @@
     <string name="credit_expense">Credit/Expense</string>
     <string name="transfer">Transfer money</string>
     <string name="help">Help</string>
-    <string name="modify">Modify</string>
+    <string name="modify">Edit</string>
     <string name="delete">Delete</string>
+    <string name="account_help">
+        This tab allows you to manage your accounts.\nPress Menu -> New account to add a new account.\nLong press an account to edit it.
+    </string>
+    <string name="got_it">I got it!</string>
 </resources>
