@@ -20,7 +20,7 @@ import com.j256.ormlite.table.TableUtils;
 public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 
     private static final String DB_NAME = "greenliving.db";
-    private static final int DB_VERSION = 12;
+    private static final int DB_VERSION = 13;
     private static PersistenceManager instance;
     private BudgetDao budgetDao;
     private AccountsDao entriesDao;
@@ -66,10 +66,11 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	    Budget currentBudget = Budget.getInstance();
 	    List<Budget> existingBudgets = this.budgetDao.queryForAll();
 	    if( existingBudgets.isEmpty() ) {
+		Log.i( this.getClass().getSimpleName(), "create new budget" );
 		this.budgetDao.create( Budget.getInstance() );
 	    } else {
+		Log.i( this.getClass().getSimpleName(), "updating existing budget" );
 		currentBudget.setId( existingBudgets.get( 0 ).getId() );
-		this.budgetDao.update( currentBudget );
 		this.budgetDao.refresh( currentBudget );
 	    }
 	    Budget.getInstance().addObserver( this.budgetDao );

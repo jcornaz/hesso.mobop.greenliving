@@ -46,7 +46,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	try {
 	    this.createOrUpdate( entity );
 	    entity.addObserver( this );
-	    this.updateChildrenList( entity );
+	    this.updateChildren( entity );
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );
 	}
@@ -87,14 +87,42 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 		this.delete( entity );
 	    } else {
 		this.update( entity );
-		this.updateChildrenList( entity );
+		this.updateChildren( entity );
 	    }
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );
 	}
     }
 
-    protected <T extends Entity> void updateChildrenList( EntityType parentEntity, EntitiesDao<T> childrenDao, Map<EntityType, Set<T>> persistedMap, Collection<T> existingList ) {
+    @Override
+    public int refresh( EntityType entity ) {
+	int res = 0;
+
+	try {
+	    res = this.dao.refresh( entity );
+	} catch( SQLException e ) {
+	    throw new UnexpectedException( e );
+	}
+
+	this.hasBeenRefreshed( entity );
+
+	entity.init();
+
+	this.refreshChildren( entity );
+
+	return res;
+    }
+
+    protected <T extends Entity> void refreshChildren( EntityType parentEntity, EntitiesDao<T> childrenDao, Map<EntityType, Set<T>> persistedMap ) {
+	Set<T> children = persistedMap.get( parentEntity );
+	if( children != null ) {
+	    for( T child : children ) {
+		childrenDao.refresh( child );
+	    }
+	}
+    }
+
+    protected <T extends Entity> void updateChildren( EntityType parentEntity, EntitiesDao<T> childrenDao, Map<EntityType, Set<T>> persistedMap, Collection<T> existingList ) {
 	Set<T> children = persistedMap.get( parentEntity );
 
 	if( children == null ) {
@@ -116,7 +144,11 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	}
     }
 
-    protected abstract void updateChildrenList( EntityType entity );
+    protected abstract void hasBeenRefreshed( EntityType entity );
+
+    protected abstract void refreshChildren( EntityType entity );
+
+    protected abstract void updateChildren( EntityType entity );
 
     protected abstract void deleteChildren( EntityType entity );
 
@@ -218,11 +250,6 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     @Override
     public int update( PreparedUpdate<EntityType> preparedUpdate ) throws SQLException {
 	return this.dao.update( preparedUpdate );
-    }
-
-    @Override
-    public int refresh( EntityType data ) throws SQLException {
-	return this.dao.refresh( data );
     }
 
     @Override

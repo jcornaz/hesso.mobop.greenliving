@@ -25,17 +25,8 @@ import com.hesso.greenliving.model.Budget;
 public class AccountFragment extends AbstractFragment implements Observer, OnMenuItemClickListener, OnItemLongClickListener {
 
 	private AccountListAdapter adapter;
-	private MainActivity mainActivity;
 	private ListView accountsListView;
 	private int itemLongClickPosition;
-
-	public AccountFragment() {
-	}
-
-	public AccountFragment( MainActivity mainActivity ) {
-		this();
-		this.mainActivity = mainActivity;
-	}
 
 	@Override
 	public int getNameId() {
@@ -44,7 +35,6 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 
 	@Override
 	public int getIconId() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -53,16 +43,22 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 		Log.d( "debug", "FragmentBudget#onCreateView" );
 
 		this.accountsListView = (ListView) inflater.inflate( R.layout.frag_accounts, container, false );
-		this.adapter = new AccountListAdapter( this.mainActivity, container.getContext() );
+		this.adapter = new AccountListAdapter(container.getContext());
 
-		this.accountsListView.setAdapter( this.adapter );
+		this.accountsListView.setAdapter(this.adapter);
 		this.accountsListView.setOnItemLongClickListener(this);
 
-		Budget.getInstance().addObserver( this );
-		this.update( Budget.getInstance(), this );
+		Budget.getInstance().addObserver(this);
+		this.update(Budget.getInstance(), this);
 		this.setHasOptionsMenu(true);
 		return this.accountsListView;
 	}
+	
+    @Override
+    public void onDestroyView() {
+	super.onDestroyView();
+	Budget.getInstance().deleteObserver( this );
+    }
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -77,25 +73,25 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 	public void update( Observable observable, Object data ) {
 		Log.d( "debug", "FragmentBudget#update" );
 
-		this.adapter.setList( Budget.getInstance().getEntries() );
+		this.adapter.setList( Budget.getInstance().getAccounts() );
 	}
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.menu_account_new_account:
-			Intent i = new Intent(this.mainActivity, DialogAccount.class);
+			Intent i = new Intent(getActivity(), DialogAccount.class);
 			startActivity(i);
 			break;
 		case R.id.menu_account_new_budget:
-			Intent j = new Intent(this.mainActivity, DialogBudget.class);
+			Intent j = new Intent(getActivity(), DialogBudget.class);
 			startActivity(j);
 			break;
 			//Todo : settings and about
 			
 		case R.id.menu_account_list_update:
 			Account account = (Account)accountsListView.getItemAtPosition(itemLongClickPosition);
-			Intent k = new Intent(this.mainActivity, DialogAccount.class);
+			Intent k = new Intent(getActivity(), DialogAccount.class);
 			k.putExtra("is_update", true);
 			k.putExtra("account", account);
 			startActivity(k);

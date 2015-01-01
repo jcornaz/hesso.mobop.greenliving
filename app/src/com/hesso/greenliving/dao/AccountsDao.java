@@ -1,6 +1,7 @@
 package com.hesso.greenliving.dao;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,21 +17,35 @@ public class AccountsDao extends EntitiesDao<Account> {
     private Map<Account, Set<Transaction>> persistedTransactions = new HashMap<Account, Set<Transaction>>();
     private Map<Account, Set<ScheduledTransaction>> persistedSchedules = new HashMap<Account, Set<ScheduledTransaction>>();
 
-    public AccountsDao( Dao<Account, Long> dao, TransactionsDao transactionsDao , SchedulesDao schedulesDao  ) {
+    public AccountsDao( Dao<Account, Long> dao, TransactionsDao transactionsDao, SchedulesDao schedulesDao ) {
 	super( dao );
 	this.transactionsDao = transactionsDao;
 	this.schedulesDao = schedulesDao;
     }
 
     @Override
-    protected void updateChildrenList( Account entity ) {
-	this.updateChildrenList( entity, this.transactionsDao, this.persistedTransactions, entity.getTransactions() );
-	this.updateChildrenList( entity, this.schedulesDao, this.persistedSchedules, entity.getScheduledTransactions() );
+    protected void updateChildren( Account entity ) {
+	this.updateChildren( entity, this.transactionsDao, this.persistedTransactions, entity.getTransactions() );
+	this.updateChildren( entity, this.schedulesDao, this.persistedSchedules, entity.getScheduledTransactions() );
     }
 
     @Override
     protected void deleteChildren( Account entity ) {
 	this.deleteChildren( entity, this.transactionsDao, this.persistedTransactions );
 	this.deleteChildren( entity, this.schedulesDao, this.persistedSchedules );
+	this.persistedSchedules.remove( entity );
+	this.persistedTransactions.remove( entity );
+    }
+
+    @Override
+    protected void refreshChildren( Account entity ) {
+	this.refreshChildren( entity, this.transactionsDao, this.persistedTransactions );
+	this.refreshChildren( entity, this.schedulesDao, this.persistedSchedules );
+    }
+
+    @Override
+    protected void hasBeenRefreshed( Account entity ) {
+	this.persistedTransactions.put( entity, new HashSet<Transaction>( entity.getTransactions() ) );
+	this.persistedSchedules.put( entity, new HashSet<ScheduledTransaction>( entity.getScheduledTransactions() ) );
     }
 }

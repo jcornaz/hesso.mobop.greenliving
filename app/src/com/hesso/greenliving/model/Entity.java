@@ -39,6 +39,8 @@ public abstract class Entity extends Observable implements Serializable {
 
     protected abstract void destroy();
 
+    public abstract void init();
+
     @Override
     public int hashCode() {
 	final int prime = 31;

@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -14,8 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.dao.PersistenceManager;
@@ -25,8 +22,6 @@ import com.hesso.greenliving.test.TestManager;
 //Fragments swiping working !!! Add fragments in createFragments()
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-
-    public static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
 
     private class PagerAdapter extends FragmentPagerAdapter {
 	public PagerAdapter( FragmentManager fm ) {
@@ -44,6 +39,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
     }
 
+    public static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
+
+    private static MainActivity instance;
+
+    public static MainActivity getInstance() {
+	return instance;
+    }
+
     private List<AbstractFragment> fragments = new ArrayList<AbstractFragment>();
     private PagerAdapter pagerAdapter;
     private ActionBar actionBar;
@@ -58,9 +61,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
 
+	instance = this;
+
 	Log.d( "debug", "MainActivity#onCreate" );
 
 	this.setContentView( R.layout.activity_main );
+
 	// Initialization :
 	this.actionBar = this.getActionBar();
 	this.actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
@@ -78,12 +84,20 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	// TODO à supprimer une fois l'app terminée
 	TestManager.createFakeModelIfNecessary();
+
+
+	// this.startActivity( new Intent( this, DialogCreditExpense.class ) );
+
+    }
+
+    @Override
+    protected void onDestroy() {
+	super.onDestroy();
     }
 
     private void createFragments() {
-	this.transactionFragment = new TransactionsFragment( this );
-
-	this.fragments.add( new AccountFragment( this ) );
+	this.transactionFragment = new TransactionsFragment();
+	this.fragments.add( new AccountFragment() );
 	this.fragments.add( this.transactionFragment );
 	// Add new Fragments here
     }
@@ -124,12 +138,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	this.actionBar.setSelectedNavigationItem( position );
 	Log.i( "position", String.valueOf( position ) );
 	if( position != this.fragments.indexOf( this.transactionFragment ) ) {
-	    this.transactionFragment.setBudgetEntry( null );
+	    this.transactionFragment.setAccount( null );
 	}
     }
 
     public void openTransactions( Account budgetEntry ) {
 	this.viewPager.setCurrentItem( this.fragments.indexOf( this.transactionFragment ) );
-	this.transactionFragment.setBudgetEntry( budgetEntry );
+	this.transactionFragment.setAccount( budgetEntry );
     }
 }

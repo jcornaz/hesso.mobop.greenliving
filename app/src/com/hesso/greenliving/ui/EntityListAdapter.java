@@ -14,11 +14,9 @@ import com.hesso.greenliving.model.Entity;
 public abstract class EntityListAdapter<EntityType extends Entity, ViewType extends IEntityView<EntityType>> extends ArrayAdapter<EntityType> {
 
     protected Set<EntityType> entities = new HashSet<EntityType>();
-    private MainActivity mainActivity;
 
-    public EntityListAdapter( MainActivity mainActivity, Context context, int resource ) {
+    public EntityListAdapter( Context context, int resource ) {
 	super( context, resource );
-	this.mainActivity = mainActivity;
     }
 
     public void setList( Collection<EntityType> entities ) {
@@ -73,7 +71,6 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
 	}
 
 	res.setModel( this.getItem( position ) );
-	res.setMainActivity( this.mainActivity );
 
 	return (View) res;
     }

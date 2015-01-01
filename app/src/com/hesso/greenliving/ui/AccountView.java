@@ -31,8 +31,6 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
     private TextView currentAmountView;
     private ProgressBar progressBarView;
 
-    private MainActivity mainActivity;
-
     @Override
     protected void onFinishInflate() {
 	super.onFinishInflate();
@@ -75,8 +73,8 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 	double currentAmount = this.budgetEntry.getCurrentAmount();
 
 	this.entryNameView.setText( this.budgetEntry.getName() );
-	this.currentAmountView.setText( String.valueOf( currentAmount ) );
-	this.targetAmountView.setText( String.valueOf( targetAmount ) );
+	this.currentAmountView.setText( MainActivity.DEC_FORMAT.format( currentAmount ) );
+	this.targetAmountView.setText( MainActivity.DEC_FORMAT.format( targetAmount ) );
 
 	if( targetAmount != 0 ) {
 	    this.progressBarView.setVisibility( View.VISIBLE );
@@ -87,13 +85,8 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
     }
 
     @Override
-    public void setMainActivity( MainActivity mainActivity ) {
-	this.mainActivity = mainActivity;
-    }
-
-    @Override
     public void onClick( View v ) {
-	this.mainActivity.openTransactions( this.budgetEntry );
+	MainActivity.getInstance().openTransactions( this.budgetEntry );
     }
 
 	@Override

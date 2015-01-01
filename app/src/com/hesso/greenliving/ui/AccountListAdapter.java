@@ -8,8 +8,8 @@ import com.hesso.greenliving.model.Account;
 
 public class AccountListAdapter extends EntityListAdapter<Account, AccountView> {
 
-    public AccountListAdapter( MainActivity mainActivity, Context context ) {
-	super( mainActivity, context, R.layout.item_account );
+    public AccountListAdapter( Context context ) {
+	super( context, R.layout.item_account );
     }
 
     @Override

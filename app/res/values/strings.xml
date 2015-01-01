@@ -15,7 +15,7 @@
     <string name="cancel">Cancel</string>
     <string name="income">Income</string>
     <string name="day_of_month">Day of month</string>
-    <string name="slash">/</string>
+    <string name="slash"> / </string>
     <string name="colon">: S</string>
     <string name="new_account">New account</string>
     <string name="update_budget">Define budget</string>

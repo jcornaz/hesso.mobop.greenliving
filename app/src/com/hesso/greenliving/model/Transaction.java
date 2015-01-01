@@ -39,6 +39,10 @@ public class Transaction extends Entity {
 	this.budget.addTransaction( this );
     }
 
+    @Override
+    public void init() {
+    }
+
     public DateTime getDate() {
 	return new DateTime( this.date );
     }
