@@ -6,7 +6,6 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -79,18 +78,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	// TODO à supprimer une fois l'app terminée
 	TestManager.createFakeModelIfNecessary();
 
-	/*
-	 * Intent i = new Intent(this, DialogAccount.class); startActivity(i);
-	 */
-	/*
-	 * Intent i = new Intent(this, DialogBudget.class); startActivity(i);
-	 */
-	/*
-	 * Intent i = new Intent(this, DialogCreditExpense.class);
-	 * startActivity(i);
-	 */
-	Intent i = new Intent( this, DialogTransfer.class );
-	startActivity( i );
+	// this.startActivity( new Intent( this, DialogCreditExpense.class ) );
     }
 
     private void createFragments() {

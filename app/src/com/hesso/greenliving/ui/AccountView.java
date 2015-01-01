@@ -73,8 +73,8 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 	double currentAmount = this.budgetEntry.getCurrentAmount();
 
 	this.entryNameView.setText( this.budgetEntry.getName() );
-	this.currentAmountView.setText( String.valueOf( currentAmount ) );
-	this.targetAmountView.setText( String.valueOf( targetAmount ) );
+	this.currentAmountView.setText( MainActivity.DEC_FORMAT.format( currentAmount ) );
+	this.targetAmountView.setText( MainActivity.DEC_FORMAT.format( targetAmount ) );
 
 	if( targetAmount != 0 ) {
 	    this.progressBarView.setVisibility( View.VISIBLE );
