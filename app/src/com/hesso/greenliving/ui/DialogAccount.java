@@ -24,7 +24,8 @@ public class DialogAccount extends Activity {
 		
 		Intent i = getIntent();
 		if(i.getBooleanExtra("is_update", false)) {
-			account = (Account)i.getSerializableExtra("account");
+			account = Budget.getInstance().getAccountById(i.getLongExtra("account_id", 0));
+			//account = (Account)i.getSerializableExtra("account");
 		}
 		if(account != null) {
 			editTextAccountName.setText(account.getName());
@@ -43,6 +44,7 @@ public class DialogAccount extends Activity {
 			} else {
 				account.setName(accountName);
 				account.setTargetAmount(amount);
+				account.notifyObservers();
 			}
 			finish();
 		} else 

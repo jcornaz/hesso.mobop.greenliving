@@ -79,34 +79,55 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
+		Intent intent;
 		switch(item.getItemId()) {
 		case R.id.menu_account_new_account:
-			Intent i = new Intent(getActivity(), DialogAccount.class);
-			startActivity(i);
+			intent = new Intent(getActivity(), DialogAccount.class);
+			startActivity(intent);
 			break;
 		case R.id.menu_account_new_budget:
-			Intent j = new Intent(getActivity(), DialogBudget.class);
-			startActivity(j);
+			intent = new Intent(getActivity(), DialogBudget.class);
+			startActivity(intent);
+			break;
+		case R.id.menu_account_credit_expense:
+			intent = new Intent(getActivity(), DialogCreditExpense.class);
+			startActivity(intent);
+			break;
+		case R.id.menu_account_transfer:
+			intent = new Intent(getActivity(), DialogTransfer.class);
+			startActivity(intent);
+			break;
+		case R.id.menu_account_settings:
+			//Todo : settings
 			break;
 		case R.id.menu_account_help:
-			Intent k = new Intent(getActivity(), DialogAccountHelp.class);
-			startActivity(k);
+			intent = new Intent(getActivity(), DialogAccountHelp.class);
+			startActivity(intent);
 			break;
-			//Todo : settings
-			
+		case R.id.menu_account_about:
+			intent = new Intent(getActivity(), DialogAbout.class);
+			startActivity(intent);
+			break;
+		
+		case R.id.menu_account_list_credit_expense:
+			intent = new Intent(getActivity(), DialogCreditExpense.class);
+			intent.putExtra("linked_to_account", true);
+			intent.putExtra("account_id", ((Account)accountsListView.getItemAtPosition(itemLongClickPosition)).getId());
+			//intent.putExtra("account", (Account)accountsListView.getItemAtPosition(itemLongClickPosition));
+			startActivity(intent);
+			break;
 		case R.id.menu_account_list_update:
 			Account account = (Account)accountsListView.getItemAtPosition(itemLongClickPosition);
-			Intent m = new Intent(getActivity(), DialogAccount.class);
-			m.putExtra("is_update", true);
-			m.putExtra("account", account);
-			startActivity(m);
+			intent = new Intent(getActivity(), DialogAccount.class);
+			intent.putExtra("is_update", true);
+			//intent.putExtra("account", account);
+			intent.putExtra("account_id", account.getId());
+			startActivity(intent);
 			break;
 			
 		case R.id.menu_account_list_delete:
 			((Account)accountsListView.getItemAtPosition(itemLongClickPosition)).delete();
 			break;
-			
-			
 		}
 		return false;
 	}

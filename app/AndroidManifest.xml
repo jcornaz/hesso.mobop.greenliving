@@ -52,6 +52,11 @@
             android:theme="@android:style/Theme.Holo.Dialog"
             android:label="Help">
         </activity>
+        <activity 
+            android:name="com.hesso.greenliving.ui.DialogAbout"
+            android:theme="@android:style/Theme.Holo.Dialog"
+            android:label="@string/about">
+        </activity>
     </application>
 
 </manifest>

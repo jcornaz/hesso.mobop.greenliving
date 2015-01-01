@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Paramètres</string>
+
+    <string name="fragment_accounts_name">Comptes</string>
+    <string name="fragment_transactions_name">Transactions</string>
+    
+    <string name="from">Depuis : </string>
+    <string name="refill">Crédit</string>
+    <string name="to">Vers : </string>
+    <string name="account_name">Nom du compte</string>
+    <string name="current_amount">Solde actuel</string>
+    <string name="target_amount">Solde visé</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
+    <string name="income">Salaire</string>
+    <string name="day_of_month">Jour du mois</string>
+    <string name="slash"> / </string>
+    <string name="colon"> : </string>
+    <string name="new_account">Nouveau compte</string>
+    <string name="update_budget">Definir un budget</string>
+    <string name="settings">Paramètres</string>
+    <string name="about">À propos...</string>
+    <string name="credit_expense">Créditer/Dépenser</string>
+    <string name="transfer">Transferer de l\'argent</string>
+    <string name="help">Aide</string>
+    <string name="modify">Modifier</string>
+    <string name="delete">Supprimer</string>
+    <string name="account_help">
+        Cet onglet vous permet de gérer vos comptes.\Appuyez sur Menu -> Nouveau compte pour ajouter un nouveau compter.\nFaites un appui long sur un compte pour le modifier.
+    </string>
+    <string name="got_it">D\'accord</string>
+    <string name="about_text">Application développée par :\nJonathan Cornaz et Ludovic Lehmann\nTous droits réservés</string>
+</resources>

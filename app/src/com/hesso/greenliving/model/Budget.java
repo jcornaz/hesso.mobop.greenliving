@@ -52,6 +52,22 @@ public class Budget extends Entity {
     public Collection<Account> getAccounts() {
 	return new HashSet<Account>( this.accounts );
     }
+    
+    public Account getAccountById(long id) {
+    	for(Account account : accounts) {
+    		if (account.getId() == id)
+    			return account;
+    	}
+    	return null;
+    }
+    
+    public Transaction getTransactionById(long id) {
+    	for(Transaction transaction : transactions) {
+    		if(transaction.getId() == id)
+    			return transaction;
+    	}
+    	return null;
+    }
 
     private boolean addAccount( Account account ) {
 	boolean res = this.accounts.add( account );
