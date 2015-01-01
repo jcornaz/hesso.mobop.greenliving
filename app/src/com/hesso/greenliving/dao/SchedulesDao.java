@@ -10,12 +10,22 @@ public class SchedulesDao extends EntitiesDao<ScheduledTransaction> {
     }
 
     @Override
-    protected void updateChildrenList( ScheduledTransaction entity ) {
-	// Les ScheduledTransaction n'ont pas d'enfant
+    protected void updateChildren( ScheduledTransaction entity ) {
+	// Les ScheduledTransaction n'ont pas d'enfants
     }
 
     @Override
     protected void deleteChildren( ScheduledTransaction entity ) {
-	// Les ScheduledTransaction n'ont pas d'enfant
+	// Les ScheduledTransaction n'ont pas d'enfants
+    }
+
+    @Override
+    protected void refreshChildren( ScheduledTransaction entity ) {
+	// Les ScheduledTransaction n'ont pas d'enfants
+    }
+
+    @Override
+    protected void hasBeenRefreshed( ScheduledTransaction entity ) {
+	// Les ScheduledTransaction n'ont pas d'enfants
     }
 }

@@ -6,6 +6,8 @@ import java.util.LinkedList;
 
 import org.joda.time.DateTime;
 
+import android.util.Log;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -27,10 +29,12 @@ public class Account extends Entity {
     private Collection<ScheduledTransaction> scheduledTransactions = new HashSet<ScheduledTransaction>();
 
     @ForeignCollectionField (eager = true, foreignFieldName = "sourceAccount" )
-    private Collection<Transaction> outgoingTransactions = new LinkedList<Transaction>();
+    private Collection<Transaction> outgoingTransactions = new HashSet<Transaction>();
 
     @ForeignCollectionField (eager = true, foreignFieldName = "destinationAccount" )
-    private Collection<Transaction> incomingTransactions = new LinkedList<Transaction>();
+    private Collection<Transaction> incomingTransactions = new HashSet<Transaction>();
+
+    private boolean initialized = false;
 
     public Account() {
     }
@@ -38,6 +42,15 @@ public class Account extends Entity {
     public Account( String name, double targetAmount ) {
 	this.name = name;
 	this.targetAmount = targetAmount;
+    }
+
+    @Override
+    public void init() {
+	Log.d( this.getClass().getSimpleName(), "initializing" );
+	this.scheduledTransactions = new HashSet<ScheduledTransaction>( this.scheduledTransactions );
+	this.outgoingTransactions = new HashSet<Transaction>( this.outgoingTransactions );
+	this.incomingTransactions = new HashSet<Transaction>( this.incomingTransactions );
+	this.initialized = true;
     }
 
     public Budget getBudget() {
@@ -91,7 +104,8 @@ public class Account extends Entity {
 	return res;
     }
 
-    public boolean addOutgoingTransaction( Transaction transaction ) {
+    boolean addOutgoingTransaction( Transaction transaction ) {
+	Log.i( this.getClass().getSimpleName(), "initilialized = " + String.valueOf( this.initialized ) );
 	boolean res = this.outgoingTransactions.add( transaction );
 	if( res ) {
 	    this.setChanged();
@@ -99,7 +113,7 @@ public class Account extends Entity {
 	return res;
     }
 
-    public boolean removeIncomingTransaction( Transaction transaction ) {
+    boolean removeIncomingTransaction( Transaction transaction ) {
 	boolean res = this.incomingTransactions.remove( transaction );
 	if( res ) {
 	    this.setChanged();
@@ -107,7 +121,7 @@ public class Account extends Entity {
 	return res;
     }
 
-    public boolean addIncomingTransaction( Transaction transaction ) {
+    boolean addIncomingTransaction( Transaction transaction ) {
 	boolean res = this.incomingTransactions.add( transaction );
 	if( res ) {
 	    this.setChanged();
@@ -115,7 +129,7 @@ public class Account extends Entity {
 	return res;
     }
 
-    public boolean removeScheduledTransaction( ScheduledTransaction schedule ) {
+    boolean removeScheduledTransaction( ScheduledTransaction schedule ) {
 	boolean res = this.scheduledTransactions.remove( schedule );
 	if( res ) {
 	    this.setChanged();
@@ -123,7 +137,7 @@ public class Account extends Entity {
 	return res;
     }
 
-    public boolean addScheduledTransaction( ScheduledTransaction schedule ) {
+    boolean addScheduledTransaction( ScheduledTransaction schedule ) {
 	boolean res = this.scheduledTransactions.add( schedule );
 	if( res ) {
 	    this.setChanged();

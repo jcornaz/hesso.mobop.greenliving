@@ -25,8 +25,6 @@ import com.hesso.greenliving.test.TestManager;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
 
-    public static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
-
     private class PagerAdapter extends FragmentPagerAdapter {
 	public PagerAdapter( FragmentManager fm ) {
 	    super( fm );
@@ -43,6 +41,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
     }
 
+    public static final DecimalFormat DEC_FORMAT = new DecimalFormat( "#0.00" );
+
+    private static MainActivity instance;
+
+    public static MainActivity getInstance() {
+	return instance;
+    }
+
     private List<AbstractFragment> fragments = new ArrayList<AbstractFragment>();
     private PagerAdapter pagerAdapter;
     private ActionBar actionBar;
@@ -57,9 +63,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
 
+	instance = this;
+
 	Log.d( "debug", "MainActivity#onCreate" );
 
 	this.setContentView( R.layout.activity_main );
+
 	// Initialization :
 	this.actionBar = this.getActionBar();
 	this.actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
@@ -81,10 +90,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	// this.startActivity( new Intent( this, DialogCreditExpense.class ) );
     }
 
-    private void createFragments() {
-	this.transactionFragment = new TransactionsFragment( this );
+    @Override
+    protected void onDestroy() {
+	super.onDestroy();
+    }
 
-	this.fragments.add( new AccountFragment( this ) );
+    private void createFragments() {
+	this.transactionFragment = new TransactionsFragment();
+	this.fragments.add( new AccountFragment() );
 	this.fragments.add( this.transactionFragment );
 	// Add new Fragments here
     }
@@ -145,12 +158,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	this.actionBar.setSelectedNavigationItem( position );
 	Log.i( "position", String.valueOf( position ) );
 	if( position != this.fragments.indexOf( this.transactionFragment ) ) {
-	    this.transactionFragment.setBudgetEntry( null );
+	    this.transactionFragment.setAccount( null );
 	}
     }
 
     public void openTransactions( Account budgetEntry ) {
 	this.viewPager.setCurrentItem( this.fragments.indexOf( this.transactionFragment ) );
-	this.transactionFragment.setBudgetEntry( budgetEntry );
+	this.transactionFragment.setAccount( budgetEntry );
     }
 }

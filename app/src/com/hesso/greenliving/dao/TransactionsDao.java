@@ -10,12 +10,22 @@ public class TransactionsDao extends EntitiesDao<Transaction> {
     }
 
     @Override
-    protected void updateChildrenList( Transaction entity ) {
-	// Les transactions n'ont pas d'enfant
+    protected void updateChildren( Transaction entity ) {
+	// Les transactions n'ont pas d'enfants
     }
 
     @Override
     protected void deleteChildren( Transaction entity ) {
-	// Les transactions n'ont pas d'enfant
+	// Les transactions n'ont pas d'enfants
+    }
+
+    @Override
+    protected void refreshChildren( Transaction entity ) {
+	// Les transactions n'ont pas d'enfants
+    }
+
+    @Override
+    protected void hasBeenRefreshed( Transaction entity ) {
+	// Les ScheduledTransaction n'ont pas d'enfants
     }
 }

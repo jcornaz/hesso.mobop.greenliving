@@ -66,10 +66,11 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	    Budget currentBudget = Budget.getInstance();
 	    List<Budget> existingBudgets = this.budgetDao.queryForAll();
 	    if( existingBudgets.isEmpty() ) {
+		Log.i( this.getClass().getSimpleName(), "create new budget" );
 		this.budgetDao.create( Budget.getInstance() );
 	    } else {
+		Log.i( this.getClass().getSimpleName(), "updating existing budget" );
 		currentBudget.setId( existingBudgets.get( 0 ).getId() );
-		this.budgetDao.update( currentBudget );
 		this.budgetDao.refresh( currentBudget );
 	    }
 	    Budget.getInstance().addObserver( this.budgetDao );

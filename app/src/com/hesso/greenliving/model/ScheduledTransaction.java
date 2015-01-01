@@ -17,7 +17,11 @@ public class ScheduledTransaction extends Entity {
     private int dayOfMonth;
 
     @DatabaseField (canBeNull = false )
-    private BigDecimal amount;
+    private double amount;
+
+    @Override
+    public void init() {
+    }
 
     public Account getEntry() {
 	return account;
@@ -41,11 +45,11 @@ public class ScheduledTransaction extends Entity {
 	this.dayOfMonth = dayOfMonth;
     }
 
-    public BigDecimal getAmount() {
+    public double getAmount() {
 	return amount;
     }
 
-    public void setAmount( BigDecimal amount ) {
+    public void setAmount( double amount ) {
 	this.amount = amount;
     }
 

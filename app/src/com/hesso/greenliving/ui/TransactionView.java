@@ -98,8 +98,4 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
 	this.amount.setText( MainActivity.DEC_FORMAT.format( this.transaction.getAmount() ) );
 	this.amount.setTextColor( color );
     }
-
-    @Override
-    public void setMainActivity( MainActivity mainActivity ) {
-    }
 }

@@ -1,11 +1,8 @@
 package com.hesso.greenliving.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
@@ -46,12 +43,14 @@ public class Budget extends Entity {
 	this.setTarget( DEFAULT_TARGET );
     }
 
-    public Set<Account> getEntries() {
-	return new HashSet<Account>( this.accounts );
+    @Override
+    public void init() {
+	this.accounts = new HashSet<Account>( this.accounts );
+	this.transactions = new HashSet<Transaction>( this.transactions );
     }
-    
-    public List<Account> getEntriesList() {
-    	return new ArrayList<Account>(this.accounts);
+
+    public Collection<Account> getAccounts() {
+	return new HashSet<Account>( this.accounts );
     }
 
     private boolean addAccount( Account account ) {
