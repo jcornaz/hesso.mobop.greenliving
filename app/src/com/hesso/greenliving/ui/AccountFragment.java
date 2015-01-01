@@ -13,65 +13,72 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import com.hesso.greenliving.R;
+import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.model.Budget;
 
-public class AccountFragment extends AbstractFragment implements Observer, OnMenuItemClickListener {
+public class AccountFragment extends AbstractFragment implements Observer, OnMenuItemClickListener, OnItemLongClickListener {
 
-    private AccountListAdapter adapter;
-    private MainActivity mainActivity;
+	private AccountListAdapter adapter;
+	private MainActivity mainActivity;
+	private ListView accountsListView;
+	private int itemLongClickPosition;
 
-    public AccountFragment() {
-    }
+	public AccountFragment() {
+	}
 
-    public AccountFragment( MainActivity mainActivity ) {
-	this();
-	this.mainActivity = mainActivity;
-    }
+	public AccountFragment( MainActivity mainActivity ) {
+		this();
+		this.mainActivity = mainActivity;
+	}
 
-    @Override
-    public int getNameId() {
-	return R.string.fragment_accounts_name;
-    }
+	@Override
+	public int getNameId() {
+		return R.string.fragment_accounts_name;
+	}
 
-    @Override
-    public int getIconId() {
-	// TODO Auto-generated method stub
-	return 0;
-    }
+	@Override
+	public int getIconId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-	Log.d( "debug", "FragmentBudget#onCreateView" );
+	@Override
+	public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+		Log.d( "debug", "FragmentBudget#onCreateView" );
 
-	ListView res = (ListView) inflater.inflate( R.layout.frag_accounts, container, false );
-	this.adapter = new AccountListAdapter( this.mainActivity, container.getContext() );
+		this.accountsListView = (ListView) inflater.inflate( R.layout.frag_accounts, container, false );
+		this.adapter = new AccountListAdapter( this.mainActivity, container.getContext() );
 
-	res.setAdapter( this.adapter );
+		this.accountsListView.setAdapter( this.adapter );
+		this.accountsListView.setOnItemLongClickListener(this);
 
-	Budget.getInstance().addObserver( this );
-	this.update( Budget.getInstance(), this );
-	this.setHasOptionsMenu(true);
-	return res;
-    }
-    
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    	super.onCreateOptionsMenu(menu, inflater);
-    	inflater.inflate(R.menu.account, menu);
-    	for(int i = 0 ; i < menu.size() ; i++) {
-    		menu.getItem(i).setOnMenuItemClickListener(this);
-    	}
-    }
+		Budget.getInstance().addObserver( this );
+		this.update( Budget.getInstance(), this );
+		this.setHasOptionsMenu(true);
+		return this.accountsListView;
+	}
 
-    @Override
-    public void update( Observable observable, Object data ) {
-	Log.d( "debug", "FragmentBudget#update" );
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.account, menu);
+		for(int i = 0 ; i < menu.size() ; i++) {
+			menu.getItem(i).setOnMenuItemClickListener(this);
+		}
+	}
 
-	this.adapter.setList( Budget.getInstance().getEntries() );
-    }
+	@Override
+	public void update( Observable observable, Object data ) {
+		Log.d( "debug", "FragmentBudget#update" );
+
+		this.adapter.setList( Budget.getInstance().getEntries() );
+	}
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
@@ -85,7 +92,36 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 			startActivity(j);
 			break;
 			//Todo : settings and about
+			
+		case R.id.menu_account_list_update:
+			Account account = (Account)accountsListView.getItemAtPosition(itemLongClickPosition);
+			Intent k = new Intent(this.mainActivity, DialogAccount.class);
+			k.putExtra("is_update", true);
+			k.putExtra("account", account);
+			startActivity(k);
+			break;
+			
+		case R.id.menu_account_list_delete:
+			((Account)accountsListView.getItemAtPosition(itemLongClickPosition)).delete();
+			break;
+			
+			
 		}
+		return false;
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		itemLongClickPosition = position;
+	    PopupMenu popup = new PopupMenu(getActivity(), view);
+	    MenuInflater inflater = popup.getMenuInflater();
+	    Menu menu = popup.getMenu();
+	    inflater.inflate(R.menu.account_list, menu);
+	    popup.show();
+	    for(int i = 0 ; i < menu.size() ; i++) {
+	    	menu.getItem(i).setOnMenuItemClickListener(this);
+	    }
+	    
 		return false;
 	}
 }

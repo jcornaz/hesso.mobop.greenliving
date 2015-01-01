@@ -78,19 +78,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	// TODO à supprimer une fois l'app terminée
 	TestManager.createFakeModelIfNecessary();
-
-	/*
-	 * Intent i = new Intent(this, DialogAccount.class); startActivity(i);
-	 */
-	/*
-	 * Intent i = new Intent(this, DialogBudget.class); startActivity(i);
-	 */
-	/*
-	 * Intent i = new Intent(this, DialogCreditExpense.class);
-	 * startActivity(i);
-	 */
-	Intent i = new Intent( this, DialogTransfer.class );
-	startActivity( i );
     }
 
     private void createFragments() {
@@ -107,26 +94,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	    this.actionBar.addTab( this.actionBar.newTab().setText( fragment.getNameId() ).setTabListener( this ) );
 	    // actionBar.addTab(actionBar.newTab().setIcon(fragment.getIconId()).setTabListener(this));
 	}
-    }
-
-    // Options menu (todo)
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
-	// Inflate the menu; this adds items to the action bar if it is present.
-	this.getMenuInflater().inflate( R.menu.main, menu );
-	return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
-	// Handle action bar item clicks here. The action bar will
-	// automatically handle clicks on the Home/Up button, so long
-	// as you specify a parent activity in AndroidManifest.xml.
-	int id = item.getItemId();
-	if( id == R.id.action_settings ) {
-	    return true;
-	}
-	return super.onOptionsItemSelected( item );
     }
 
     // Manage tabs (ActionBar.TabListener)

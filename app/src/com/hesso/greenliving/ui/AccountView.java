@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Account;
 
-public class AccountView extends LinearLayout implements IEntityView<Account>, OnClickListener {
+public class AccountView extends LinearLayout implements IEntityView<Account>, OnClickListener, OnLongClickListener {
 
     private static final int PROGRESSBAR_SIZE = 1000;
 
@@ -41,6 +42,7 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 	this.progressBarView = (ProgressBar) this.findViewById( R.id.progressBar );
 	this.progressBarView.setMax( PROGRESSBAR_SIZE );
 	this.setOnClickListener( this );
+	this.setOnLongClickListener(this);
     }
 
     public AccountView( Context context, AttributeSet attrs, int defStyle ) {
@@ -93,4 +95,9 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
     public void onClick( View v ) {
 	this.mainActivity.openTransactions( this.budgetEntry );
     }
+
+	@Override
+	public boolean onLongClick(View v) {
+		return false;
+	}
 }

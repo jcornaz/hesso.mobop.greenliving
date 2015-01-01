@@ -157,7 +157,7 @@ public class Account extends Entity {
 	}
 
 	for( Transaction transaction : this.outgoingTransactions ) {
-	    res += transaction.getAmount();
+	    res -= transaction.getAmount();
 	}
 
 	return res;
