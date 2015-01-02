@@ -1,7 +1,6 @@
 package com.hesso.greenliving.dao;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +19,7 @@ import com.j256.ormlite.table.TableUtils;
 public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 
     private static final String DB_NAME = "greenliving.db";
-    private static final int DB_VERSION = 15;
+    private static final int DB_VERSION = 18;
     private static PersistenceManager instance;
     private BudgetDao budgetDao;
     private AccountsDao entriesDao;
@@ -62,23 +61,8 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	    throw new UnexpectedException( e );
 	}
 
-	try {
-	    Budget currentBudget = Budget.getInstance();
-	    List<Budget> existingBudgets = this.budgetDao.queryForAll();
-	    if( existingBudgets.isEmpty() ) {
-		Log.i( this.getClass().getSimpleName(), "create new budget" );
-		Budget.getInstance().init();
-		this.budgetDao.persist( Budget.getInstance() );
-	    } else {
-		Log.i( this.getClass().getSimpleName(), "updating existing budget" );
-		currentBudget.setId( existingBudgets.get( 0 ).getId() );
-		this.budgetDao.refresh( currentBudget );
-	    }
-	    Budget.getInstance().addObserver( this.budgetDao );
-	} catch( SQLException e ) {
-	    this.doStop();
-	    throw new UnexpectedException( e );
-	}
+	this.budgetDao.refresh( Budget.getInstance() );
+	Budget.getInstance().addObserver( this.budgetDao );
     }
 
     private void doStop() {
@@ -92,6 +76,7 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	    TableUtils.createTable( connectionSource, Account.class );
 	    TableUtils.createTable( connectionSource, ScheduledTransaction.class );
 	    TableUtils.createTable( connectionSource, Transaction.class );
+	    this.getDao( Budget.class ).create( Budget.getInstance() );
 	    Log.i( this.getClass().getSimpleName(), "tables created" );
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );

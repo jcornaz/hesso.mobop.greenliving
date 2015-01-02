@@ -20,12 +20,16 @@ public class Budget extends Entity {
     private static final BigDecimal DEFAULT_TARGET = new BigDecimal( 1000 );
     private static final int DEFAULT_DAY_OF_MONTH = 25;
 
+    private static final long ID = 42;
+
+    private static Integer AUTO_NUM = 1;
+
     private static Budget instance;
 
     public static synchronized Budget getInstance() {
 	if( instance == null ) {
-		//This is called only once
-		Log.d("Budget", "Budget instance null");
+	    // This is called only once
+	    Log.d( "Budget", "Budget instance null" );
 	    instance = new Budget();
 	}
 	return instance;
@@ -43,17 +47,23 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
-    // @DatabaseField (canBeNull = false )
-    // private Account offBudgetAccount = null;
-
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
+
+    private int num;
 
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
 	this.setTarget( DEFAULT_TARGET );
-	//This is called 3 times ! WTF ???
-	Log.d(this.getClass().getSimpleName(), "new Budget instance");
+	this.setId( ID );
+
+	synchronized( AUTO_NUM ) {
+	    this.num = AUTO_NUM;
+	    AUTO_NUM++;
+	}
+
+	// This is called 3 times ! WTF ???
+	Log.d( this.getClass().getSimpleName(), "Budget instance : " + this.num );
     }
 
     @Override
@@ -63,8 +73,8 @@ public class Budget extends Entity {
 
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );
-	
-	Log.d(this.getClass().getSimpleName(), "Budget init");
+
+	Log.d( this.getClass().getSimpleName(), "Budget init" );
 
 	// if( this.offBudgetAccount == null ) {
 	// this.offBudgetAccount = new OffBudgetAccount();
@@ -177,31 +187,21 @@ public class Budget extends Entity {
 
     @Override
     public void addObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer added : " + observer.getClass().getSimpleName() + " for " + this );
+	Log.d( this.getClass().getSimpleName(), "observer added : " + observer.getClass().getSimpleName() + " for " + this.num );
 	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
 	super.addObserver( observer );
     }
 
     @Override
     public synchronized void deleteObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer removed : " + observer.getClass().getSimpleName()  + " for " + this );
+	Log.d( this.getClass().getSimpleName(), "observer removed : " + observer.getClass().getSimpleName() + " for " + this.num );
 	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
 	super.deleteObserver( observer );
     }
 
     @Override
     public void notifyObservers() {
-	Log.d( this.getClass().getSimpleName(), "notify " + this.countObservers() + " observers : " + this.hasChanged() + " for " + this );
+	Log.d( this.getClass().getSimpleName(), "notify " + this.countObservers() + " observers : " + this.hasChanged() + " for " + this.num );
 	super.notifyObservers();
     }
-
-    /*@Override
-    public synchronized void deleteObservers() {
-	Log.d( this.getClass().getSimpleName(), " observers deleted" );
-	super.deleteObservers();
-    }*/
-
-    // public Account getOffBudget() {
-    // return this.offBudgetAccount;
-    // }
 }
