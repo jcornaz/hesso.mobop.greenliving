@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,9 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
     }
 
     public void setList( Collection<EntityType> entities ) {
+
+	Log.d( this.getClass().getSimpleName(), "old list had " + this.entities.size() + " elements" );
+
 	Set<EntityType> toRemove = new HashSet<EntityType>( this.entities );
 
 	for( EntityType entity : entities ) {
@@ -29,10 +33,12 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
 	}
 
 	this.remove( toRemove );
+	this.notifyDataSetChanged();
     }
 
-    private void remove( Collection<EntityType> transactions ) {
-	for( EntityType transaction : transactions ) {
+    private void remove( Collection<EntityType> entities ) {
+
+	for( EntityType transaction : entities ) {
 	    this.remove( transaction );
 	}
     }
