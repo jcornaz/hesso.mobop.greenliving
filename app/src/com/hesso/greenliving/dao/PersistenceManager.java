@@ -59,7 +59,6 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	}
 
 	this.budgetDao.refresh( Budget.getInstance() );
-	Budget.getInstance().addObserver( this.budgetDao );
     }
 
     private void doStop() {
