@@ -5,7 +5,6 @@ import java.util.Observer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +21,7 @@ import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.model.Budget;
 import com.hesso.greenliving.model.Transaction;
+import com.hesso.greenliving.model.TransctionType;
 
 public class TransactionsFragment extends AbstractFragment implements Observer, OnMenuItemClickListener, OnItemLongClickListener {
 
@@ -99,8 +99,18 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 	    startActivity( intent );
 	    break;
 	case R.id.menu_transaction_list_update:
-	    // Hard to implement : manage source and destination of transaction,
-	    // complicated in case of money transfer
+		Transaction transaction  = ((Transaction)this.listViewTransaction.getItemAtPosition(itemLongClickPosition));
+		if(transaction.getType() == TransctionType.CREDIT || transaction.getType() == TransctionType.EXPENSE) {
+			intent = new Intent( getActivity(), DialogCreditExpense.class) ;
+			intent.putExtra("is_credit_expense", true);
+			intent.putExtra("transaction_id", transaction.getId());
+			startActivity(intent);
+		} else if (transaction.getType() == TransctionType.TRANSFER) {
+			intent = new Intent(getActivity(), DialogTransfer.class);
+			intent.putExtra("is_transfer", true);
+			intent.putExtra("transaction_id", transaction.getId());
+			startActivity(intent);
+		}
 	    break;
 	case R.id.menu_transaction_list_delete:
 	    ((Transaction) this.listViewTransaction.getItemAtPosition( itemLongClickPosition )).delete();

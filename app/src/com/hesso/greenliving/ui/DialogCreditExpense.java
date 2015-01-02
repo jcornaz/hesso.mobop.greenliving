@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.model.Budget;
+import com.hesso.greenliving.model.Transaction;
+import com.hesso.greenliving.model.TransctionType;
 
 public class DialogCreditExpense extends Activity implements OnCheckedChangeListener {
 	private EditText editTextAmount;
@@ -33,8 +35,10 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 	
 	private boolean hasAccountPreselected;
 	private boolean isLinkedToAccount;
+	private boolean isExistingTransaction;
 	
 	private Account account;
+	private Transaction transaction;
 	private DateTime date;
 
 	private static final int REQUESTCODE_DATE_SELECTION = 42;
@@ -48,9 +52,13 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 		Intent intent = getIntent();
 		hasAccountPreselected = intent.getBooleanExtra("has_preselected_account", false);
 		isLinkedToAccount = intent.getBooleanExtra("linked_to_account", false);
+		isExistingTransaction = intent.getBooleanExtra("is_credit_expense", false);
+
 		if(hasAccountPreselected || isLinkedToAccount)
 			account = Budget.getInstance().getAccountById(intent.getLongExtra("account_id", 0));
-		
+		if(isExistingTransaction)
+			transaction = Budget.getInstance().getTransactionById(intent.getLongExtra("transaction_id", 0));
+
 		date = DateTime.now();
 		editTextAmount = (EditText) this.findViewById( R.id.dialog_credit_expense_edittext_amount );
 		spinnerAccount = (Spinner) this.findViewById( R.id.dialog_credit_expense_spinner_account );
@@ -59,7 +67,7 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 		textViewFromTo = (TextView) this.findViewById(R.id.dialog_credit_expense_textview_from);
 		textViewAccount = (TextView) this.findViewById(R.id.dialog_credit_expense_textview_account);
 		switchExpenseCredit.setOnCheckedChangeListener(this);
-		
+
 		setDateToButton();
 		if(isLinkedToAccount && account != null) {
 			spinnerAccount.setVisibility(View.GONE);
@@ -71,6 +79,16 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 			spinnerAccount.setAdapter(adapter);
 			if(hasAccountPreselected && account != null) {
 				spinnerAccount.setSelection(accounts.indexOf(account));
+			} else if(isExistingTransaction && transaction != null) {
+				date = transaction.getDate();
+				editTextAmount.setText(String.valueOf(transaction.getAmount()));
+				if(transaction.getType() == TransctionType.CREDIT)	{
+					switchExpenseCredit.setChecked(true);
+					spinnerAccount.setSelection(accounts.indexOf(transaction.getDestinationAccount()));
+				} else {
+					switchExpenseCredit.setChecked(false);
+					spinnerAccount.setSelection(accounts.indexOf(transaction.getSourceAccount()));
+				}	
 			}
 		}
 	}
@@ -107,6 +125,18 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 				} else if( switchExpenseCredit.isChecked() == CREDIT ) {
 					account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
 				}
+				finish();
+			} else if(isExistingTransaction && transaction != null) {
+				transaction.setAmount(Double.valueOf(editTextAmount.getText().toString()));
+				transaction.setDate(date);
+				if(switchExpenseCredit.isChecked() == EXPENSE) {
+					transaction.setSourceAccount((Account)spinnerAccount.getSelectedItem());
+					transaction.setDestinationAccount(null);
+				} else {
+					transaction.setDestinationAccount((Account)spinnerAccount.getSelectedItem());
+					transaction.setSourceAccount(null);
+				}
+				transaction.notifyObservers();
 				finish();
 			} else {
 				account =(Account) spinnerAccount.getSelectedItem();

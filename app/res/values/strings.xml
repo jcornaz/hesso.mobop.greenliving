@@ -41,4 +41,7 @@
     <string name="transaction_help">This tab allows you to manage your transactions</string>
     <string name="no_account">To begin please create new accounts in menu -> new account</string>
     <string name="date">Date:</string>
+    <string name="same_account">Unable to transfer from/to the same account</string>
+    <string name="no_account_to">Please select an account to transfer to</string>
+    <string name="no_account_from">Please select the account from witch to transfer from</string>
 </resources>
