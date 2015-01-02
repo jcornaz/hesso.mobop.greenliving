@@ -2,6 +2,8 @@ package com.hesso.greenliving.model;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Observable;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -35,6 +37,13 @@ public abstract class Entity extends Observable implements Serializable {
 	this.isDeleted = true;
 	this.setChanged();
 	this.notifyObservers();
+    }
+
+    protected <T extends Entity> void map( Collection<T> entities, Map<Long, T> entitiesMap ) {
+	entitiesMap.clear();
+	for( T entity : entities ) {
+	    entitiesMap.put( entity.getId(), entity );
+	}
     }
 
     protected abstract void destroy();

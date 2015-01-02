@@ -2,7 +2,11 @@ package com.hesso.greenliving.model;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+
+import android.util.SparseArray;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
@@ -13,7 +17,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Budget extends Entity {
     private static final long serialVersionUID = 8240495679280473832L;
 
-    private static final BigDecimal DEFAULT_TARGET = new BigDecimal(1000);
+    private static final BigDecimal DEFAULT_TARGET = new BigDecimal( 1000 );
     private static final int DEFAULT_DAY_OF_MONTH = 25;
 
     private static Budget instance;
@@ -38,6 +42,9 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
+    private Map<Long, Account> accountsMap = new HashMap<Long, Account>();
+    private Map<Long, Transaction> transactionsMap = new HashMap<Long, Transaction>();
+
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
 	this.setTarget( DEFAULT_TARGET );
@@ -47,42 +54,49 @@ public class Budget extends Entity {
     public void init() {
 	this.accounts = new HashSet<Account>( this.accounts );
 	this.transactions = new HashSet<Transaction>( this.transactions );
+
+	this.map( this.accounts, this.accountsMap );
+	this.map( this.transactions, this.transactionsMap );
     }
 
     public Collection<Account> getAccounts() {
 	return new HashSet<Account>( this.accounts );
     }
-    
-    public Account getAccountById(long id) {
-    	for(Account account : accounts) {
-    		if (account.getId() == id)
-    			return account;
-    	}
-    	return null;
+
+    public Account getAccountById( long id ) {
+	for( Account account : accounts ) {
+	    if( account.getId() == id )
+		return account;
+	}
+	return null;
     }
-    
-    public Transaction getTransactionById(long id) {
-    	for(Transaction transaction : transactions) {
-    		if(transaction.getId() == id)
-    			return transaction;
-    	}
-    	return null;
+
+    public Transaction getTransactionById( long id ) {
+	for( Transaction transaction : transactions ) {
+	    if( transaction.getId() == id )
+		return transaction;
+	}
+	return null;
     }
 
     private boolean addAccount( Account account ) {
 	boolean res = this.accounts.add( account );
 
-	if( res )
+	if( res ) {
+	    this.accountsMap.put( account.getId(), account );
 	    this.setChanged();
+	}
 
 	return res;
     }
 
-    public boolean removeAccount( Account account ) {
+    boolean removeAccount( Account account ) {
 	boolean res = this.accounts.remove( account );
 
-	if( res )
+	if( res ) {
+	    this.accountsMap.remove( account.getId() );
 	    this.setChanged();
+	}
 
 	return res;
     }
@@ -113,20 +127,24 @@ public class Budget extends Entity {
 	return new HashSet<Transaction>( this.transactions );
     }
 
-    public boolean addTransaction( Transaction transaction ) {
+    boolean addTransaction( Transaction transaction ) {
 	boolean res = this.transactions.add( transaction );
 
-	if( res )
+	if( res ) {
+	    this.transactionsMap.put( transaction.getId(), transaction );
 	    this.setChanged();
+	}
 
 	return res;
     }
 
-    public boolean removeTransaction( Transaction transaction ) {
+    boolean removeTransaction( Transaction transaction ) {
 	boolean res = this.transactions.remove( transaction );
 
-	if( res )
+	if( res ) {
+	    this.transactionsMap.remove( transaction.getId() );
 	    this.setChanged();
+	}
 
 	return res;
     }
@@ -148,5 +166,13 @@ public class Budget extends Entity {
     public void destroy() {
 	// Le budget ne peut pas être supprimé
 	throw new NotSupportedOperationException();
+    }
+
+    public Account getAccount( long accountId ) {
+	return this.accountsMap.get( accountId );
+    }
+
+    public Transaction getTransaction( long transactionId ) {
+	return this.transactionsMap.get( transactionId );
     }
 }
