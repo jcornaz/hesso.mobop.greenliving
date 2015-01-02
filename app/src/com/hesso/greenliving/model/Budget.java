@@ -3,6 +3,7 @@ package com.hesso.greenliving.model;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Observer;
 
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
@@ -90,7 +91,6 @@ public class Budget extends Entity {
 
     boolean removeAccount( Account account ) {
 	boolean res = this.accounts.remove( account );
-	Log.d( this.getClass().getSimpleName(), "Removing account " + account.getId() + " from budget" );
 
 	if( res ) {
 	    this.accountsMap.remove( account.getId() );
@@ -168,6 +168,32 @@ public class Budget extends Entity {
     public void destroy() {
 	// Le budget ne peut pas être supprimé
 	throw new NotSupportedOperationException();
+    }
+
+    @Override
+    public void addObserver( Observer observer ) {
+	Log.d( this.getClass().getSimpleName(), "observer added : " + observer.getClass().getSimpleName() );
+	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
+	super.addObserver( observer );
+    }
+
+    @Override
+    public synchronized void deleteObserver( Observer observer ) {
+	Log.d( this.getClass().getSimpleName(), "observer removed : " + observer.getClass().getSimpleName() );
+	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
+	super.deleteObserver( observer );
+    }
+
+    @Override
+    public void notifyObservers() {
+	Log.d( this.getClass().getSimpleName(), "notify " + this.countObservers() + " observers : " + this.hasChanged() );
+	super.notifyObservers();
+    }
+
+    @Override
+    public synchronized void deleteObservers() {
+	Log.d( this.getClass().getSimpleName(), " observers deleted" );
+	super.deleteObservers();
     }
 
     // public Account getOffBudget() {
