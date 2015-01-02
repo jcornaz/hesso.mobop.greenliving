@@ -31,4 +31,7 @@
     </string>
     <string name="got_it">D\'accord</string>
     <string name="about_text">Application développée par :\nJonathan Cornaz et Ludovic Lehmann\nTous droits réservés</string>
+    <string name="select_date">Selectionner une date</string>
+    <string name="no_account_selected">Veuillez sélectionner un compte ou en créer un nouveau !</string>
+    <string name="no_amount_typed">Veuillez saisir un montant !</string>
 </resources>

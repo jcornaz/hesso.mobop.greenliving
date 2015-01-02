@@ -60,7 +60,8 @@
                 <TextView
                     android:id="@+id/dialog_credit_expense_textview_account"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

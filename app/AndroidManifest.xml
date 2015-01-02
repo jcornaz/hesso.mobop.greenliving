@@ -25,32 +25,32 @@
         <activity 
             android:name="com.hesso.greenliving.ui.DialogAccount"
             android:theme="@android:style/Theme.Holo.Dialog"
-            android:label="Account">
+            android:label="@string/new_account">
         </activity>
         <activity 
             android:name="com.hesso.greenliving.ui.DialogBudget"
             android:theme="@android:style/Theme.Holo.Dialog"
-            android:label="Budget">
+            android:label="@string/update_budget">
         </activity>
         <activity 
             android:name="com.hesso.greenliving.ui.DialogCreditExpense"
             android:theme="@android:style/Theme.Holo.Dialog"
-            android:label="Credit/Expense">
+            android:label="@string/credit_expense">
         </activity>
         <activity 
             android:name="com.hesso.greenliving.ui.DialogDateSelector"
             android:theme="@android:style/Theme.Holo.Dialog"
-            android:label="Date selection">
+            android:label="@string/select_date">
         </activity>
         <activity 
             android:name="com.hesso.greenliving.ui.DialogTransfer"
             android:theme="@android:style/Theme.Holo.Dialog"
-            android:label="Transfer">
+            android:label="@string/transfer">
         </activity>
         <activity 
             android:name="com.hesso.greenliving.ui.DialogAccountHelp"
             android:theme="@android:style/Theme.Holo.Dialog"
-            android:label="Help">
+            android:label="@string/help">
         </activity>
         <activity 
             android:name="com.hesso.greenliving.ui.DialogAbout"

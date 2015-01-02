@@ -1,13 +1,13 @@
 package com.hesso.greenliving.ui;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import org.joda.time.DateTime;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,9 +31,13 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 	private Button buttonDate;
 	private TextView textViewFromTo;
 	private TextView textViewAccount;
+	
+	private boolean hasAccountPreselected;
+	private boolean isLinkedToAccount;
+	
 	private Account account;
 	private DateTime date;
-	private List<Account> accounts;
+
 	private static final int REQUESTCODE_DATE_SELECTION = 42;
 	private static final boolean EXPENSE = false;
 	private static final boolean CREDIT = true;
@@ -43,9 +47,11 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 		super.onCreate( savedInstanceState );
 		this.setContentView( R.layout.dialog_credit_expense );
 		Intent intent = getIntent();
-		if(intent.getBooleanExtra("linked_to_account", false)) {
+		hasAccountPreselected = intent.getBooleanExtra("has_preselected_account", false);
+		isLinkedToAccount = intent.getBooleanExtra("linked_to_account", false);
+		if(hasAccountPreselected || isLinkedToAccount)
 			account = Budget.getInstance().getAccountById(intent.getLongExtra("account_id", 0));
-		}
+		
 		date = DateTime.now();
 		editTextAmount = (EditText) this.findViewById( R.id.dialog_credit_expense_edittext_amount );
 		spinnerAccount = (Spinner) this.findViewById( R.id.dialog_credit_expense_spinner_account );
@@ -53,16 +59,21 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 		buttonDate = (Button) this.findViewById( R.id.dialog_credit_expense_button_date );
 		textViewFromTo = (TextView) this.findViewById(R.id.dialog_credit_expense_textview_from);
 		textViewAccount = (TextView) this.findViewById(R.id.dialog_credit_expense_textview_account);
+		switchExpenseCredit.setOnCheckedChangeListener(this);
+		
 		setDateToButton();
-		accounts = new LinkedList<Account>( Budget.getInstance().getAccounts() );
-		ArrayAdapter<Account> adapter = new ArrayAdapter<Account>( this, android.R.layout.simple_spinner_dropdown_item, accounts );
-		if(account == null)
-			spinnerAccount.setAdapter( adapter );
-		else {
+		if(isLinkedToAccount && account != null) {
 			spinnerAccount.setVisibility(View.GONE);
 			textViewAccount.setText(account.getName());
+			textViewAccount.setTypeface(null, Typeface.BOLD);
+		} else {
+			ArrayList<Account> accounts = new ArrayList<Account>(Budget.getInstance().getAccounts());
+			ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_spinner_dropdown_item, accounts);
+			spinnerAccount.setAdapter(adapter);
+			if(hasAccountPreselected && account != null) {
+				spinnerAccount.setSelection(accounts.indexOf(account));
+			}
 		}
-		switchExpenseCredit.setOnCheckedChangeListener(this);
 	}
 
 	public void onClickDate( View v ) {
@@ -91,9 +102,16 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 	public void onClickOk( View v ) {
 		// TODO : check date
 		if( editTextAmount.getText().length() > 0 ) {
-			if(account == null) {
-				account = (Account) spinnerAccount.getSelectedItem();
-				if( account != null ) {
+			if(isLinkedToAccount && account != null) {
+				if( switchExpenseCredit.isChecked() == EXPENSE ) {
+					account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
+				} else if( switchExpenseCredit.isChecked() == CREDIT ) {
+					account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
+				}
+				finish();
+			} else {
+				account =(Account) spinnerAccount.getSelectedItem();
+				if(account != null) {
 					if( switchExpenseCredit.isChecked() == EXPENSE ) {
 						account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
 					} else if( switchExpenseCredit.isChecked() == CREDIT ) {
@@ -101,19 +119,11 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 					}
 					finish();
 				} else {
-					Toast.makeText( this, "Please select an account", Toast.LENGTH_LONG ).show();
+					Toast.makeText( this, R.string.no_account_selected, Toast.LENGTH_LONG ).show();
 				}
-			} else {
-				if( switchExpenseCredit.isChecked() == EXPENSE ) {
-					account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
-				} else if( switchExpenseCredit.isChecked() == CREDIT ) {
-					account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
-				}
-				finish();
 			}
-			
 		} else {
-			Toast.makeText( this, "Please type an amount", Toast.LENGTH_LONG ).show();
+			Toast.makeText( this, R.string.no_amount_typed, Toast.LENGTH_LONG ).show();
 		}
 	}
 
@@ -128,6 +138,5 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 		} else {
 			this.textViewFromTo.setText(R.string.from);
 		}
-
 	}
 }

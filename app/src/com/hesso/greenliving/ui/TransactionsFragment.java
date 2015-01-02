@@ -12,15 +12,21 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.model.Budget;
+import com.hesso.greenliving.model.Transaction;
 
-public class TransactionsFragment extends AbstractFragment implements Observer, OnMenuItemClickListener {
+public class TransactionsFragment extends AbstractFragment implements Observer, OnMenuItemClickListener, OnItemLongClickListener {
 
     private TransactionListAdapter adapter;
+    private ListView listViewTransaction;
+    private int itemLongClickPosition;
     private Account account;
 
     @Override
@@ -35,14 +41,15 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-	ListView res = (ListView) inflater.inflate( R.layout.frag_transactions, container, false );
+	listViewTransaction = (ListView) inflater.inflate( R.layout.frag_transactions, container, false );
 	this.adapter = new TransactionListAdapter( container.getContext() );
-	res.setAdapter( this.adapter );
+	listViewTransaction.setAdapter( this.adapter );
 
 	Budget.getInstance().addObserver( this );
 	this.update( Budget.getInstance(), this );
 	this.setHasOptionsMenu( true );
-	return res;
+	listViewTransaction.setOnItemLongClickListener(this);
+	return listViewTransaction;
     }
 
     @Override
@@ -68,16 +75,38 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 
     @Override
     public boolean onMenuItemClick( MenuItem item ) {
+    	Intent intent;
 	switch( item.getItemId() ) {
 	case R.id.menu_transaction_credit_expense:
-	    Intent i = new Intent( MainActivity.getInstance(), DialogCreditExpense.class );
-	    startActivity( i );
+	    intent = new Intent( MainActivity.getInstance(), DialogCreditExpense.class );
+	    if(account != null) {
+	    	intent.putExtra("has_preselected_account", true);
+	    	intent.putExtra("account_id", account.getId());
+	    }
+	    startActivity(intent);
 	    break;
 	case R.id.menu_transaction_transfer:
-	    Intent j = new Intent( MainActivity.getInstance(), DialogTransfer.class );
-	    startActivity( j );
+	    intent = new Intent( MainActivity.getInstance(), DialogTransfer.class );
+	    startActivity(intent);
 	    break;
+	case R.id.menu_transaction_settings:
+		//Todo : settings
+		break;
+	case R.id.menu_transaction_help:
+		//Todo : transaction help
+		break;
+	case R.id.menu_transaction_about:
 	// Todo : settings and about
+		break;
+	case R.id.menu_transaction_list_update:
+		intent = new Intent(getActivity(), DialogCreditExpense.class);
+		intent.putExtra("is_update", true);
+		intent.putExtra("transaction_id", ((Transaction)this.listViewTransaction.getItemAtPosition(itemLongClickPosition)).getId());
+		startActivity(intent);
+		break;
+	case R.id.menu_transaction_list_delete:
+		((Transaction)this.listViewTransaction.getItemAtPosition(itemLongClickPosition)).delete();
+		break;
 	}
 	return false;
     }
@@ -106,4 +135,20 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 	    this.update( Budget.getInstance(), this );
 	}
     }
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		itemLongClickPosition = position;
+		PopupMenu popup = new PopupMenu(getActivity(), view);
+	    MenuInflater inflater = popup.getMenuInflater();
+	    Menu menu = popup.getMenu();
+	    inflater.inflate(R.menu.transaction_list, menu);
+	    popup.show();
+	    for(int i = 0 ; i < menu.size() ; i++) {
+	    	menu.getItem(i).setOnMenuItemClickListener(this);
+	    }
+		return false;
+	}
+
+
 }
