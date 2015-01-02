@@ -3,12 +3,13 @@ package com.hesso.greenliving.model;
 import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.Collection;
+import java.util.Observable;
 
 import android.support.v4.util.LongSparseArray;
 
 import com.j256.ormlite.field.DatabaseField;
 
-public abstract class Entity extends GreenLivingObservable implements Serializable {
+public abstract class Entity extends Observable implements Serializable {
     private static final long serialVersionUID = -110511284436795169L;
 
     @DatabaseField (generatedId = true )

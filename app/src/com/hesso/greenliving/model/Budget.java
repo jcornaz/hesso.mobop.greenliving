@@ -22,11 +22,12 @@ public class Budget extends Entity {
 
     private static Budget instance;
 
-    public static Budget getInstance() {
+    public static synchronized Budget getInstance() {
 	if( instance == null ) {
+		//This is called only once
+		Log.d("Budget", "Budget instance null");
 	    instance = new Budget();
 	}
-
 	return instance;
     }
 
@@ -51,6 +52,8 @@ public class Budget extends Entity {
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
 	this.setTarget( DEFAULT_TARGET );
+	//This is called 3 times ! WTF ???
+	Log.d(this.getClass().getSimpleName(), "new Budget instance");
     }
 
     @Override
@@ -60,6 +63,8 @@ public class Budget extends Entity {
 
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );
+	
+	Log.d(this.getClass().getSimpleName(), "Budget init");
 
 	// if( this.offBudgetAccount == null ) {
 	// this.offBudgetAccount = new OffBudgetAccount();
@@ -190,11 +195,11 @@ public class Budget extends Entity {
 	super.notifyObservers();
     }
 
-    @Override
+    /*@Override
     public synchronized void deleteObservers() {
 	Log.d( this.getClass().getSimpleName(), " observers deleted" );
 	super.deleteObservers();
-    }
+    }*/
 
     // public Account getOffBudget() {
     // return this.offBudgetAccount;
