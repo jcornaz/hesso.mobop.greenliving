@@ -24,7 +24,7 @@ public class DialogAccount extends Activity {
 	editTextTargetAmount = (EditText) this.findViewById( R.id.dialog_account_edittext_target_amount );
 
 	Intent i = getIntent();
-	if( i.getBooleanExtra( "is_update", false ) ) {
+	if( i.getBooleanExtra( "isLinkedToAccount", false ) ) {
 	    account = Budget.getInstance().getAccountById( i.getLongExtra( "account_id", 0 ) );
 	    // account = (Account)i.getSerializableExtra("account");
 	}
