@@ -1,12 +1,16 @@
 package com.hesso.greenliving.model;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
+
+import org.joda.time.DateTime;
 
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -40,6 +44,9 @@ public class Budget extends Entity {
 
     @DatabaseField (canBeNull = true, foreign = true )
     private Account offBudgetAccount;
+
+    @DatabaseField (canBeNull = false, dataType = DataType.DATE )
+    private Date lastRefill = DateTime.now().toDate();
 
     private Collection<Transaction> transactions = new HashSet<Transaction>();
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
@@ -181,5 +188,30 @@ public class Budget extends Entity {
 		res += account.getTargetAmount();
 	}
 	return res;
+    }
+
+    public void autoRefill() {
+	if( this.needRefill() ) {
+	    this.refill();
+	}
+    }
+
+    private boolean needRefill() {
+	DateTime lastRefillDate = new DateTime( this.lastRefill ).withHourOfDay( 0 ).withMinuteOfHour( 0 ).withSecondOfMinute( 0 );
+	DateTime nextRefillDate = lastRefillDate.withDayOfMonth( Math.max( 1, Math.min( lastRefillDate.dayOfMonth().withMaximumValue().getDayOfMonth(), this.dayOfMonth ) ) );
+
+	if( nextRefillDate.isBefore( lastRefillDate ) ) {
+	    nextRefillDate = nextRefillDate.plusMonths( 1 );
+	}
+	return nextRefillDate.isBeforeNow();
+    }
+
+    private void refill() {
+	for( Account account : this.accounts ) {
+	    account.fill( account.getTargetAmount() );
+	}
+	this.lastRefill = DateTime.now().toDate();
+	this.setChanged();
+	this.notifyObservers();
     }
 }

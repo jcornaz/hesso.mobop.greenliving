@@ -18,6 +18,7 @@ import android.util.Log;
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.dao.PersistenceManager;
 import com.hesso.greenliving.model.Account;
+import com.hesso.greenliving.model.Budget;
 
 //Fragments swiping working !!! Add fragments in createFragments()
 
@@ -83,11 +84,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 	PersistenceManager.start( this );
 
-	// TODO à supprimer une fois l'app terminée
-	// TestManager.createFakeModelIfNecessary();
-
-	// this.startActivity( new Intent( this, DialogCreditExpense.class ) );
-
+	Budget.getInstance().autoRefill();
     }
 
     @Override
