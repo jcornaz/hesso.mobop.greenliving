@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.joda.time.DateTime;
 
@@ -14,7 +16,7 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable (tableName = "entries" )
-public class Account extends Entity {
+public class Account extends Entity implements Observer {
     private static final long serialVersionUID = -7764049582155718184L;
 
     @DatabaseField (canBeNull = false, foreign = true )
@@ -99,7 +101,9 @@ public class Account extends Entity {
 
     public boolean removeOutgoingTransaction( Transaction transaction ) {
 	boolean res = this.outgoingTransactions.remove( transaction );
+
 	if( res ) {
+	    transaction.deleteObserver( this );
 	    this.setChanged();
 	}
 	return res;
@@ -108,7 +112,9 @@ public class Account extends Entity {
     boolean addOutgoingTransaction( Transaction transaction ) {
 	Log.i( this.getClass().getSimpleName(), "initilialized = " + String.valueOf( this.initialized ) );
 	boolean res = this.outgoingTransactions.add( transaction );
+
 	if( res ) {
+	    transaction.addObserver( this );
 	    this.setChanged();
 	}
 	return res;
@@ -116,7 +122,9 @@ public class Account extends Entity {
 
     boolean removeIncomingTransaction( Transaction transaction ) {
 	boolean res = this.incomingTransactions.remove( transaction );
+
 	if( res ) {
+	    transaction.deleteObserver( this );
 	    this.setChanged();
 	}
 	return res;
@@ -124,7 +132,9 @@ public class Account extends Entity {
 
     boolean addIncomingTransaction( Transaction transaction ) {
 	boolean res = this.incomingTransactions.add( transaction );
+
 	if( res ) {
+	    transaction.addObserver( this );
 	    this.setChanged();
 	}
 	return res;
@@ -132,6 +142,7 @@ public class Account extends Entity {
 
     boolean removeScheduledTransaction( ScheduledTransaction schedule ) {
 	boolean res = this.scheduledTransactions.remove( schedule );
+
 	if( res ) {
 	    this.setChanged();
 	}
@@ -203,5 +214,11 @@ public class Account extends Entity {
     @Override
     public String toString() {
 	return name;
+    }
+
+    @Override
+    public void update( Observable observable, Object data ) {
+	this.setChanged();
+	this.notifyObservers();
     }
 }

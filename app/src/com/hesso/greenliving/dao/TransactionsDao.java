@@ -10,7 +10,7 @@ public class TransactionsDao extends EntitiesDao<Transaction> {
     }
 
     @Override
-    protected void updateChildren( Transaction entity ) {
+    protected void persistChildren( Transaction entity ) {
 	// Les transactions n'ont pas d'enfants
     }
 

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import android.support.v4.util.LongSparseArray;
+import android.util.Log;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
@@ -40,6 +41,9 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
+    // @DatabaseField (canBeNull = false )
+    // private Account offBudgetAccount = null;
+
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
 
@@ -55,6 +59,10 @@ public class Budget extends Entity {
 
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );
+
+	// if( this.offBudgetAccount == null ) {
+	// this.offBudgetAccount = new OffBudgetAccount();
+	// }
     }
 
     public Collection<Account> getAccounts() {
@@ -62,19 +70,11 @@ public class Budget extends Entity {
     }
 
     public Account getAccountById( long id ) {
-	for( Account account : accounts ) {
-	    if( account.getId() == id )
-		return account;
-	}
-	return null;
+	return this.accountsMap.get( id );
     }
 
     public Transaction getTransactionById( long id ) {
-	for( Transaction transaction : transactions ) {
-	    if( transaction.getId() == id )
-		return transaction;
-	}
-	return null;
+	return this.transactionsMap.get( id );
     }
 
     private boolean addAccount( Account account ) {
@@ -90,10 +90,14 @@ public class Budget extends Entity {
 
     boolean removeAccount( Account account ) {
 	boolean res = this.accounts.remove( account );
+	Log.d( this.getClass().getSimpleName(), "Removing account " + account.getId() + " from budget" );
 
 	if( res ) {
 	    this.accountsMap.remove( account.getId() );
 	    this.setChanged();
+	    Log.i( this.getClass().getSimpleName(), "Account " + account.getId() + " removed from budget" );
+	} else {
+	    Log.w( this.getClass().getSimpleName(), "Account " + account.getId() + " not removed from budget" );
 	}
 
 	return res;
@@ -166,11 +170,7 @@ public class Budget extends Entity {
 	throw new NotSupportedOperationException();
     }
 
-    public Account getAccount( long accountId ) {
-	return this.accountsMap.get( accountId );
-    }
-
-    public Transaction getTransaction( long transactionId ) {
-	return this.transactionsMap.get( transactionId );
-    }
+    // public Account getOffBudget() {
+    // return this.offBudgetAccount;
+    // }
 }

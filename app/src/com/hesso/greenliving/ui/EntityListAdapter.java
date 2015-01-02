@@ -32,6 +32,8 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
 	    }
 	}
 
+	Log.d( this.getClass().getSimpleName(), "New list has " + this.entities.size() + " elements" );
+
 	this.remove( toRemove );
 	this.notifyDataSetChanged();
     }
