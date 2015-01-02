@@ -2,6 +2,7 @@ package com.hesso.greenliving.model;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.joda.time.DateTime;
@@ -180,12 +181,19 @@ public class Account extends Entity {
     @Override
     public void destroy() {
 
-	for( Transaction transaction : this.outgoingTransactions ) {
-	    transaction.delete();
+	Transaction current;
+	Iterator<Transaction> i = this.outgoingTransactions.iterator();
+	while( i.hasNext() ) {
+	    current = i.next();
+	    i.remove();
+	    current.delete();
 	}
 
-	for( Transaction transaction : this.incomingTransactions ) {
-	    transaction.delete();
+	i = this.incomingTransactions.iterator();
+	while( i.hasNext() ) {
+	    current = i.next();
+	    i.remove();
+	    current.delete();
 	}
 
 	this.budget.removeAccount( this );

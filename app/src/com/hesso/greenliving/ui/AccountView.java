@@ -40,7 +40,7 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 	this.progressBarView = (ProgressBar) this.findViewById( R.id.progressBar );
 	this.progressBarView.setMax( PROGRESSBAR_SIZE );
 	this.setOnClickListener( this );
-	this.setOnLongClickListener(this);
+	this.setOnLongClickListener( this );
     }
 
     public AccountView( Context context, AttributeSet attrs, int defStyle ) {
@@ -89,8 +89,8 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 	MainActivity.getInstance().openTransactions( this.budgetEntry );
     }
 
-	@Override
-	public boolean onLongClick(View v) {
-		return false;
-	}
+    @Override
+    public boolean onLongClick( View v ) {
+	return false;
+    }
 }
