@@ -43,7 +43,7 @@
  		     <LinearLayout
  		         android:layout_width="0dp"
  		         android:layout_height="wrap_content"
- 		         android:layout_weight="1"
+ 		         android:layout_weight="0.8"
  		         android:orientation="vertical" >
 
                 <TextView
@@ -70,10 +70,10 @@
  		         android:layout_width="0dp"
  		         android:layout_height="wrap_content"
  		         android:layout_gravity="center_vertical"
- 		         android:layout_weight="1"
+ 		         android:layout_weight="1.2"
  		         android:checked="false"
- 		         android:textOff="Expense"
- 		         android:textOn="Credit" />
+ 		         android:textOff="@string/expense"
+ 		         android:textOn="@string/credit" />
             
  		 </LinearLayout>
  		 <LinearLayout

@@ -97,9 +97,6 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 			intent = new Intent(getActivity(), DialogTransfer.class);
 			startActivity(intent);
 			break;
-		case R.id.menu_account_settings:
-			//Todo : settings
-			break;
 		case R.id.menu_account_help:
 			intent = new Intent(getActivity(), DialogAccountHelp.class);
 			startActivity(intent);

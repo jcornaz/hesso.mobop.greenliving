@@ -5,7 +5,6 @@
         <item android:id="@+id/menu_transaction_transfer" android:title="@string/transfer"></item>
     </group>
         <group android:id="@+id/group2">
-        <item android:id="@+id/menu_transaction_settings" android:title="@string/settings"></item>
         <item android:id="@+id/menu_transaction_help" android:title="@string/help"></item>
         <item android:id="@+id/menu_transaction_about" android:title="@string/about"></item>
     </group>

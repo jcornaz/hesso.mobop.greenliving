@@ -11,6 +11,9 @@
     <string name="account_name">Account name</string>
     <string name="current_amount">Current Amount</string>
     <string name="target_amount">Target amount</string>
+    <string name="amount">Amount</string>
+    <string name="expense">Expense</string>
+    <string name="credit">Credit</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="income">Income</string>
@@ -34,4 +37,6 @@
     <string name="select_date">Select a date</string>
     <string name="no_account_selected">Please select an account or create a new one!</string>
     <string name="no_amount_typed">Please type an amount!</string>
+    <string name="select_currency">Select your currency:</string>
+    <string name="transaction_help">This tab allows you to manage your transactions</string>
 </resources>

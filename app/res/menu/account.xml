@@ -9,7 +9,6 @@
         <item android:id="@+id/menu_account_transfer" android:title="@string/transfer"></item>
     </group>
     <group android:id="@+id/group3">
-        <item android:id="@+id/menu_account_settings" android:title="@string/settings"></item>
         <item android:id="@+id/menu_account_help" android:title="@string/help"></item>
         <item android:id="@+id/menu_account_about" android:title="@string/about"></item>
         

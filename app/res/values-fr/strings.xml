@@ -9,8 +9,11 @@
     <string name="refill">Crédit</string>
     <string name="to">Vers : </string>
     <string name="account_name">Nom du compte</string>
-    <string name="current_amount">Solde actuel</string>
-    <string name="target_amount">Solde visé</string>
+    <string name="current_amount">Montant actuel</string>
+    <string name="target_amount">Montant prévu</string>
+    <string name="amount">Montant</string>
+    <string name="expense">Dépense</string>
+    <string name="credit">Crédit</string>
     <string name="ok">OK</string>
     <string name="cancel">Annuler</string>
     <string name="income">Salaire</string>
@@ -27,11 +30,12 @@
     <string name="modify">Modifier</string>
     <string name="delete">Supprimer</string>
     <string name="account_help">
-        Cet onglet vous permet de gérer vos comptes.\Appuyez sur Menu -> Nouveau compte pour ajouter un nouveau compter.\nFaites un appui long sur un compte pour le modifier.
+        Cet onglet vous permet de gérer vos comptes.\nAppuyez sur Menu -> Nouveau compte pour ajouter un nouveau compter.\nFaites un appui long sur un compte pour le modifier.
     </string>
     <string name="got_it">D\'accord</string>
     <string name="about_text">Application développée par :\nJonathan Cornaz et Ludovic Lehmann\nTous droits réservés</string>
     <string name="select_date">Selectionner une date</string>
     <string name="no_account_selected">Veuillez sélectionner un compte ou en créer un nouveau !</string>
     <string name="no_amount_typed">Veuillez saisir un montant !</string>
+    <string name="transaction_help">Cet onglet vous permet de gérer vos transactions.</string>
 </resources>

@@ -89,20 +89,16 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 	    intent = new Intent( MainActivity.getInstance(), DialogTransfer.class );
 	    startActivity(intent);
 	    break;
-	case R.id.menu_transaction_settings:
-		//Todo : settings
-		break;
 	case R.id.menu_transaction_help:
-		//Todo : transaction help
+		intent = new Intent(getActivity(), DialogTransactionHelp.class);
+		startActivity(intent);
 		break;
 	case R.id.menu_transaction_about:
-	// Todo : settings and about
+		intent = new Intent(getActivity(), DialogAbout.class);
+		startActivity(intent);
 		break;
 	case R.id.menu_transaction_list_update:
-		intent = new Intent(getActivity(), DialogCreditExpense.class);
-		intent.putExtra("is_update", true);
-		intent.putExtra("transaction_id", ((Transaction)this.listViewTransaction.getItemAtPosition(itemLongClickPosition)).getId());
-		startActivity(intent);
+		//Hard to implement : manage source and destination of transaction, complicated in case of money transfer
 		break;
 	case R.id.menu_transaction_list_delete:
 		((Transaction)this.listViewTransaction.getItemAtPosition(itemLongClickPosition)).delete();
@@ -149,6 +145,4 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 	    }
 		return false;
 	}
-
-
 }
