@@ -38,6 +38,7 @@ public class BudgetDao extends EntitiesDao<Budget> {
 
     @Override
     protected void hasBeenRefreshed( Budget entity ) {
+	this.accountsDao.refresh( entity.getOffBudget() );
 	this.persistedAccounts.put( entity, new HashSet<Account>( entity.getAccounts() ) );
     }
 }

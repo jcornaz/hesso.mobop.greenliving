@@ -111,10 +111,8 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	    throw new UnexpectedException( e );
 	}
 
-	this.hasBeenRefreshed( entity );
-
 	entity.init();
-
+	this.hasBeenRefreshed( entity );
 	this.refreshChildren( entity );
 
 	return res;

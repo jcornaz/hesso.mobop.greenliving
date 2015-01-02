@@ -26,146 +26,146 @@ import com.hesso.greenliving.model.Transaction;
 import com.hesso.greenliving.model.TransctionType;
 
 public class DialogCreditExpense extends Activity implements OnCheckedChangeListener {
-	private EditText editTextAmount;
-	private Spinner spinnerAccount;
-	private Switch switchExpenseCredit;
-	private Button buttonDate;
-	private TextView textViewFromTo;
-	private TextView textViewAccount;
-	
-	private boolean hasAccountPreselected;
-	private boolean isLinkedToAccount;
-	private boolean isExistingTransaction;
-	
-	private Account account;
-	private Transaction transaction;
-	private DateTime date;
+    private EditText editTextAmount;
+    private Spinner spinnerAccount;
+    private Switch switchExpenseCredit;
+    private Button buttonDate;
+    private TextView textViewFromTo;
+    private TextView textViewAccount;
 
-	private static final int REQUESTCODE_DATE_SELECTION = 42;
-	private static final boolean EXPENSE = false;
-	private static final boolean CREDIT = true;
+    private boolean hasAccountPreselected;
+    private boolean isLinkedToAccount;
+    private boolean isExistingTransaction;
 
-	@Override
-	protected void onCreate( Bundle savedInstanceState ) {
-		super.onCreate( savedInstanceState );
-		this.setContentView( R.layout.dialog_credit_expense );
-		Intent intent = getIntent();
-		hasAccountPreselected = intent.getBooleanExtra("has_preselected_account", false);
-		isLinkedToAccount = intent.getBooleanExtra("linked_to_account", false);
-		isExistingTransaction = intent.getBooleanExtra("is_credit_expense", false);
+    private Account account;
+    private Transaction transaction;
+    private DateTime date;
 
-		if(hasAccountPreselected || isLinkedToAccount)
-			account = Budget.getInstance().getAccountById(intent.getLongExtra("account_id", 0));
-		if(isExistingTransaction)
-			transaction = Budget.getInstance().getTransactionById(intent.getLongExtra("transaction_id", 0));
+    private static final int REQUESTCODE_DATE_SELECTION = 42;
+    private static final boolean EXPENSE = false;
+    private static final boolean CREDIT = true;
 
-		date = DateTime.now();
-		editTextAmount = (EditText) this.findViewById( R.id.dialog_credit_expense_edittext_amount );
-		spinnerAccount = (Spinner) this.findViewById( R.id.dialog_credit_expense_spinner_account );
-		switchExpenseCredit = (Switch) this.findViewById( R.id.dialog_credit_expense_switch_expense_credit );
-		buttonDate = (Button) this.findViewById( R.id.dialog_credit_expense_button_date );
-		textViewFromTo = (TextView) this.findViewById(R.id.dialog_credit_expense_textview_from);
-		textViewAccount = (TextView) this.findViewById(R.id.dialog_credit_expense_textview_account);
-		switchExpenseCredit.setOnCheckedChangeListener(this);
+    @Override
+    protected void onCreate( Bundle savedInstanceState ) {
+	super.onCreate( savedInstanceState );
+	this.setContentView( R.layout.dialog_credit_expense );
+	Intent intent = getIntent();
+	hasAccountPreselected = intent.getBooleanExtra( "has_preselected_account", false );
+	isLinkedToAccount = intent.getBooleanExtra( "linked_to_account", false );
+	isExistingTransaction = intent.getBooleanExtra( "is_credit_expense", false );
 
+	if( hasAccountPreselected || isLinkedToAccount )
+	    account = Budget.getInstance().getAccountById( intent.getLongExtra( "account_id", 0 ) );
+	if( isExistingTransaction )
+	    transaction = Budget.getInstance().getTransactionById( intent.getLongExtra( "transaction_id", 0 ) );
+
+	date = DateTime.now();
+	editTextAmount = (EditText) this.findViewById( R.id.dialog_credit_expense_edittext_amount );
+	spinnerAccount = (Spinner) this.findViewById( R.id.dialog_credit_expense_spinner_account );
+	switchExpenseCredit = (Switch) this.findViewById( R.id.dialog_credit_expense_switch_expense_credit );
+	buttonDate = (Button) this.findViewById( R.id.dialog_credit_expense_button_date );
+	textViewFromTo = (TextView) this.findViewById( R.id.dialog_credit_expense_textview_from );
+	textViewAccount = (TextView) this.findViewById( R.id.dialog_credit_expense_textview_account );
+	switchExpenseCredit.setOnCheckedChangeListener( this );
+
+	setDateToButton();
+	if( isLinkedToAccount && account != null ) {
+	    spinnerAccount.setVisibility( View.GONE );
+	    textViewAccount.setText( account.getName( this ) );
+	    textViewAccount.setTypeface( null, Typeface.BOLD );
+	} else {
+	    ArrayList<Account> accounts = new ArrayList<Account>( Budget.getInstance().getAccounts() );
+	    ArrayAdapter<Account> adapter = new ArrayAdapter<Account>( this, android.R.layout.simple_spinner_dropdown_item, accounts );
+	    spinnerAccount.setAdapter( adapter );
+	    if( hasAccountPreselected && account != null ) {
+		spinnerAccount.setSelection( accounts.indexOf( account ) );
+	    } else if( isExistingTransaction && transaction != null ) {
+		date = transaction.getDate();
+		editTextAmount.setText( String.valueOf( transaction.getAmount() ) );
+		if( transaction.getType() == TransctionType.CREDIT ) {
+		    switchExpenseCredit.setChecked( true );
+		    spinnerAccount.setSelection( accounts.indexOf( transaction.getDestinationAccount() ) );
+		} else {
+		    switchExpenseCredit.setChecked( false );
+		    spinnerAccount.setSelection( accounts.indexOf( transaction.getSourceAccount() ) );
+		}
+	    }
+	}
+    }
+
+    public void onClickDate( View v ) {
+	Intent intent = new Intent( this, DialogDateSelector.class );
+	long d = date.getMillis();
+	intent.putExtra( "date", d );
+	startActivityForResult( intent, REQUESTCODE_DATE_SELECTION );
+    }
+
+    @Override
+    protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
+	if( requestCode == REQUESTCODE_DATE_SELECTION && resultCode == RESULT_OK ) {
+	    long d = data.getLongExtra( "date", -1 );
+	    if( d >= 0 ) {
+		date = new DateTime( d );
 		setDateToButton();
-		if(isLinkedToAccount && account != null) {
-			spinnerAccount.setVisibility(View.GONE);
-			textViewAccount.setText(account.getName());
-			textViewAccount.setTypeface(null, Typeface.BOLD);
-		} else {
-			ArrayList<Account> accounts = new ArrayList<Account>(Budget.getInstance().getAccounts());
-			ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_spinner_dropdown_item, accounts);
-			spinnerAccount.setAdapter(adapter);
-			if(hasAccountPreselected && account != null) {
-				spinnerAccount.setSelection(accounts.indexOf(account));
-			} else if(isExistingTransaction && transaction != null) {
-				date = transaction.getDate();
-				editTextAmount.setText(String.valueOf(transaction.getAmount()));
-				if(transaction.getType() == TransctionType.CREDIT)	{
-					switchExpenseCredit.setChecked(true);
-					spinnerAccount.setSelection(accounts.indexOf(transaction.getDestinationAccount()));
-				} else {
-					switchExpenseCredit.setChecked(false);
-					spinnerAccount.setSelection(accounts.indexOf(transaction.getSourceAccount()));
-				}	
-			}
+	    }
+	}
+    }
+
+    private void setDateToButton() {
+	String d = date.toString( "dd/MM/YYYY", this.getResources().getConfiguration().locale );
+	buttonDate.setText( d );
+    }
+
+    public void onClickOk( View v ) {
+	// TODO : check date
+	if( editTextAmount.getText().length() > 0 ) {
+	    if( isLinkedToAccount && account != null ) {
+		if( switchExpenseCredit.isChecked() == EXPENSE ) {
+		    account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
+		} else if( switchExpenseCredit.isChecked() == CREDIT ) {
+		    account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
 		}
-	}
-
-	public void onClickDate( View v ) {
-		Intent intent = new Intent( this, DialogDateSelector.class );
-		long d = date.getMillis();
-		intent.putExtra( "date", d );
-		startActivityForResult( intent, REQUESTCODE_DATE_SELECTION );
-	}
-
-	@Override
-	protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
-		if( requestCode == REQUESTCODE_DATE_SELECTION && resultCode == RESULT_OK ) {
-			long d = data.getLongExtra( "date", -1 );
-			if( d >= 0 ) {
-				date = new DateTime( d );
-				setDateToButton();
-			}
-		}
-	}
-
-	private void setDateToButton() {
-		String d = date.toString( "dd/MM/YYYY", this.getResources().getConfiguration().locale );
-		buttonDate.setText( d );
-	}
-
-	public void onClickOk( View v ) {
-		// TODO : check date
-		if( editTextAmount.getText().length() > 0 ) {
-			if(isLinkedToAccount && account != null) {
-				if( switchExpenseCredit.isChecked() == EXPENSE ) {
-					account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
-				} else if( switchExpenseCredit.isChecked() == CREDIT ) {
-					account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
-				}
-				finish();
-			} else if(isExistingTransaction && transaction != null) {
-				transaction.setAmount(Double.valueOf(editTextAmount.getText().toString()));
-				transaction.setDate(date);
-				if(switchExpenseCredit.isChecked() == EXPENSE) {
-					transaction.setSourceAccount((Account)spinnerAccount.getSelectedItem());
-					transaction.setDestinationAccount(null);
-				} else {
-					transaction.setDestinationAccount((Account)spinnerAccount.getSelectedItem());
-					transaction.setSourceAccount(null);
-				}
-				transaction.notifyObservers();
-				finish();
-			} else {
-				account =(Account) spinnerAccount.getSelectedItem();
-				if(account != null) {
-					if( switchExpenseCredit.isChecked() == EXPENSE ) {
-						account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
-					} else if( switchExpenseCredit.isChecked() == CREDIT ) {
-						account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
-					}
-					finish();
-				} else {
-					Toast.makeText( this, R.string.no_account_selected, Toast.LENGTH_LONG ).show();
-				}
-			}
-		} else {
-			Toast.makeText( this, R.string.no_amount_typed, Toast.LENGTH_LONG ).show();
-		}
-	}
-
-	public void onClickCancel( View v ) {
 		finish();
-	}
-
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if(isChecked) {
-			this.textViewFromTo.setText(R.string.to);
+	    } else if( isExistingTransaction && transaction != null ) {
+		transaction.setAmount( Double.valueOf( editTextAmount.getText().toString() ) );
+		transaction.setDate( date );
+		if( switchExpenseCredit.isChecked() == EXPENSE ) {
+		    transaction.setSourceAccount( (Account) spinnerAccount.getSelectedItem() );
+		    transaction.setDestinationAccount( null );
 		} else {
-			this.textViewFromTo.setText(R.string.from);
+		    transaction.setDestinationAccount( (Account) spinnerAccount.getSelectedItem() );
+		    transaction.setSourceAccount( null );
 		}
+		transaction.notifyObservers();
+		finish();
+	    } else {
+		account = (Account) spinnerAccount.getSelectedItem();
+		if( account != null ) {
+		    if( switchExpenseCredit.isChecked() == EXPENSE ) {
+			account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
+		    } else if( switchExpenseCredit.isChecked() == CREDIT ) {
+			account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
+		    }
+		    finish();
+		} else {
+		    Toast.makeText( this, R.string.no_account_selected, Toast.LENGTH_LONG ).show();
+		}
+	    }
+	} else {
+	    Toast.makeText( this, R.string.no_amount_typed, Toast.LENGTH_LONG ).show();
 	}
+    }
+
+    public void onClickCancel( View v ) {
+	finish();
+    }
+
+    @Override
+    public void onCheckedChanged( CompoundButton buttonView, boolean isChecked ) {
+	if( isChecked ) {
+	    this.textViewFromTo.setText( R.string.to );
+	} else {
+	    this.textViewFromTo.setText( R.string.from );
+	}
+    }
 }

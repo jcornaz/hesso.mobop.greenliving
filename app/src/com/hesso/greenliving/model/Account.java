@@ -9,6 +9,10 @@ import java.util.Observer;
 
 import org.joda.time.DateTime;
 
+import android.content.Context;
+
+import com.hesso.greenliving.R;
+import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -38,6 +42,7 @@ public class Account extends Entity implements Observer {
     @ForeignCollectionField (eager = true, foreignFieldName = "destinationAccount" )
     private Collection<Transaction> incomingTransactions = new HashSet<Transaction>();
 
+    @DatabaseField (canBeNull = false )
     private boolean isOffBudget = false;
 
     public Account() {
@@ -56,15 +61,15 @@ public class Account extends Entity implements Observer {
 	this.incomingTransactions = new HashSet<Transaction>( this.incomingTransactions );
 
 	if( this.isOffBudget )
-	    this.budget.addObserver( this );
+	    this.setOffBudget();
     }
 
     public Budget getBudget() {
 	return budget;
     }
 
-    public String getName() {
-	return this.name;
+    public String getName( Context context ) {
+	return (this.isOffBudget && context != null) ? context.getString( R.string.off_account ) : this.name;
     }
 
     public void setName( String name ) {
@@ -180,24 +185,27 @@ public class Account extends Entity implements Observer {
 
     @Override
     public void destroy() {
+	if( this.isOffBudget() ) {
+	    throw new NotSupportedOperationException();
+	} else {
+	    Transaction current;
+	    Iterator<Transaction> i = this.outgoingTransactions.iterator();
+	    while( i.hasNext() ) {
+		current = i.next();
+		i.remove();
+		current.delete();
+	    }
 
-	Transaction current;
-	Iterator<Transaction> i = this.outgoingTransactions.iterator();
-	while( i.hasNext() ) {
-	    current = i.next();
-	    i.remove();
-	    current.delete();
+	    i = this.incomingTransactions.iterator();
+	    while( i.hasNext() ) {
+		current = i.next();
+		i.remove();
+		current.delete();
+	    }
+
+	    this.budget.removeAccount( this );
+	    this.budget.notifyObservers();
 	}
-
-	i = this.incomingTransactions.iterator();
-	while( i.hasNext() ) {
-	    current = i.next();
-	    i.remove();
-	    current.delete();
-	}
-
-	this.budget.removeAccount( this );
-	this.budget.notifyObservers();
     }
 
     private void setOffBudget() {

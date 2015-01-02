@@ -72,7 +72,7 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 	double targetAmount = this.account.getTargetAmount();
 	double currentAmount = this.account.getCurrentAmount();
 
-	this.entryNameView.setText( this.account.getName() );
+	this.entryNameView.setText( this.account.getName( this.getContext() ) );
 	this.currentAmountView.setText( MainActivity.DEC_FORMAT.format( currentAmount ) );
 	this.targetAmountView.setText( MainActivity.DEC_FORMAT.format( targetAmount ) );
 
