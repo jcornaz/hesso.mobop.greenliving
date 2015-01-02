@@ -197,13 +197,22 @@ public class Budget extends Entity {
     }
 
     private boolean needRefill() {
-	DateTime lastRefillDate = new DateTime( this.lastRefill ).withHourOfDay( 0 ).withMinuteOfHour( 0 ).withSecondOfMinute( 0 );
-	DateTime nextRefillDate = lastRefillDate.withDayOfMonth( Math.max( 1, Math.min( lastRefillDate.dayOfMonth().withMaximumValue().getDayOfMonth(), this.dayOfMonth ) ) );
 
-	if( nextRefillDate.isBefore( lastRefillDate ) ) {
-	    nextRefillDate = nextRefillDate.plusMonths( 1 );
+	return this.getNextRefillDate().isBeforeNow();
+    }
+
+    public DateTime getNextRefillDate() {
+	DateTime lastRefillDate = this.getLastRefillDate().withHourOfDay( 0 ).withMinuteOfHour( 0 ).withSecondOfMinute( 0 );
+	DateTime res = lastRefillDate.withDayOfMonth( Math.max( 1, Math.min( lastRefillDate.dayOfMonth().withMaximumValue().getDayOfMonth(), this.dayOfMonth ) ) );
+
+	if( res.isBefore( lastRefillDate ) ) {
+	    res = res.plusMonths( 1 );
 	}
-	return nextRefillDate.isBeforeNow();
+	return res;
+    }
+
+    public DateTime getLastRefillDate() {
+	return new DateTime( this.lastRefill );
     }
 
     private void refill() {

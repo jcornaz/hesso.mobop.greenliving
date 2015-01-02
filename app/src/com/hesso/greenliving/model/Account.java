@@ -8,6 +8,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
@@ -17,6 +18,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable (tableName = "accounts" )
 public class Account extends Entity implements Observer {
     private static final long serialVersionUID = -7764049582155718184L;
+    private static final long MONTH_DURATION = 30 * 24;
 
     public static Account createOffBudget() {
 	Account res = new Account( "offbudget", 0 );
@@ -218,5 +220,13 @@ public class Account extends Entity implements Observer {
     public void update( Observable observable, Object data ) {
 	this.setChanged();
 	this.notifyObservers();
+    }
+
+    public boolean isInBudget() {
+	return (this.getCurrentAmount() - this.getTheoricAmount()) >= 0;
+    }
+
+    public double getTheoricAmount() {
+	return Math.min( this.targetAmount, this.getTargetAmount() * new Duration( DateTime.now(), this.budget.getNextRefillDate() ).getStandardHours() / MONTH_DURATION );
     }
 }

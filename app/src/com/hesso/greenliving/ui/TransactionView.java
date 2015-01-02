@@ -15,8 +15,8 @@ import com.hesso.greenliving.model.Transaction;
 
 public class TransactionView extends LinearLayout implements IEntityView<Transaction> {
 
-    private static final int COLOR_FILL = Color.rgb( 0, 128, 0 );
-    private static final int COLOR_EXPENSE = Color.rgb( 181, 13, 13 );
+    public static final int COLOR_FILL = Color.rgb( 0, 128, 0 );
+    public static final int COLOR_EXPENSE = Color.rgb( 181, 13, 13 );
     private static final int COLOR_TRANSFER = Color.BLACK;
 
     public static TransactionView inflate( ViewGroup parent ) {
