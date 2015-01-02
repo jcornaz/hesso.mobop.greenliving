@@ -1,7 +1,6 @@
 package com.hesso.greenliving.model;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.Observable;
 
@@ -12,8 +11,8 @@ import com.j256.ormlite.field.DatabaseField;
 public abstract class Entity extends Observable implements Serializable {
     private static final long serialVersionUID = -110511284436795169L;
 
-    @DatabaseField (generatedId = true )
-    private long id = new SecureRandom().nextLong();
+    @DatabaseField (generatedId = true, allowGeneratedIdInsert = true )
+    private long id;
 
     private boolean isDeleted = false;
 

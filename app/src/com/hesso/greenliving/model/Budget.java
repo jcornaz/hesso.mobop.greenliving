@@ -19,13 +19,14 @@ public class Budget extends Entity {
     private static final BigDecimal DEFAULT_TARGET = new BigDecimal( 1000 );
     private static final int DEFAULT_DAY_OF_MONTH = 25;
 
+    private static final long ID = 42;
+
     private static Budget instance;
 
-    public static Budget getInstance() {
+    public static synchronized Budget getInstance() {
 	if( instance == null ) {
 	    instance = new Budget();
 	}
-
 	return instance;
     }
 
@@ -41,15 +42,13 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
-    // @DatabaseField (canBeNull = false )
-    // private Account offBudgetAccount = null;
-
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
 
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
 	this.setTarget( DEFAULT_TARGET );
+	this.setId( ID );
     }
 
     @Override
@@ -59,6 +58,8 @@ public class Budget extends Entity {
 
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );
+
+	Log.d( this.getClass().getSimpleName(), "Budget init" );
 
 	// if( this.offBudgetAccount == null ) {
 	// this.offBudgetAccount = new OffBudgetAccount();
@@ -90,7 +91,6 @@ public class Budget extends Entity {
 
     boolean removeAccount( Account account ) {
 	boolean res = this.accounts.remove( account );
-	Log.d( this.getClass().getSimpleName(), "Removing account " + account.getId() + " from budget" );
 
 	if( res ) {
 	    this.accountsMap.remove( account.getId() );
@@ -169,8 +169,4 @@ public class Budget extends Entity {
 	// Le budget ne peut pas être supprimé
 	throw new NotSupportedOperationException();
     }
-
-    // public Account getOffBudget() {
-    // return this.offBudgetAccount;
-    // }
 }

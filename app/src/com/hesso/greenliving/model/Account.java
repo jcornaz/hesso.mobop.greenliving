@@ -28,9 +28,6 @@ public class Account extends Entity implements Observer {
     @DatabaseField (canBeNull = false )
     private double targetAmount;
 
-    @ForeignCollectionField (eager = true )
-    private Collection<ScheduledTransaction> scheduledTransactions = new HashSet<ScheduledTransaction>();
-
     @ForeignCollectionField (eager = true, foreignFieldName = "sourceAccount" )
     private Collection<Transaction> outgoingTransactions = new HashSet<Transaction>();
 
@@ -49,8 +46,8 @@ public class Account extends Entity implements Observer {
 
     @Override
     public void init() {
+	this.budget = Budget.getInstance();
 	Log.d( this.getClass().getSimpleName(), "initializing" );
-	this.scheduledTransactions = new HashSet<ScheduledTransaction>( this.scheduledTransactions );
 	this.outgoingTransactions = new HashSet<Transaction>( this.outgoingTransactions );
 	this.incomingTransactions = new HashSet<Transaction>( this.incomingTransactions );
 	this.initialized = true;
@@ -76,10 +73,6 @@ public class Account extends Entity implements Observer {
     public void setTargetAmount( double targetAmount ) {
 	this.targetAmount = targetAmount;
 	this.setChanged();
-    }
-
-    public Collection<ScheduledTransaction> getScheduledTransactions() {
-	return new HashSet<ScheduledTransaction>( this.scheduledTransactions );
     }
 
     public Collection<Transaction> getTransactions() {
@@ -135,23 +128,6 @@ public class Account extends Entity implements Observer {
 
 	if( res ) {
 	    transaction.addObserver( this );
-	    this.setChanged();
-	}
-	return res;
-    }
-
-    boolean removeScheduledTransaction( ScheduledTransaction schedule ) {
-	boolean res = this.scheduledTransactions.remove( schedule );
-
-	if( res ) {
-	    this.setChanged();
-	}
-	return res;
-    }
-
-    boolean addScheduledTransaction( ScheduledTransaction schedule ) {
-	boolean res = this.scheduledTransactions.add( schedule );
-	if( res ) {
 	    this.setChanged();
 	}
 	return res;
