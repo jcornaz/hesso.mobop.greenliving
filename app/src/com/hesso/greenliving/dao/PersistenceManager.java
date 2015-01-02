@@ -19,7 +19,7 @@ import com.j256.ormlite.table.TableUtils;
 public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 
     private static final String DB_NAME = "greenliving.db";
-    private static final int DB_VERSION = 15;
+    private static final int DB_VERSION = 17;
     private static PersistenceManager instance;
     private BudgetDao budgetDao;
     private AccountsDao entriesDao;

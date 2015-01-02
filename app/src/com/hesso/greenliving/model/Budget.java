@@ -41,8 +41,8 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
-    @DatabaseField (canBeNull = false )
-    private Account offBudgetAccount = new OffBudgetAccount();
+    @DatabaseField (foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true )
+    private OffBudgetAccount offBudgetAccount;
 
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
@@ -193,7 +193,7 @@ public class Budget extends Entity {
 	super.deleteObservers();
     }
 
-    public Account getOffBudget() {
+    public OffBudgetAccount getOffBudget() {
 	return this.offBudgetAccount;
     }
 

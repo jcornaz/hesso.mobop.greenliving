@@ -15,12 +15,12 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable (tableName = "entries" )
+@DatabaseTable (tableName = "accounts" )
 public class Account extends Entity implements Observer {
     private static final long serialVersionUID = -7764049582155718184L;
 
     @DatabaseField (canBeNull = false, foreign = true )
-    private Budget budget = Budget.getInstance();
+    protected Budget budget = Budget.getInstance();
 
     @DatabaseField (canBeNull = false )
     private String name;
