@@ -9,8 +9,6 @@ import java.util.Observer;
 
 import org.joda.time.DateTime;
 
-import android.util.Log;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -18,6 +16,12 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable (tableName = "accounts" )
 public class Account extends Entity implements Observer {
     private static final long serialVersionUID = -7764049582155718184L;
+
+    public static Account createOffBudget() {
+	Account res = new Account( "offbudget", 0 );
+	res.setOffBudget();
+	return res;
+    }
 
     @DatabaseField (canBeNull = false, foreign = true )
     protected Budget budget = Budget.getInstance();
@@ -34,7 +38,7 @@ public class Account extends Entity implements Observer {
     @ForeignCollectionField (eager = true, foreignFieldName = "destinationAccount" )
     private Collection<Transaction> incomingTransactions = new HashSet<Transaction>();
 
-    private boolean initialized = false;
+    private boolean isOffBudget = false;
 
     public Account() {
     }
@@ -47,10 +51,12 @@ public class Account extends Entity implements Observer {
     @Override
     public void init() {
 	this.budget = Budget.getInstance();
-	Log.d( this.getClass().getSimpleName(), "initializing" );
+
 	this.outgoingTransactions = new HashSet<Transaction>( this.outgoingTransactions );
 	this.incomingTransactions = new HashSet<Transaction>( this.incomingTransactions );
-	this.initialized = true;
+
+	if( this.isOffBudget )
+	    this.budget.addObserver( this );
     }
 
     public Budget getBudget() {
@@ -67,7 +73,15 @@ public class Account extends Entity implements Observer {
     }
 
     public double getTargetAmount() {
-	return this.targetAmount;
+	double res;
+
+	if( this.isOffBudget ) {
+	    res = this.budget.getTarget() - this.budget.getBudgeted();
+	} else {
+	    res = this.targetAmount;
+	}
+
+	return res;
     }
 
     public void setTargetAmount( double targetAmount ) {
@@ -103,7 +117,6 @@ public class Account extends Entity implements Observer {
     }
 
     boolean addOutgoingTransaction( Transaction transaction ) {
-	Log.i( this.getClass().getSimpleName(), "initilialized = " + String.valueOf( this.initialized ) );
 	boolean res = this.outgoingTransactions.add( transaction );
 
 	if( res ) {
@@ -187,14 +200,23 @@ public class Account extends Entity implements Observer {
 	this.budget.notifyObservers();
     }
 
-    @Override
-    public String toString() {
-	return name;
+    private void setOffBudget() {
+	this.isOffBudget = true;
+	this.budget.addObserver( this );
+    }
+
+    public boolean isOffBudget() {
+	return this.isOffBudget;
     }
 
     @Override
     public void update( Observable observable, Object data ) {
 	this.setChanged();
 	this.notifyObservers();
+    }
+
+    @Override
+    public String toString() {
+	return name;
     }
 }

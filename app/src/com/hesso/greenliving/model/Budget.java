@@ -41,8 +41,8 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
-    @DatabaseField (foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true )
-    private OffBudgetAccount offBudgetAccount;
+    @DatabaseField (canBeNull = true, foreign = true )
+    private Account offBudgetAccount;
 
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
@@ -55,7 +55,12 @@ public class Budget extends Entity {
 
     @Override
     public void init() {
+	if( this.offBudgetAccount == null ) {
+	    this.offBudgetAccount = Account.createOffBudget();
+	}
+
 	this.accounts = new HashSet<Account>( this.accounts );
+	this.accounts.add( this.offBudgetAccount );
 	this.transactions = new HashSet<Transaction>( this.transactions );
 
 	this.map( this.accounts, this.accountsMap );
@@ -63,9 +68,7 @@ public class Budget extends Entity {
     }
 
     public Collection<Account> getAccounts() {
-	Collection<Account> res = new HashSet<Account>( this.accounts );
-	res.add( this.getOffBudget() );
-	return res;
+	return new HashSet<Account>( this.accounts );
     }
 
     public Account getAccountById( long id ) {
@@ -168,14 +171,15 @@ public class Budget extends Entity {
 	throw new NotSupportedOperationException();
     }
 
-    public OffBudgetAccount getOffBudget() {
+    public Account getOffBudget() {
 	return this.offBudgetAccount;
     }
 
     public double getBudgeted() {
 	double res = 0;
 	for( Account account : this.getAccounts() ) {
-	    res += account.getTargetAmount();
+	    if( !account.isOffBudget() )
+		res += account.getTargetAmount();
 	}
 	return res;
     }
