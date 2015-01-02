@@ -2,11 +2,9 @@ package com.hesso.greenliving.model;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
-import android.util.SparseArray;
+import android.support.v4.util.LongSparseArray;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
@@ -42,8 +40,8 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
-    private Map<Long, Account> accountsMap = new HashMap<Long, Account>();
-    private Map<Long, Transaction> transactionsMap = new HashMap<Long, Transaction>();
+    private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
+    private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
 
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );

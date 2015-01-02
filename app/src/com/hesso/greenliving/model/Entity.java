@@ -3,8 +3,9 @@ package com.hesso.greenliving.model;
 import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Observable;
+
+import android.support.v4.util.LongSparseArray;
 
 import com.j256.ormlite.field.DatabaseField;
 
@@ -39,7 +40,7 @@ public abstract class Entity extends Observable implements Serializable {
 	this.notifyObservers();
     }
 
-    protected <T extends Entity> void map( Collection<T> entities, Map<Long, T> entitiesMap ) {
+    protected <T extends Entity> void map( Collection<T> entities, LongSparseArray<T> entitiesMap ) {
 	entitiesMap.clear();
 	for( T entity : entities ) {
 	    entitiesMap.put( entity.getId(), entity );
