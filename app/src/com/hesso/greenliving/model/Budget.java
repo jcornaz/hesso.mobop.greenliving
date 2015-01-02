@@ -3,7 +3,6 @@ package com.hesso.greenliving.model;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Observer;
 
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
@@ -22,14 +21,10 @@ public class Budget extends Entity {
 
     private static final long ID = 42;
 
-    private static Integer AUTO_NUM = 1;
-
     private static Budget instance;
 
     public static synchronized Budget getInstance() {
 	if( instance == null ) {
-	    // This is called only once
-	    Log.d( "Budget", "Budget instance null" );
 	    instance = new Budget();
 	}
 	return instance;
@@ -50,20 +45,10 @@ public class Budget extends Entity {
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
 
-    private int num;
-
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
 	this.setTarget( DEFAULT_TARGET );
 	this.setId( ID );
-
-	synchronized( AUTO_NUM ) {
-	    this.num = AUTO_NUM;
-	    AUTO_NUM++;
-	}
-
-	// This is called 3 times ! WTF ???
-	Log.d( this.getClass().getSimpleName(), "Budget instance : " + this.num );
     }
 
     @Override
@@ -183,25 +168,5 @@ public class Budget extends Entity {
     public void destroy() {
 	// Le budget ne peut pas être supprimé
 	throw new NotSupportedOperationException();
-    }
-
-    @Override
-    public void addObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer added : " + observer.getClass().getSimpleName() + " for " + this.num );
-	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
-	super.addObserver( observer );
-    }
-
-    @Override
-    public synchronized void deleteObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer removed : " + observer.getClass().getSimpleName() + " for " + this.num );
-	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
-	super.deleteObserver( observer );
-    }
-
-    @Override
-    public void notifyObservers() {
-	Log.d( this.getClass().getSimpleName(), "notify " + this.countObservers() + " observers : " + this.hasChanged() + " for " + this.num );
-	super.notifyObservers();
     }
 }
