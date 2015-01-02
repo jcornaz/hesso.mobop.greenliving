@@ -5,6 +5,7 @@ import java.util.Observer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +49,7 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 	Budget.getInstance().addObserver( this );
 	this.update( Budget.getInstance(), this );
 	this.setHasOptionsMenu( true );
-	listViewTransaction.setOnItemLongClickListener(this);
+	listViewTransaction.setOnItemLongClickListener( this );
 	return listViewTransaction;
     }
 
@@ -75,34 +76,35 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 
     @Override
     public boolean onMenuItemClick( MenuItem item ) {
-    	Intent intent;
+	Intent intent;
 	switch( item.getItemId() ) {
 	case R.id.menu_transaction_credit_expense:
 	    intent = new Intent( MainActivity.getInstance(), DialogCreditExpense.class );
-	    if(account != null) {
-	    	intent.putExtra("has_preselected_account", true);
-	    	intent.putExtra("account_id", account.getId());
+	    if( account != null ) {
+		intent.putExtra( "has_preselected_account", true );
+		intent.putExtra( "account_id", account.getId() );
 	    }
-	    startActivity(intent);
+	    startActivity( intent );
 	    break;
 	case R.id.menu_transaction_transfer:
 	    intent = new Intent( MainActivity.getInstance(), DialogTransfer.class );
-	    startActivity(intent);
+	    startActivity( intent );
 	    break;
 	case R.id.menu_transaction_help:
-		intent = new Intent(getActivity(), DialogTransactionHelp.class);
-		startActivity(intent);
-		break;
+	    intent = new Intent( getActivity(), DialogTransactionHelp.class );
+	    startActivity( intent );
+	    break;
 	case R.id.menu_transaction_about:
-		intent = new Intent(getActivity(), DialogAbout.class);
-		startActivity(intent);
-		break;
+	    intent = new Intent( getActivity(), DialogAbout.class );
+	    startActivity( intent );
+	    break;
 	case R.id.menu_transaction_list_update:
-		//Hard to implement : manage source and destination of transaction, complicated in case of money transfer
-		break;
+	    // Hard to implement : manage source and destination of transaction,
+	    // complicated in case of money transfer
+	    break;
 	case R.id.menu_transaction_list_delete:
-		((Transaction)this.listViewTransaction.getItemAtPosition(itemLongClickPosition)).delete();
-		break;
+	    ((Transaction) this.listViewTransaction.getItemAtPosition( itemLongClickPosition )).delete();
+	    break;
 	}
 	return false;
     }
@@ -132,17 +134,17 @@ public class TransactionsFragment extends AbstractFragment implements Observer, 
 	}
     }
 
-	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-		itemLongClickPosition = position;
-		PopupMenu popup = new PopupMenu(getActivity(), view);
-	    MenuInflater inflater = popup.getMenuInflater();
-	    Menu menu = popup.getMenu();
-	    inflater.inflate(R.menu.transaction_list, menu);
-	    popup.show();
-	    for(int i = 0 ; i < menu.size() ; i++) {
-	    	menu.getItem(i).setOnMenuItemClickListener(this);
-	    }
-		return false;
+    @Override
+    public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id ) {
+	itemLongClickPosition = position;
+	PopupMenu popup = new PopupMenu( getActivity(), view );
+	MenuInflater inflater = popup.getMenuInflater();
+	Menu menu = popup.getMenu();
+	inflater.inflate( R.menu.transaction_list, menu );
+	popup.show();
+	for( int i = 0; i < menu.size(); i++ ) {
+	    menu.getItem( i ).setOnMenuItemClickListener( this );
 	}
+	return false;
+    }
 }

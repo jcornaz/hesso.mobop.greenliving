@@ -1,7 +1,6 @@
 package com.hesso.greenliving.ui;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import org.joda.time.DateTime;
 
