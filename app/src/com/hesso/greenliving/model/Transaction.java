@@ -15,10 +15,10 @@ public class Transaction extends Entity {
     @DatabaseField (canBeNull = false, foreign = true )
     private Budget budget = Budget.getInstance();
 
-    @DatabaseField (canBeNull = true, foreign = true )
+    @DatabaseField (columnName = "sourceAccount", canBeNull = true, foreign = true )
     private Account sourceAccount;
 
-    @DatabaseField (canBeNull = true, foreign = true )
+    @DatabaseField (columnName = "destinationAccount", canBeNull = true, foreign = true )
     private Account destinationAccount;
 
     @DatabaseField (canBeNull = false )

@@ -1,6 +1,5 @@
 package com.hesso.greenliving.model;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -16,7 +15,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class Budget extends Entity {
     private static final long serialVersionUID = 8240495679280473832L;
 
-    private static final BigDecimal DEFAULT_TARGET = new BigDecimal( 1000 );
+    private static final double DEFAULT_TARGET = 1000;
     private static final int DEFAULT_DAY_OF_MONTH = 25;
 
     private static final long ID = 42;
@@ -34,13 +33,16 @@ public class Budget extends Entity {
     private int dayOfMonth;
 
     @DatabaseField (canBeNull = false )
-    private BigDecimal target = new BigDecimal( 0 );
+    private double target = 0;
 
     @ForeignCollectionField (eager = true )
     private Collection<Account> accounts = new HashSet<Account>();
 
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
+
+    @DatabaseField (canBeNull = true, foreign = true )
+    private Account offBudgetAccount;
 
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
@@ -53,17 +55,16 @@ public class Budget extends Entity {
 
     @Override
     public void init() {
+	if( this.offBudgetAccount == null ) {
+	    this.offBudgetAccount = Account.createOffBudget();
+	}
+
 	this.accounts = new HashSet<Account>( this.accounts );
+	this.accounts.add( this.offBudgetAccount );
 	this.transactions = new HashSet<Transaction>( this.transactions );
 
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );
-
-	Log.d( this.getClass().getSimpleName(), "Budget init" );
-
-	// if( this.offBudgetAccount == null ) {
-	// this.offBudgetAccount = new OffBudgetAccount();
-	// }
     }
 
     public Collection<Account> getAccounts() {
@@ -114,12 +115,12 @@ public class Budget extends Entity {
 	}
     }
 
-    public BigDecimal getTarget() {
+    public double getTarget() {
 	return target;
     }
 
-    public void setTarget( BigDecimal amount ) {
-	if( !this.target.equals( amount ) ) {
+    public void setTarget( double amount ) {
+	if( this.target != amount ) {
 	    this.target = amount;
 	    this.setChanged();
 	}
@@ -168,5 +169,18 @@ public class Budget extends Entity {
     public void destroy() {
 	// Le budget ne peut pas être supprimé
 	throw new NotSupportedOperationException();
+    }
+
+    public Account getOffBudget() {
+	return this.offBudgetAccount;
+    }
+
+    public double getBudgeted() {
+	double res = 0;
+	for( Account account : this.getAccounts() ) {
+	    if( !account.isOffBudget() )
+		res += account.getTargetAmount();
+	}
+	return res;
     }
 }
