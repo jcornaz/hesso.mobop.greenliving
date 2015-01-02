@@ -60,8 +60,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
 	super.onCreate( savedInstanceState );
-	//Lock portrait
-	this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	// Lock portrait
+	this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT );
 	instance = this;
 
 	Log.d( "debug", "MainActivity#onCreate" );
@@ -84,8 +84,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	PersistenceManager.start( this );
 
 	// TODO à supprimer une fois l'app terminée
-	//TestManager.createFakeModelIfNecessary();
-
+	// TestManager.createFakeModelIfNecessary();
 
 	// this.startActivity( new Intent( this, DialogCreditExpense.class ) );
 
@@ -137,7 +136,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onPageSelected( int position ) {
 	this.actionBar.setSelectedNavigationItem( position );
-	Log.i( "position", String.valueOf( position ) );
 	if( position != this.fragments.indexOf( this.transactionFragment ) ) {
 	    this.transactionFragment.setAccount( null );
 	}

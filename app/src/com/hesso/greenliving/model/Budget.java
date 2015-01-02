@@ -38,12 +38,10 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Account> accounts = new HashSet<Account>();
 
-    @ForeignCollectionField (eager = true )
-    private Collection<Transaction> transactions = new HashSet<Transaction>();
-
     @DatabaseField (canBeNull = true, foreign = true )
     private Account offBudgetAccount;
 
+    private Collection<Transaction> transactions = new HashSet<Transaction>();
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
 
@@ -61,7 +59,6 @@ public class Budget extends Entity {
 
 	this.accounts = new HashSet<Account>( this.accounts );
 	this.accounts.add( this.offBudgetAccount );
-	this.transactions = new HashSet<Transaction>( this.transactions );
 
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );

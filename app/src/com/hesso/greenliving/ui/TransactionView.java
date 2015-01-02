@@ -45,11 +45,10 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
     @Override
     protected void onFinishInflate() {
 	super.onFinishInflate();
-	this.textViewFromAccount = (TextView)this.findViewById(R.id.budgetFrom);
-	this.textViewToAccount = (TextView)this.findViewById(R.id.budgetTo);
-	this.textViewDate = (TextView)this.findViewById(R.id.date);
-	this.textViewAmount = (TextView)this.findViewById(R.id.amount);
-
+	this.textViewFromAccount = (TextView) this.findViewById( R.id.budgetFrom );
+	this.textViewToAccount = (TextView) this.findViewById( R.id.budgetTo );
+	this.textViewDate = (TextView) this.findViewById( R.id.date );
+	this.textViewAmount = (TextView) this.findViewById( R.id.amount );
     }
 
     @Override
@@ -67,34 +66,36 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
     @Override
     public void update( Observable observable, Object data ) {
 	if( this.transaction.hasSource() ) {
-		this.textViewFromAccount.setText(this.transaction.getSourceAccount().getName());
+	    this.textViewFromAccount.setText( this.transaction.getSourceAccount().getName() );
 	} else {
 	    this.textViewFromAccount.setText( this.getContext().getString( R.string.credit ) );
 	}
 
 	if( this.transaction.hasDestination() ) {
-		this.textViewToAccount.setText(this.transaction.getDestinationAccount().getName());
+	    this.textViewToAccount.setText( this.transaction.getDestinationAccount().getName() );
 	} else {
-	    this.textViewToAccount.setText(this.getContext().getString(R.string.expense));
+	    this.textViewToAccount.setText( this.getContext().getString( R.string.expense ) );
 	}
 
 	int color;
 	switch( this.transaction.getType() ) {
+
 	default:
 	case TRANSFER:
 	    color = COLOR_TRANSFER;
-	    this.textViewAmount.setText(MainActivity.DEC_FORMAT.format(this.transaction.getAmount()));
+	    this.textViewAmount.setText( MainActivity.DEC_FORMAT.format( this.transaction.getAmount() ) );
 	    break;
 	case EXPENSE:
 	    color = COLOR_EXPENSE;
-	    this.textViewAmount.setText("-" + MainActivity.DEC_FORMAT.format(this.transaction.getAmount()));
+	    this.textViewAmount.setText( "-" + MainActivity.DEC_FORMAT.format( this.transaction.getAmount() ) );
 	    break;
 	case CREDIT:
 	    color = COLOR_FILL;
-	    this.textViewAmount.setText("+" + MainActivity.DEC_FORMAT.format(this.transaction.getAmount()));
+	    this.textViewAmount.setText( "+" + MainActivity.DEC_FORMAT.format( this.transaction.getAmount() ) );
 	    break;
 	}
-	this.textViewAmount.setTextColor(color);
-	this.textViewDate.setText(this.transaction.getDate().toString("dd/MM/YYYY", this.getContext().getResources().getConfiguration().locale));
+
+	this.textViewAmount.setTextColor( color );
+	this.textViewDate.setText( this.transaction.getDate().toString( "dd/MM/YYYY", this.getContext().getResources().getConfiguration().locale ) );
     }
 }
