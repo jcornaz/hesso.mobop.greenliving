@@ -47,7 +47,7 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
     protected void onFinishInflate() {
 	super.onFinishInflate();
 
-	this.budgetToLayout = (LinearLayout) this.findViewById( R.id.budgetToLayout );
+	//this.budgetToLayout = (LinearLayout) this.findViewById( R.id.budgetToLayout );
 	this.from = (TextView) this.findViewById( R.id.budgetFrom );
 	this.to = (TextView) this.findViewById( R.id.budgetTo );
 	this.amount = (TextView) this.findViewById( R.id.amount );

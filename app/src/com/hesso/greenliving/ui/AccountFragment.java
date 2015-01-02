@@ -80,6 +80,7 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 
 	Collection<Account> accounts = Budget.getInstance().getAccounts();
 	this.adapter.setList( accounts );
+	Log.d("debug", "FragmentBudgetListSize " + accounts.size());
 	if( !accounts.isEmpty() ) {
 	    this.noAccountTextView.setVisibility( View.GONE );
 	} else {
