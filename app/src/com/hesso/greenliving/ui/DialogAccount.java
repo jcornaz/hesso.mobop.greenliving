@@ -29,7 +29,7 @@ public class DialogAccount extends Activity {
 	    // account = (Account)i.getSerializableExtra("account");
 	}
 	if( account != null ) {
-	    editTextAccountName.setText( account.getName( this ) );
+	    editTextAccountName.setText( AccountDisplayer.toString( this, this.account ) );
 	    editTextTargetAmount.setText( String.valueOf( account.getTargetAmount() ) );
 	}
     }

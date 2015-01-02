@@ -15,7 +15,7 @@ public class AccountComparatorByName implements Comparator<Account> {
 	} else if( account2.isOffBudget() ) {
 	    res = 1;
 	} else {
-	    res = account1.getName( null ).compareTo( account2.getName( null ) );
+	    res = account1.getName().compareTo( account2.getName() );
 	}
 
 	return res;

@@ -9,9 +9,6 @@ import java.util.Observer;
 
 import org.joda.time.DateTime;
 
-import android.content.Context;
-
-import com.hesso.greenliving.R;
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -68,8 +65,8 @@ public class Account extends Entity implements Observer {
 	return budget;
     }
 
-    public String getName( Context context ) {
-	return (this.isOffBudget && context != null) ? context.getString( R.string.off_account ) : this.name;
+    public String getName() {
+	return this.name;
     }
 
     public void setName( String name ) {
@@ -208,7 +205,7 @@ public class Account extends Entity implements Observer {
 	}
     }
 
-    private void setOffBudget() {
+    void setOffBudget() {
 	this.isOffBudget = true;
 	this.budget.addObserver( this );
     }
@@ -221,10 +218,5 @@ public class Account extends Entity implements Observer {
     public void update( Observable observable, Object data ) {
 	this.setChanged();
 	this.notifyObservers();
-    }
-
-    @Override
-    public String toString() {
-	return this.name;
     }
 }

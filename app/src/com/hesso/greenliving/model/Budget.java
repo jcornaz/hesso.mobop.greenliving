@@ -55,6 +55,8 @@ public class Budget extends Entity {
     public void init() {
 	if( this.offBudgetAccount == null ) {
 	    this.offBudgetAccount = Account.createOffBudget();
+	} else {
+	    this.offBudgetAccount.setOffBudget();
 	}
 
 	this.accounts = new HashSet<Account>( this.accounts );

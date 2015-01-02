@@ -1,6 +1,6 @@
 package com.hesso.greenliving.ui;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
@@ -71,11 +71,11 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 	setDateToButton();
 	if( isLinkedToAccount && account != null ) {
 	    spinnerAccount.setVisibility( View.GONE );
-	    textViewAccount.setText( account.getName( this ) );
+	    textViewAccount.setText( AccountDisplayer.toString( this, this.account ) );
 	    textViewAccount.setTypeface( null, Typeface.BOLD );
 	} else {
-	    ArrayList<Account> accounts = new ArrayList<Account>( Budget.getInstance().getAccounts() );
-	    ArrayAdapter<Account> adapter = new ArrayAdapter<Account>( this, android.R.layout.simple_spinner_dropdown_item, accounts );
+	    List<AccountDisplayer> accounts = AccountDisplayer.convert( this, Budget.getInstance().getAccounts() );
+	    ArrayAdapter<AccountDisplayer> adapter = new ArrayAdapter<AccountDisplayer>( this, android.R.layout.simple_spinner_dropdown_item, accounts );
 	    spinnerAccount.setAdapter( adapter );
 	    if( hasAccountPreselected && account != null ) {
 		spinnerAccount.setSelection( accounts.indexOf( account ) );

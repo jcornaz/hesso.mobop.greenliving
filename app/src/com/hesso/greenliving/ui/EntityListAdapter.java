@@ -1,6 +1,7 @@
 package com.hesso.greenliving.ui;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,8 +30,12 @@ public abstract class EntityListAdapter<EntityType extends Entity, ViewType exte
 	}
 
 	this.remove( toRemove );
+
+	this.sort( this.getComparator() );
 	this.notifyDataSetChanged();
     }
+
+    protected abstract Comparator<? super EntityType> getComparator();
 
     private void remove( Collection<EntityType> entities ) {
 
