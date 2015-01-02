@@ -172,21 +172,21 @@ public class Budget extends Entity {
 
     @Override
     public void addObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer added : " + observer.getClass().getSimpleName() );
+	Log.d( this.getClass().getSimpleName(), "observer added : " + observer.getClass().getSimpleName() + " for " + this );
 	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
 	super.addObserver( observer );
     }
 
     @Override
     public synchronized void deleteObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer removed : " + observer.getClass().getSimpleName() );
+	Log.d( this.getClass().getSimpleName(), "observer removed : " + observer.getClass().getSimpleName()  + " for " + this );
 	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
 	super.deleteObserver( observer );
     }
 
     @Override
     public void notifyObservers() {
-	Log.d( this.getClass().getSimpleName(), "notify " + this.countObservers() + " observers : " + this.hasChanged() );
+	Log.d( this.getClass().getSimpleName(), "notify " + this.countObservers() + " observers : " + this.hasChanged() + " for " + this );
 	super.notifyObservers();
     }
 
