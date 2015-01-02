@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import android.support.v4.util.LongSparseArray;
+import android.util.Log;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
@@ -40,8 +41,8 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
-//    @DatabaseField (canBeNull = false )
-//    private Account offBudgetAccount = null;
+    // @DatabaseField (canBeNull = false )
+    // private Account offBudgetAccount = null;
 
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
@@ -59,9 +60,9 @@ public class Budget extends Entity {
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );
 
-//	if( this.offBudgetAccount == null ) {
-//	    this.offBudgetAccount = new OffBudgetAccount();
-//	}
+	// if( this.offBudgetAccount == null ) {
+	// this.offBudgetAccount = new OffBudgetAccount();
+	// }
     }
 
     public Collection<Account> getAccounts() {
@@ -88,11 +89,17 @@ public class Budget extends Entity {
     }
 
     boolean removeAccount( Account account ) {
+	Log.d( this.getClass().getSimpleName(), "contains = " + this.accounts.contains( account ) + ", size = " + this.accounts.size() );
+
 	boolean res = this.accounts.remove( account );
+	Log.d( this.getClass().getSimpleName(), "Removing account " + account.getId() + " from budget" );
 
 	if( res ) {
 	    this.accountsMap.remove( account.getId() );
 	    this.setChanged();
+	    Log.i( this.getClass().getSimpleName(), "Account " + account.getId() + " removed from budget" );
+	} else {
+	    Log.w( this.getClass().getSimpleName(), "Account " + account.getId() + " not removed from budget" );
 	}
 
 	return res;
@@ -165,7 +172,7 @@ public class Budget extends Entity {
 	throw new NotSupportedOperationException();
     }
 
-//    public Account getOffBudget() {
-//	return this.offBudgetAccount;
-//    }
+    // public Account getOffBudget() {
+    // return this.offBudgetAccount;
+    // }
 }
