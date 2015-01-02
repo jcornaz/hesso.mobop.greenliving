@@ -10,6 +10,8 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import android.util.Log;
+
 import com.hesso.greenliving.exception.UnexpectedException;
 import com.hesso.greenliving.model.Entity;
 import com.j256.ormlite.dao.CloseableIterator;
@@ -50,6 +52,8 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );
 	}
+
+	Log.i( this.getClass().getSimpleName(), "entity " + entity.getId() + " persisted" );
     }
 
     @Override
@@ -63,6 +67,8 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );
 	}
+
+	Log.i( this.getClass().getSimpleName(), "entity " + entity.getId() + " deleted" );
 
 	return res;
     }

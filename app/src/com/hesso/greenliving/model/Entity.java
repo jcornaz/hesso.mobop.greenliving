@@ -12,8 +12,7 @@ import com.j256.ormlite.field.DatabaseField;
 public abstract class Entity extends Observable implements Serializable {
     private static final long serialVersionUID = -110511284436795169L;
 
-    @DatabaseField (id = true )
-    // TODO Améliorer le système d'identification
+    @DatabaseField (generatedId = true )
     private long id = new SecureRandom().nextLong();
 
     private boolean isDeleted = false;
@@ -47,9 +46,9 @@ public abstract class Entity extends Observable implements Serializable {
 	}
     }
 
-    protected abstract void destroy();
-
     public abstract void init();
+
+    protected abstract void destroy();
 
     @Override
     public int hashCode() {
