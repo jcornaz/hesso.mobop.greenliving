@@ -24,9 +24,9 @@ public class AccountsDao extends EntitiesDao<Account> {
     }
 
     @Override
-    protected void updateChildren( Account entity ) {
-	this.updateChildren( entity, this.transactionsDao, this.persistedTransactions, entity.getTransactions() );
-	this.updateChildren( entity, this.schedulesDao, this.persistedSchedules, entity.getScheduledTransactions() );
+    protected void persistChildren( Account entity ) {
+	this.persistChildren( entity, this.transactionsDao, this.persistedTransactions, entity.getTransactions() );
+	this.persistChildren( entity, this.schedulesDao, this.persistedSchedules, entity.getScheduledTransactions() );
     }
 
     @Override

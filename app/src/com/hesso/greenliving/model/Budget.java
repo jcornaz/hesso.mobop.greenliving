@@ -40,6 +40,9 @@ public class Budget extends Entity {
     @ForeignCollectionField (eager = true )
     private Collection<Transaction> transactions = new HashSet<Transaction>();
 
+    @DatabaseField (canBeNull = false )
+    private Account offBudgetAccount = null;
+
     private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
     private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
 
@@ -55,6 +58,10 @@ public class Budget extends Entity {
 
 	this.map( this.accounts, this.accountsMap );
 	this.map( this.transactions, this.transactionsMap );
+
+	if( this.offBudgetAccount == null ) {
+	    this.offBudgetAccount = new OffBudgetAccount();
+	}
     }
 
     public Collection<Account> getAccounts() {
@@ -62,19 +69,11 @@ public class Budget extends Entity {
     }
 
     public Account getAccountById( long id ) {
-	for( Account account : accounts ) {
-	    if( account.getId() == id )
-		return account;
-	}
-	return null;
+	return this.accountsMap.get( id );
     }
 
     public Transaction getTransactionById( long id ) {
-	for( Transaction transaction : transactions ) {
-	    if( transaction.getId() == id )
-		return transaction;
-	}
-	return null;
+	return this.transactionsMap.get( id );
     }
 
     private boolean addAccount( Account account ) {
@@ -166,11 +165,7 @@ public class Budget extends Entity {
 	throw new NotSupportedOperationException();
     }
 
-    public Account getAccount( long accountId ) {
-	return this.accountsMap.get( accountId );
-    }
-
-    public Transaction getTransaction( long transactionId ) {
-	return this.transactionsMap.get( transactionId );
+    public Account getOffBudget() {
+	return this.offBudgetAccount;
     }
 }

@@ -10,7 +10,7 @@ public class SchedulesDao extends EntitiesDao<ScheduledTransaction> {
     }
 
     @Override
-    protected void updateChildren( ScheduledTransaction entity ) {
+    protected void persistChildren( ScheduledTransaction entity ) {
 	// Les ScheduledTransaction n'ont pas d'enfants
     }
 

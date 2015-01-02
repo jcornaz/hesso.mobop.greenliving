@@ -48,12 +48,12 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	try {
 	    this.createOrUpdate( entity );
 	    entity.addObserver( this );
-	    this.updateChildren( entity );
+	    this.persistChildren( entity );
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );
 	}
 
-	Log.i( this.getClass().getSimpleName(), "entity " + entity.getId() + " persisted" );
+	Log.i( this.getClass().getSimpleName(), entity.getClass().getSimpleName() + " " + entity.getId() + " persisted" );
     }
 
     @Override
@@ -68,7 +68,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	    throw new UnexpectedException( e );
 	}
 
-	Log.i( this.getClass().getSimpleName(), "entity " + entity.getId() + " deleted" );
+	Log.i( this.getClass().getSimpleName(), entity.getClass().getSimpleName() + " " + entity.getId() + " deleted" );
 
 	return res;
     }
@@ -93,7 +93,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 		this.delete( entity );
 	    } else {
 		this.update( entity );
-		this.updateChildren( entity );
+		this.persistChildren( entity );
 	    }
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );
@@ -128,7 +128,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 	}
     }
 
-    protected <T extends Entity> void updateChildren( EntityType parentEntity, EntitiesDao<T> childrenDao, Map<EntityType, Set<T>> persistedMap, Collection<T> existingList ) {
+    protected <T extends Entity> void persistChildren( EntityType parentEntity, EntitiesDao<T> childrenDao, Map<EntityType, Set<T>> persistedMap, Collection<T> existingList ) {
 	Set<T> children = persistedMap.get( parentEntity );
 
 	if( children == null ) {
@@ -154,7 +154,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
 
     protected abstract void refreshChildren( EntityType entity );
 
-    protected abstract void updateChildren( EntityType entity );
+    protected abstract void persistChildren( EntityType entity );
 
     protected abstract void deleteChildren( EntityType entity );
 
