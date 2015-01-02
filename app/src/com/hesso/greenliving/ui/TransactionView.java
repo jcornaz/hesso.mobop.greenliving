@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,10 +25,10 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
 
     private Transaction transaction;
 
-    private TextView from;
-    private TextView to;
-    private TextView amount;
-    private LinearLayout budgetToLayout;
+    private TextView textViewFromAccount;
+    private TextView textViewToAccount;
+    private TextView textViewDate;
+    private TextView textViewAmount;
 
     public TransactionView( Context context ) {
 	super( context );
@@ -46,11 +45,11 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
     @Override
     protected void onFinishInflate() {
 	super.onFinishInflate();
+	this.textViewFromAccount = (TextView)this.findViewById(R.id.budgetFrom);
+	this.textViewToAccount = (TextView)this.findViewById(R.id.budgetTo);
+	this.textViewDate = (TextView)this.findViewById(R.id.date);
+	this.textViewAmount = (TextView)this.findViewById(R.id.amount);
 
-	//this.budgetToLayout = (LinearLayout) this.findViewById( R.id.budgetToLayout );
-	this.from = (TextView) this.findViewById( R.id.budgetFrom );
-	this.to = (TextView) this.findViewById( R.id.budgetTo );
-	this.amount = (TextView) this.findViewById( R.id.amount );
     }
 
     @Override
@@ -68,17 +67,15 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
     @Override
     public void update( Observable observable, Object data ) {
 	if( this.transaction.hasSource() ) {
-	    this.from.setText( this.transaction.getSourceAccount().getName() );
+		this.textViewFromAccount.setText(this.transaction.getSourceAccount().getName());
 	} else {
-	    this.from.setText( this.getContext().getString( R.string.refill ) );
+	    this.textViewFromAccount.setText( this.getContext().getString( R.string.credit ) );
 	}
 
 	if( this.transaction.hasDestination() ) {
-	    this.budgetToLayout.setVisibility( View.VISIBLE );
-	    this.to.setText( this.transaction.getDestinationAccount().getName() );
-
+		this.textViewToAccount.setText(this.transaction.getDestinationAccount().getName());
 	} else {
-	    this.budgetToLayout.setVisibility( View.INVISIBLE );
+	    this.textViewToAccount.setText(this.getContext().getString(R.string.expense));
 	}
 
 	int color;
@@ -86,16 +83,18 @@ public class TransactionView extends LinearLayout implements IEntityView<Transac
 	default:
 	case TRANSFER:
 	    color = COLOR_TRANSFER;
+	    this.textViewAmount.setText(MainActivity.DEC_FORMAT.format(this.transaction.getAmount()));
 	    break;
 	case EXPENSE:
 	    color = COLOR_EXPENSE;
+	    this.textViewAmount.setText("-" + MainActivity.DEC_FORMAT.format(this.transaction.getAmount()));
 	    break;
 	case CREDIT:
 	    color = COLOR_FILL;
+	    this.textViewAmount.setText("+" + MainActivity.DEC_FORMAT.format(this.transaction.getAmount()));
 	    break;
 	}
-
-	this.amount.setText( MainActivity.DEC_FORMAT.format( this.transaction.getAmount() ) );
-	this.amount.setTextColor( color );
+	this.textViewAmount.setTextColor(color);
+	this.textViewDate.setText(this.transaction.getDate().toString("dd/MM/YYYY", this.getContext().getResources().getConfiguration().locale));
     }
 }

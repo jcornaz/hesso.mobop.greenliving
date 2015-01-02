@@ -95,7 +95,7 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 	}
 
 	private void setDateToButton() {
-		String d = date.toString( "MM/dd/YYYY", Locale.getDefault() );
+		String d = date.toString( "dd/MM/YYYY", this.getResources().getConfiguration().locale );
 		buttonDate.setText( d );
 	}
 
