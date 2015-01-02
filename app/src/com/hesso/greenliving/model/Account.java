@@ -217,6 +217,6 @@ public class Account extends Entity implements Observer {
 
     @Override
     public String toString() {
-	return name;
+	return this.name;
     }
 }

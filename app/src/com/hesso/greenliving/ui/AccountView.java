@@ -24,7 +24,7 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 	return (AccountView) LayoutInflater.from( parent.getContext() ).inflate( R.layout.item_account, parent, false );
     }
 
-    private Account budgetEntry;
+    private Account account;
 
     private TextView entryNameView;
     private TextView targetAmountView;
@@ -57,22 +57,22 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 
     @Override
     public void setModel( Account entry ) {
-	if( this.budgetEntry != entry ) {
-	    this.budgetEntry = entry;
-	    if( this.budgetEntry != null ) {
-		this.budgetEntry.deleteObserver( this );
+	if( this.account != entry ) {
+	    this.account = entry;
+	    if( this.account != null ) {
+		this.account.deleteObserver( this );
 	    }
-	    this.budgetEntry.addObserver( this );
-	    this.update( this.budgetEntry, this );
+	    this.account.addObserver( this );
+	    this.update( this.account, this );
 	}
     }
 
     @Override
     public void update( Observable observable, Object data ) {
-	double targetAmount = this.budgetEntry.getTargetAmount();
-	double currentAmount = this.budgetEntry.getCurrentAmount();
+	double targetAmount = this.account.getTargetAmount();
+	double currentAmount = this.account.getCurrentAmount();
 
-	this.entryNameView.setText( this.budgetEntry.getName() );
+	this.entryNameView.setText( this.account.getName() );
 	this.currentAmountView.setText( MainActivity.DEC_FORMAT.format( currentAmount ) );
 	this.targetAmountView.setText( MainActivity.DEC_FORMAT.format( targetAmount ) );
 
@@ -86,7 +86,7 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
 
     @Override
     public void onClick( View v ) {
-	MainActivity.getInstance().openTransactions( this.budgetEntry );
+	MainActivity.getInstance().openTransactions( this.account );
     }
 
     @Override
