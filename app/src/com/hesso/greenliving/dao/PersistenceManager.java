@@ -18,13 +18,9 @@ import com.j256.ormlite.table.TableUtils;
 public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 
     private static final String DB_NAME = "greenliving.db";
-
-    private static final int DB_VERSION = 22;
+    private static final int DB_VERSION = 24;
 
     private static PersistenceManager instance;
-    private BudgetDao budgetDao;
-    private AccountsDao entriesDao;
-    private TransactionsDao transactionsDao;
 
     public static PersistenceManager getInstance() {
 	return instance;
@@ -44,6 +40,10 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	instance.doStop();
 	instance = null;
     }
+
+    private BudgetDao budgetDao;
+    private AccountsDao entriesDao;
+    private TransactionsDao transactionsDao;
 
     private PersistenceManager( Context context ) {
 	super( context, DB_NAME, null, DB_VERSION );
@@ -94,17 +94,5 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	}
 
 	this.onCreate( database, connectionSource );
-    }
-
-    public BudgetDao getBudgetDao() {
-	return budgetDao;
-    }
-
-    public AccountsDao getEntriesDao() {
-	return entriesDao;
-    }
-
-    public TransactionsDao getTransactionsDao() {
-	return transactionsDao;
     }
 }

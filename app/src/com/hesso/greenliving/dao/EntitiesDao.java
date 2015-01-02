@@ -103,7 +103,7 @@ public abstract class EntitiesDao<EntityType extends Entity> implements Observer
     @Override
     public int refresh( EntityType entity ) {
 	int res = 0;
-	
+
 	try {
 	    res = this.dao.refresh( entity );
 	    entity.addObserver( this );
