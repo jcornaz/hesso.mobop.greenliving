@@ -40,4 +40,5 @@
     <string name="select_currency">Select your currency:</string>
     <string name="transaction_help">This tab allows you to manage your transactions</string>
     <string name="no_account">To begin please create new accounts in menu -> new account</string>
+    <string name="date">Date:</string>
 </resources>

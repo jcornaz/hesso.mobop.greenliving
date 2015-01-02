@@ -46,6 +46,7 @@ public class Account extends Entity implements Observer {
 
     @Override
     public void init() {
+	this.budget = Budget.getInstance();
 	Log.d( this.getClass().getSimpleName(), "initializing" );
 	this.outgoingTransactions = new HashSet<Transaction>( this.outgoingTransactions );
 	this.incomingTransactions = new HashSet<Transaction>( this.incomingTransactions );

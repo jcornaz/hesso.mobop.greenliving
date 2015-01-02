@@ -2,7 +2,6 @@ package com.hesso.greenliving.ui;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import org.joda.time.DateTime;
 
@@ -64,7 +63,7 @@ public class DialogTransfer extends Activity {
     }
 
     private void setDateToButton() {
-	String d = date.toString( "MM/dd/YYYY", Locale.getDefault() );
+	String d = date.toString( "dd/MM/YYYY", this.getResources().getConfiguration().locale );
 	buttonDate.setText( d );
     }
 

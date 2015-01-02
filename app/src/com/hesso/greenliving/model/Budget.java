@@ -2,7 +2,6 @@ package com.hesso.greenliving.model;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Observer;
 
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
@@ -19,13 +18,14 @@ public class Budget extends Entity {
     private static final double DEFAULT_TARGET = 1000;
     private static final int DEFAULT_DAY_OF_MONTH = 25;
 
+    private static final long ID = 42;
+
     private static Budget instance;
 
-    public static Budget getInstance() {
+    public static synchronized Budget getInstance() {
 	if( instance == null ) {
 	    instance = new Budget();
 	}
-
 	return instance;
     }
 
@@ -50,6 +50,7 @@ public class Budget extends Entity {
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
 	this.setTarget( DEFAULT_TARGET );
+	this.setId( ID );
     }
 
     @Override
@@ -165,32 +166,6 @@ public class Budget extends Entity {
     public void destroy() {
 	// Le budget ne peut pas être supprimé
 	throw new NotSupportedOperationException();
-    }
-
-    @Override
-    public void addObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer added : " + observer.getClass().getSimpleName() + " for " + this );
-	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
-	super.addObserver( observer );
-    }
-
-    @Override
-    public synchronized void deleteObserver( Observer observer ) {
-	Log.d( this.getClass().getSimpleName(), "observer removed : " + observer.getClass().getSimpleName() + " for " + this );
-	Log.d( this.getClass().getSimpleName(), this.countObservers() + " observers watching" );
-	super.deleteObserver( observer );
-    }
-
-    @Override
-    public void notifyObservers() {
-	Log.d( this.getClass().getSimpleName(), "notify " + this.countObservers() + " observers : " + this.hasChanged() + " for " + this );
-	super.notifyObservers();
-    }
-
-    @Override
-    public synchronized void deleteObservers() {
-	Log.d( this.getClass().getSimpleName(), " observers deleted" );
-	super.deleteObservers();
     }
 
     public OffBudgetAccount getOffBudget() {

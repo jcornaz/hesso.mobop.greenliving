@@ -41,6 +41,7 @@ public class Transaction extends Entity {
 
     @Override
     public void init() {
+	this.budget = Budget.getInstance();
     }
 
     public DateTime getDate() {

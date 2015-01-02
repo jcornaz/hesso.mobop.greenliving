@@ -80,6 +80,7 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 
 	Collection<Account> accounts = Budget.getInstance().getAccounts();
 	this.adapter.setList( accounts );
+	Log.d("debug", "FragmentBudgetListSize " + accounts.size());
 	if( !accounts.isEmpty() ) {
 	    this.noAccountTextView.setVisibility( View.GONE );
 	} else {
@@ -127,7 +128,7 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 	case R.id.menu_account_list_update:
 	    Account account = (Account) accountsListView.getItemAtPosition( itemLongClickPosition );
 	    intent = new Intent( getActivity(), DialogAccount.class );
-	    intent.putExtra( "is_update", true );
+	    intent.putExtra( "isLinkedToAccount", true );
 	    // intent.putExtra("account", account);
 	    intent.putExtra( "account_id", account.getId() );
 	    startActivity( intent );
