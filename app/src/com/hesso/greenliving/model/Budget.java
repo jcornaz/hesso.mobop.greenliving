@@ -89,8 +89,6 @@ public class Budget extends Entity {
     }
 
     boolean removeAccount( Account account ) {
-	Log.d( this.getClass().getSimpleName(), "contains = " + this.accounts.contains( account ) + ", size = " + this.accounts.size() );
-
 	boolean res = this.accounts.remove( account );
 	Log.d( this.getClass().getSimpleName(), "Removing account " + account.getId() + " from budget" );
 
