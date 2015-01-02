@@ -1,5 +1,6 @@
 package com.hesso.greenliving.ui;
 
+import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.hesso.greenliving.R;
 import com.hesso.greenliving.model.Account;
@@ -26,6 +28,7 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 
 	private AccountListAdapter adapter;
 	private ListView accountsListView;
+	private TextView noAccountTextView;
 	private int itemLongClickPosition;
 
 	@Override
@@ -42,7 +45,9 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 	public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
 		Log.d( "debug", "FragmentBudget#onCreateView" );
 
-		this.accountsListView = (ListView) inflater.inflate( R.layout.frag_accounts, container, false );
+		View v = inflater.inflate( R.layout.frag_accounts, container, false );
+		this.accountsListView = (ListView)v.findViewById(R.id.frag_accounts_listview);
+		this.noAccountTextView = (TextView)v.findViewById(R.id.frag_accounts_textview);
 		this.adapter = new AccountListAdapter(container.getContext());
 		//this.adapter.setList(Budget.getInstance().getAccounts());
 		this.accountsListView.setAdapter(this.adapter);
@@ -51,7 +56,7 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 		Budget.getInstance().addObserver(this);
 		this.update(Budget.getInstance(), this);
 		this.setHasOptionsMenu(true);
-		return this.accountsListView;
+		return v;
 	}
 	
     @Override
@@ -73,8 +78,14 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 	public void update( Observable observable, Object data ) {
 		Log.d( "debug", "FragmentBudget#update" );
 		//this.adapter.notifyDataSetChanged();
-		this.adapter.setList(Budget.getInstance().getAccounts());
-		this.adapter.notifyDataSetChanged();
+		Collection<Account> accounts = Budget.getInstance().getAccounts();
+		if(!accounts.isEmpty()) {
+			this.noAccountTextView.setVisibility(View.GONE);
+			this.adapter.setList(accounts);
+			this.adapter.notifyDataSetChanged();
+		} else {
+			this.noAccountTextView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
