@@ -16,4 +16,9 @@ public class OffBudgetAccount extends Account implements Observer {
 	this.setChanged();
 	this.notifyObservers();
     }
+
+    @Override
+    public double getTargetAmount() {
+	return Budget.getInstance().getTarget() - Budget.getInstance().getBudgeted();
+    }
 }

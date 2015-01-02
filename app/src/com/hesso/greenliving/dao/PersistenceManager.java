@@ -10,7 +10,6 @@ import android.util.Log;
 import com.hesso.greenliving.exception.UnexpectedException;
 import com.hesso.greenliving.model.Account;
 import com.hesso.greenliving.model.Budget;
-import com.hesso.greenliving.model.ScheduledTransaction;
 import com.hesso.greenliving.model.Transaction;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -25,7 +24,6 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
     private BudgetDao budgetDao;
     private AccountsDao entriesDao;
     private TransactionsDao transactionsDao;
-    private SchedulesDao schedulesDao;
 
     public static PersistenceManager getInstance() {
 	return instance;
@@ -55,8 +53,7 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 
 	try {
 	    this.transactionsDao = new TransactionsDao( (Dao<Transaction, Long>) this.getDao( Transaction.class ) );
-	    this.schedulesDao = new SchedulesDao( (Dao<ScheduledTransaction, Long>) this.getDao( ScheduledTransaction.class ) );
-	    this.entriesDao = new AccountsDao( (Dao<Account, Long>) this.getDao( Account.class ), this.transactionsDao, this.schedulesDao );
+	    this.entriesDao = new AccountsDao( (Dao<Account, Long>) this.getDao( Account.class ), this.transactionsDao );
 	    this.budgetDao = new BudgetDao( (Dao<Budget, Long>) this.getDao( Budget.class ), this.entriesDao );
 	} catch( SQLException e ) {
 	    throw new UnexpectedException( e );
@@ -90,7 +87,6 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	try {
 	    TableUtils.createTable( connectionSource, Budget.class );
 	    TableUtils.createTable( connectionSource, Account.class );
-	    TableUtils.createTable( connectionSource, ScheduledTransaction.class );
 	    TableUtils.createTable( connectionSource, Transaction.class );
 	    Log.i( this.getClass().getSimpleName(), "tables created" );
 	} catch( SQLException e ) {
@@ -105,7 +101,6 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 	try {
 	    TableUtils.dropTable( connectionSource, Budget.class, true );
 	    TableUtils.dropTable( connectionSource, Account.class, true );
-	    TableUtils.dropTable( connectionSource, ScheduledTransaction.class, true );
 	    TableUtils.dropTable( connectionSource, Transaction.class, true );
 	    Log.i( this.getClass().getSimpleName(), "tables droped" );
 	} catch( SQLException e ) {
@@ -125,9 +120,5 @@ public final class PersistenceManager extends OrmLiteSqliteOpenHelper {
 
     public TransactionsDao getTransactionsDao() {
 	return transactionsDao;
-    }
-
-    public SchedulesDao getSchedulesDao() {
-	return schedulesDao;
     }
 }
