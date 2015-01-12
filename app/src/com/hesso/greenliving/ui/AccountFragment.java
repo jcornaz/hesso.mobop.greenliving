@@ -80,7 +80,7 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
 
 	Collection<Account> accounts = Budget.getInstance().getAccounts();
 	this.adapter.setList( accounts );
-	Log.d("debug", "FragmentBudgetListSize " + accounts.size());
+	Log.d( "debug", "FragmentBudgetListSize " + accounts.size() );
 	if( !accounts.isEmpty() ) {
 	    this.noAccountTextView.setVisibility( View.GONE );
 	} else {
@@ -144,14 +144,18 @@ public class AccountFragment extends AbstractFragment implements Observer, OnMen
     @Override
     public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id ) {
 	itemLongClickPosition = position;
-	PopupMenu popup = new PopupMenu( getActivity(), view );
-	MenuInflater inflater = popup.getMenuInflater();
-	Menu menu = popup.getMenu();
-	inflater.inflate( R.menu.account_list, menu );
-	popup.show();
-	for( int i = 0; i < menu.size(); i++ ) {
-	    menu.getItem( i ).setOnMenuItemClickListener( this );
+
+	if( !((AccountView) view).getModel().isOffBudget() ) {
+	    PopupMenu popup = new PopupMenu( getActivity(), view );
+	    MenuInflater inflater = popup.getMenuInflater();
+	    Menu menu = popup.getMenu();
+	    inflater.inflate( R.menu.account_list, menu );
+	    popup.show();
+	    for( int i = 0; i < menu.size(); i++ ) {
+		menu.getItem( i ).setOnMenuItemClickListener( this );
+	    }
 	}
+
 	return false;
     }
 }

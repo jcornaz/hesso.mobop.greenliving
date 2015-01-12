@@ -134,4 +134,8 @@ public class AccountView extends LinearLayout implements IEntityView<Account>, O
     public boolean onLongClick( View v ) {
 	return false;
     }
+
+    public Account getModel() {
+	return this.account;
+    }
 }
