@@ -1,7 +1,6 @@
 package com.hesso.greenliving.model;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
@@ -9,6 +8,8 @@ import java.util.Observer;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+
+import android.util.Log;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
 import com.j256.ormlite.field.DatabaseField;
@@ -36,10 +37,10 @@ public class Account extends Entity implements Observer {
     private double targetAmount;
 
     @ForeignCollectionField (eager = true, foreignFieldName = "sourceAccount" )
-    private Collection<Transaction> outgoingTransactions = new HashSet<Transaction>();
+    private Collection<Transaction> outgoingTransactions = new LinkedList<Transaction>();
 
     @ForeignCollectionField (eager = true, foreignFieldName = "destinationAccount" )
-    private Collection<Transaction> incomingTransactions = new HashSet<Transaction>();
+    private Collection<Transaction> incomingTransactions = new LinkedList<Transaction>();
 
     @DatabaseField (canBeNull = false )
     private boolean isOffBudget = false;
@@ -56,8 +57,8 @@ public class Account extends Entity implements Observer {
     public void init() {
 	this.budget = Budget.getInstance();
 
-	this.outgoingTransactions = new HashSet<Transaction>( this.outgoingTransactions );
-	this.incomingTransactions = new HashSet<Transaction>( this.incomingTransactions );
+	this.outgoingTransactions = new LinkedList<Transaction>( this.outgoingTransactions );
+	this.incomingTransactions = new LinkedList<Transaction>( this.incomingTransactions );
 
 	this.setOffBudget( this.isOffBudget );
     }
@@ -116,36 +117,47 @@ public class Account extends Entity implements Observer {
 	    transaction.deleteObserver( this );
 	    this.setChanged();
 	}
+
 	return res;
     }
 
-    boolean addOutgoingTransaction( Transaction transaction ) {
-	boolean res = this.outgoingTransactions.add( transaction );
+    public boolean addOutgoingTransaction( Transaction transaction ) {
+	boolean res = !this.outgoingTransactions.contains( transaction ) && this.outgoingTransactions.add( transaction );
 
 	if( res ) {
 	    transaction.addObserver( this );
 	    this.setChanged();
 	}
+
 	return res;
     }
 
-    boolean removeIncomingTransaction( Transaction transaction ) {
+    public boolean removeIncomingTransaction( Transaction transaction ) {
 	boolean res = this.incomingTransactions.remove( transaction );
+
+	Log.d( this.getClass().getSimpleName(), "removeIncomingTransaction of " + transaction.getAmount() + " = " + res );
 
 	if( res ) {
 	    transaction.deleteObserver( this );
 	    this.setChanged();
 	}
+
 	return res;
     }
 
-    boolean addIncomingTransaction( Transaction transaction ) {
-	boolean res = this.incomingTransactions.add( transaction );
+    public boolean addIncomingTransaction( Transaction transaction ) {
+	Log.d( this.getClass().getSimpleName(), "currentAmount = " + this.getCurrentAmount() );
+
+	boolean res = !this.incomingTransactions.contains( transaction ) && this.incomingTransactions.add( transaction );
+
+	Log.d( this.getClass().getSimpleName(), "addIncomingTransaction of " + transaction.getAmount() + " = " + res );
+	Log.d( this.getClass().getSimpleName(), "currentAmount = " + this.getCurrentAmount() );
 
 	if( res ) {
 	    transaction.addObserver( this );
 	    this.setChanged();
 	}
+
 	return res;
     }
 
@@ -164,6 +176,7 @@ public class Account extends Entity implements Observer {
     public void transfert( double amount, Account destination ) {
 	new Transaction( this, destination, DateTime.now(), amount ).notifyObservers();
 	this.notifyObservers();
+	destination.notifyObservers();
 	this.budget.notifyObservers();
     }
 
@@ -206,7 +219,7 @@ public class Account extends Entity implements Observer {
 	}
     }
 
-    void setOffBudget( boolean value ) {
+    public void setOffBudget( boolean value ) {
 	this.isOffBudget = value;
 	if( this.isOffBudget ) {
 	    this.budget.addObserver( this );
@@ -215,6 +228,7 @@ public class Account extends Entity implements Observer {
 	}
     }
 
+    
     public boolean isOffBudget() {
 	return this.isOffBudget;
     }

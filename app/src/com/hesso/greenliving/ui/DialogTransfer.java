@@ -93,6 +93,8 @@ public class DialogTransfer extends Activity {
 			    transaction.setSourceAccount( accountFrom );
 			    transaction.setDestinationAccount( accountTo );
 			    transaction.notifyObservers();
+			    accountFrom.notifyObservers();
+			    accountTo.notifyObservers();
 			    finish();
 			} else {
 			    Toast.makeText( this, R.string.same_account, Toast.LENGTH_LONG ).show();

@@ -42,149 +42,179 @@ public class AccountDisplayer extends Account {
     public String toString() {
 	return AccountDisplayer.toString( this.context, this.account );
     }
-
+    
     @Override
     public long getId() {
-	return this.account.getId();
+	return account.getId();
     }
 
     @Override
     public boolean isDeleted() {
-	return this.account.isDeleted();
+	return account.isDeleted();
     }
 
     @Override
     public void delete() {
-	this.account.delete();
+	account.delete();
     }
 
     @Override
     public void addObserver( Observer observer ) {
-	this.account.addObserver( observer );
+	account.addObserver( observer );
     }
 
     @Override
     public void init() {
-	this.account.init();
+	account.init();
     }
 
     @Override
     public Budget getBudget() {
-	return this.account.getBudget();
+	return account.getBudget();
     }
-
+    
     @Override
     public String getName() {
-	return this.account.getName();
+	return account.getName();
     }
 
     @Override
     public void setName( String name ) {
-	this.account.setName( name );
+	account.setName( name );
     }
 
     @Override
     public double getTargetAmount() {
-	return this.account.getTargetAmount();
+	return account.getTargetAmount();
     }
 
     @Override
     public int countObservers() {
-	return this.account.countObservers();
+	return account.countObservers();
     }
 
     @Override
     public void setTargetAmount( double targetAmount ) {
-	this.account.setTargetAmount( targetAmount );
-    }
-
-    @Override
-    public Collection<Transaction> getTransactions() {
-	return this.account.getTransactions();
+	account.setTargetAmount( targetAmount );
     }
 
     @Override
     public void deleteObserver( Observer observer ) {
-	this.account.deleteObserver( observer );
+	account.deleteObserver( observer );
+    }
+
+    @Override
+    public Collection<Transaction> getTransactions() {
+	return account.getTransactions();
     }
 
     @Override
     public Collection<? extends Transaction> getIncomingTransactions() {
-	return this.account.getIncomingTransactions();
+	return account.getIncomingTransactions();
     }
 
     @Override
     public void deleteObservers() {
-	this.account.deleteObservers();
+	account.deleteObservers();
     }
 
     @Override
     public Collection<? extends Transaction> getOutgoingTransactions() {
-	return this.account.getOutgoingTransactions();
+	return account.getOutgoingTransactions();
     }
 
     @Override
     public boolean hasChanged() {
-	return this.account.hasChanged();
-    }
-
-    @Override
-    public boolean removeOutgoingTransaction( Transaction transaction ) {
-	return this.account.removeOutgoingTransaction( transaction );
+	return account.hasChanged();
     }
 
     @Override
     public void notifyObservers() {
-	this.account.notifyObservers();
+	account.notifyObservers();
     }
 
     @Override
     public void notifyObservers( Object data ) {
-	this.account.notifyObservers( data );
+	account.notifyObservers( data );
     }
 
     @Override
     public void fill( double amount ) {
-	this.account.fill( amount );
+	account.fill( amount );
     }
 
     @Override
     public void expense( double amount ) {
-	this.account.expense( amount );
+	account.expense( amount );
     }
 
     @Override
     public void transfert( double amount, Account destination ) {
-	this.account.transfert( amount, destination );
+	account.transfert( amount, destination );
     }
 
     @Override
     public double getCurrentAmount() {
-	return this.account.getCurrentAmount();
+	return account.getCurrentAmount();
     }
 
     @Override
     public void destroy() {
-	this.account.destroy();
+	account.destroy();
     }
 
     @Override
     public boolean isOffBudget() {
-	return this.account.isOffBudget();
+	return account.isOffBudget();
     }
 
     @Override
     public void update( Observable observable, Object data ) {
-	this.account.update( observable, data );
+	account.update( observable, data );
+    }
+
+    @Override
+    public boolean isInBudget() {
+	return account.isInBudget();
     }
 
     @Override
     public boolean equals( Object o ) {
-	return this.account.equals( o );
+	return account.equals( o );
+    }
+
+    @Override
+    public double getTheoricAmount() {
+	return account.getTheoricAmount();
     }
 
     @Override
     public int hashCode() {
-	return this.account.hashCode();
+	return account.hashCode();
+    }
+
+    @Override
+    public boolean removeOutgoingTransaction( Transaction transaction ) {
+	return account.removeOutgoingTransaction( transaction );
+    }
+
+    @Override
+    public boolean addOutgoingTransaction( Transaction transaction ) {
+	return account.addOutgoingTransaction( transaction );
+    }
+
+    @Override
+    public boolean removeIncomingTransaction( Transaction transaction ) {
+	return account.removeIncomingTransaction( transaction );
+    }
+
+    @Override
+    public boolean addIncomingTransaction( Transaction transaction ) {
+	return account.addIncomingTransaction( transaction );
+    }
+
+    @Override
+    public void setOffBudget( boolean value ) {
+	account.setOffBudget( value );
     }
 }

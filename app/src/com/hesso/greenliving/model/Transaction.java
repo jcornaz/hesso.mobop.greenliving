@@ -32,9 +32,9 @@ public class Transaction extends Entity {
 
     public Transaction( Account sourceEntry, Account destinationEntry, DateTime date, double amount ) {
 	this();
+	this.setAmount( amount );
 	this.setSourceAccount( sourceEntry );
 	this.setDestinationAccount( destinationEntry );
-	this.setAmount( amount );
 	this.setDate( date );
 	this.budget.addTransaction( this );
     }
@@ -64,12 +64,12 @@ public class Transaction extends Entity {
 	return this.sourceAccount;
     }
 
-    public void setSourceAccount( Account budgetEntry ) {
-	if( this.sourceAccount != budgetEntry ) {
+    public void setSourceAccount( Account account ) {
+	if( this.sourceAccount != account ) {
 	    if( this.sourceAccount != null ) {
 		this.sourceAccount.removeOutgoingTransaction( this );
 	    }
-	    this.sourceAccount = budgetEntry;
+	    this.sourceAccount = account;
 	    if( this.sourceAccount != null ) {
 		this.sourceAccount.addOutgoingTransaction( this );
 	    }
@@ -81,12 +81,12 @@ public class Transaction extends Entity {
 	return this.destinationAccount;
     }
 
-    public void setDestinationAccount( Account budgetEntry ) {
-	if( this.destinationAccount != budgetEntry ) {
+    public void setDestinationAccount( Account account ) {
+	if( this.destinationAccount != account ) {
 	    if( this.destinationAccount != null ) {
 		this.destinationAccount.removeIncomingTransaction( this );
 	    }
-	    this.destinationAccount = budgetEntry;
+	    this.destinationAccount = account;
 	    if( this.destinationAccount != null ) {
 		this.destinationAccount.addIncomingTransaction( this );
 	    }
