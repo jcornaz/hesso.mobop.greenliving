@@ -39,5 +39,5 @@
     <string name="no_amount_typed">Veuillez saisir un montant !</string>
     <string name="transaction_help">Cet onglet vous permet de gérer vos transactions.</string>
     <string name="no_account">Pour commencer, veuillez créer des comptes à partir de menu -> nouveau compte</string>
-    <string name="off_account">Hors budget</string>
+    <string name="off_budget">Hors budget</string>
 </resources>

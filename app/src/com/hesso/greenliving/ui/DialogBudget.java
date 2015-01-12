@@ -41,6 +41,7 @@ public class DialogBudget extends Activity {
 	    dayOfMonth = numberPickerDay.getValue();
 	    budget.setDayOfMonth( dayOfMonth );
 	    budget.setTarget( target );
+	    budget.notifyObservers();
 	    finish();
 	} else {
 	    Toast.makeText( this, "Please type an income", Toast.LENGTH_LONG ).show();

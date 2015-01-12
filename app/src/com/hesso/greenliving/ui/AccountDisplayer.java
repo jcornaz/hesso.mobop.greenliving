@@ -27,7 +27,7 @@ public class AccountDisplayer extends Account {
     }
 
     public static String toString( Context context, Account account ) {
-	return account.isOffBudget() ? context.getString( R.string.off_account ) : account.getName();
+	return account.isOffBudget() ? context.getString( R.string.off_budget ) : account.getName();
     }
 
     private Account account;

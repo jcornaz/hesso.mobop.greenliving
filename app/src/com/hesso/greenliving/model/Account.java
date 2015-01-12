@@ -22,7 +22,7 @@ public class Account extends Entity implements Observer {
 
     public static Account createOffBudget() {
 	Account res = new Account( "offbudget", 0 );
-	res.setOffBudget();
+	res.setOffBudget( true );
 	return res;
     }
 
@@ -59,8 +59,7 @@ public class Account extends Entity implements Observer {
 	this.outgoingTransactions = new HashSet<Transaction>( this.outgoingTransactions );
 	this.incomingTransactions = new HashSet<Transaction>( this.incomingTransactions );
 
-	if( this.isOffBudget )
-	    this.setOffBudget();
+	this.setOffBudget( this.isOffBudget );
     }
 
     public Budget getBudget() {
@@ -207,9 +206,13 @@ public class Account extends Entity implements Observer {
 	}
     }
 
-    void setOffBudget() {
-	this.isOffBudget = true;
-	this.budget.addObserver( this );
+    void setOffBudget( boolean value ) {
+	this.isOffBudget = value;
+	if( this.isOffBudget ) {
+	    this.budget.addObserver( this );
+	} else {
+	    this.budget.deleteObserver( this );
+	}
     }
 
     public boolean isOffBudget() {
