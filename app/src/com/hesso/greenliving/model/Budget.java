@@ -97,6 +97,7 @@ public class Budget extends Entity {
     }
 
     boolean removeAccount( Account account ) {
+
 	boolean res = this.accounts.remove( account );
 
 	if( res ) {
@@ -160,8 +161,8 @@ public class Budget extends Entity {
 
     public Account createAccount( String name, double target ) {
 	Account res = new Account( name, target );
-	this.addAccount( res );
 	res.notifyObservers();
+	this.addAccount( res );
 	this.notifyObservers();
 	return res;
     }

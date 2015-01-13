@@ -36,7 +36,6 @@ public class Transaction extends Entity {
 	this.setSourceAccount( sourceEntry );
 	this.setDestinationAccount( destinationEntry );
 	this.setDate( date );
-	this.budget.addTransaction( this );
     }
 
     @Override

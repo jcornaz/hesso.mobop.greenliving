@@ -162,21 +162,23 @@ public class Account extends Entity implements Observer {
     }
 
     public void fill( double amount ) {
-	new Transaction( null, this, DateTime.now(), amount ).notifyObservers();
-	this.notifyObservers();
-	this.budget.notifyObservers();
+	this.createTransaction( null, this, amount );
     }
 
     public void expense( double amount ) {
-	new Transaction( this, null, DateTime.now(), amount ).notifyObservers();
-	this.notifyObservers();
-	this.budget.notifyObservers();
+	this.createTransaction( this, null, amount );
     }
 
     public void transfert( double amount, Account destination ) {
-	new Transaction( this, destination, DateTime.now(), amount ).notifyObservers();
+	this.createTransaction( this, destination, amount );
+    }
+
+    private void createTransaction( Account account, Account destination, double amount ) {
+	Transaction transaction = new Transaction( this, destination, DateTime.now(), amount );
+	transaction.notifyObservers();
 	this.notifyObservers();
 	destination.notifyObservers();
+	this.budget.addTransaction( transaction );
 	this.budget.notifyObservers();
     }
 
@@ -228,7 +230,6 @@ public class Account extends Entity implements Observer {
 	}
     }
 
-    
     public boolean isOffBudget() {
 	return this.isOffBudget;
     }
