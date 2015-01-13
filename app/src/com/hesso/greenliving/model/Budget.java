@@ -6,7 +6,6 @@ import java.util.HashSet;
 
 import org.joda.time.DateTime;
 
-import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
 import com.hesso.greenliving.exception.NotSupportedOperationException;
@@ -49,8 +48,6 @@ public class Budget extends Entity {
     private Date lastRefill = DateTime.now().toDate();
 
     private Collection<Transaction> transactions = new HashSet<Transaction>();
-    private LongSparseArray<Account> accountsMap = new LongSparseArray<Account>();
-    private LongSparseArray<Transaction> transactionsMap = new LongSparseArray<Transaction>();
 
     private Budget() {
 	this.setDayOfMonth( DEFAULT_DAY_OF_MONTH );
@@ -68,9 +65,6 @@ public class Budget extends Entity {
 
 	this.accounts = new HashSet<Account>( this.accounts );
 	this.accounts.add( this.offBudgetAccount );
-
-	this.map( this.accounts, this.accountsMap );
-	this.map( this.transactions, this.transactionsMap );
     }
 
     public Collection<Account> getAccounts() {
@@ -78,18 +72,35 @@ public class Budget extends Entity {
     }
 
     public Account getAccountById( long id ) {
-	return this.accountsMap.get( id );
+	Account res = null;
+
+	for( Account account : this.accounts ) {
+	    if( account.getId() == id ) {
+		res = account;
+		break;
+	    }
+	}
+
+	return res;
     }
 
     public Transaction getTransactionById( long id ) {
-	return this.transactionsMap.get( id );
+	Transaction res = null;
+
+	for( Transaction transaction : this.transactions ) {
+	    if( transaction.getId() == id ) {
+		res = transaction;
+		break;
+	    }
+	}
+
+	return res;
     }
 
     private boolean addAccount( Account account ) {
 	boolean res = this.accounts.add( account );
 
 	if( res ) {
-	    this.accountsMap.put( account.getId(), account );
 	    this.setChanged();
 	}
 
@@ -100,7 +111,6 @@ public class Budget extends Entity {
 	boolean res = this.accounts.remove( account );
 
 	if( res ) {
-	    this.accountsMap.remove( account.getId() );
 	    this.setChanged();
 	    Log.i( this.getClass().getSimpleName(), "Account " + account.getId() + " removed from budget" );
 	} else {
@@ -140,7 +150,6 @@ public class Budget extends Entity {
 	boolean res = this.transactions.add( transaction );
 
 	if( res ) {
-	    this.transactionsMap.put( transaction.getId(), transaction );
 	    this.setChanged();
 	}
 
@@ -151,7 +160,6 @@ public class Budget extends Entity {
 	boolean res = this.transactions.remove( transaction );
 
 	if( res ) {
-	    this.transactionsMap.remove( transaction.getId() );
 	    this.setChanged();
 	}
 

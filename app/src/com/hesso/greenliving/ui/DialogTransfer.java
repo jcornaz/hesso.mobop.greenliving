@@ -3,6 +3,7 @@ package com.hesso.greenliving.ui;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,6 +29,7 @@ public class DialogTransfer extends Activity {
     private Transaction transaction;
     private DateTime date;
     private List<AccountDisplayer> accounts;
+    private Interval day;
     private static final int REQUESTCODE_DATE_SELECTION = 42;
 
     @Override
@@ -39,6 +41,7 @@ public class DialogTransfer extends Activity {
 	if( isExistingTransfer )
 	    transaction = Budget.getInstance().getTransactionById( intent.getLongExtra( "transaction_id", 0 ) );
 	date = DateTime.now();
+	this.day = new Interval( this.date.withMillisOfDay( 0 ), this.date.withMillisOfDay( 0 ).plusDays( 1 ) );
 	accounts = AccountDisplayer.convert( this, Budget.getInstance().getAccounts() );
 	editTextAmount = (EditText) this.findViewById( R.id.dialog_transfer_edittext_amount );
 	buttonDate = (Button) this.findViewById( R.id.dialog_transfer_button_date );
@@ -81,6 +84,10 @@ public class DialogTransfer extends Activity {
     }
 
     public void onClickOk( View v ) {
+	DateTime dte = DateTime.parse( this.buttonDate.getText().toString(), DialogCreditExpense.DATE_FORMAT );
+	if( !this.day.contains( dte ) ) {
+	    this.date = dte;
+	}
 	if( editTextAmount.getText().length() > 0 ) {
 	    Account accountFrom = (Account) spinnerFromAccount.getSelectedItem();
 	    Account accountTo = (Account) spinnerToAccount.getSelectedItem();
@@ -110,7 +117,7 @@ public class DialogTransfer extends Activity {
 		if( accountFrom != null ) {
 		    if( accountTo != null ) {
 			if( accountFrom != accountTo ) {
-			    accountFrom.transfert( Double.valueOf( editTextAmount.getText().toString() ), accountTo );
+			    accountFrom.transfert( Double.valueOf( editTextAmount.getText().toString() ), accountTo, this.date );
 			    finish();
 			} else {
 			    Toast.makeText( this, R.string.same_account, Toast.LENGTH_LONG ).show();

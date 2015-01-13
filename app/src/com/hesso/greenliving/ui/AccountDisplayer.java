@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.joda.time.DateTime;
+
 import android.content.Context;
 
 import com.hesso.greenliving.R;
@@ -42,7 +44,7 @@ public class AccountDisplayer extends Account {
     public String toString() {
 	return AccountDisplayer.toString( this.context, this.account );
     }
-    
+
     @Override
     public long getId() {
 	return account.getId();
@@ -72,7 +74,7 @@ public class AccountDisplayer extends Account {
     public Budget getBudget() {
 	return account.getBudget();
     }
-    
+
     @Override
     public String getName() {
 	return account.getName();
@@ -139,21 +141,6 @@ public class AccountDisplayer extends Account {
     }
 
     @Override
-    public void fill( double amount ) {
-	account.fill( amount );
-    }
-
-    @Override
-    public void expense( double amount ) {
-	account.expense( amount );
-    }
-
-    @Override
-    public void transfert( double amount, Account destination ) {
-	account.transfert( amount, destination );
-    }
-
-    @Override
     public double getCurrentAmount() {
 	return account.getCurrentAmount();
     }
@@ -216,5 +203,29 @@ public class AccountDisplayer extends Account {
     @Override
     public void setOffBudget( boolean value ) {
 	account.setOffBudget( value );
+    }
+
+    public void fill( double amount ) {
+	account.fill( amount );
+    }
+
+    public void fill( double amount, DateTime date ) {
+	account.fill( amount, date );
+    }
+
+    public void expense( double amount, DateTime date ) {
+	account.expense( amount, date );
+    }
+
+    public void transfert( double amount, Account destination, DateTime date ) {
+	account.transfert( amount, destination, date );
+    }
+
+    public void createTransaction( Account source, Account destination, double amount ) {
+	account.createTransaction( source, destination, amount );
+    }
+
+    public void createTransaction( Account source, Account destination, DateTime date, double amount ) {
+	account.createTransaction( source, destination, date, amount );
     }
 }

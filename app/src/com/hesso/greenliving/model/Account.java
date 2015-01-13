@@ -162,22 +162,37 @@ public class Account extends Entity implements Observer {
     }
 
     public void fill( double amount ) {
-	new Transaction( null, this, DateTime.now(), amount ).notifyObservers();
-	this.notifyObservers();
-	this.budget.notifyObservers();
+	this.fill( amount, DateTime.now() );
     }
 
-    public void expense( double amount ) {
-	new Transaction( this, null, DateTime.now(), amount ).notifyObservers();
-	this.notifyObservers();
-	this.budget.notifyObservers();
+    public void fill( double amount, DateTime date ) {
+	this.createTransaction( null, this, date, amount );
     }
 
-    public void transfert( double amount, Account destination ) {
-	new Transaction( this, destination, DateTime.now(), amount ).notifyObservers();
-	this.notifyObservers();
-	destination.notifyObservers();
+    public void expense( double amount, DateTime date ) {
+	this.createTransaction( this, null, date, amount );
+    }
+
+    public void transfert( double amount, Account destination, DateTime date ) {
+	this.createTransaction( this, destination, date, amount );
+    }
+
+    public void createTransaction( Account source, Account destination, double amount ) {
+	this.createTransaction( source, destination, DateTime.now(), amount );
+    }
+
+    public void createTransaction( Account source, Account destination, DateTime date, double amount ) {
+	Transaction transaction = new Transaction( source, destination, date, amount );
+
+	if( source != null ) {
+	    source.notifyObservers();
+	}
+	if( destination != null ) {
+	    destination.notifyObservers();
+	}
+
 	this.budget.notifyObservers();
+	this.budget.addTransaction( transaction );
     }
 
     public double getCurrentAmount() {
@@ -228,7 +243,6 @@ public class Account extends Entity implements Observer {
 	}
     }
 
-    
     public boolean isOffBudget() {
 	return this.isOffBudget;
     }

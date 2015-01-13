@@ -3,6 +3,9 @@ package com.hesso.greenliving.ui;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +29,8 @@ import com.hesso.greenliving.model.Transaction;
 import com.hesso.greenliving.model.TransctionType;
 
 public class DialogCreditExpense extends Activity implements OnCheckedChangeListener {
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern( "dd/MM/YYYY" );
+
     private EditText editTextAmount;
     private Spinner spinnerAccount;
     private Switch switchExpenseCredit;
@@ -40,6 +45,8 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
     private Account account;
     private Transaction transaction;
     private DateTime date;
+
+    private Interval day;
 
     private static final int REQUESTCODE_DATE_SELECTION = 42;
     private static final boolean EXPENSE = false;
@@ -60,6 +67,7 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 	    transaction = Budget.getInstance().getTransactionById( intent.getLongExtra( "transaction_id", 0 ) );
 
 	date = DateTime.now();
+	this.day = new Interval( this.date.withMillisOfDay( 0 ), this.date.withMillisOfDay( 0 ).plusDays( 1 ) );
 	editTextAmount = (EditText) this.findViewById( R.id.dialog_credit_expense_edittext_amount );
 	spinnerAccount = (Spinner) this.findViewById( R.id.dialog_credit_expense_spinner_account );
 	switchExpenseCredit = (Switch) this.findViewById( R.id.dialog_credit_expense_switch_expense_credit );
@@ -112,18 +120,22 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
     }
 
     private void setDateToButton() {
-	String d = date.toString( "dd/MM/YYYY", this.getResources().getConfiguration().locale );
+	String d = date.toString( DATE_FORMAT );
 	buttonDate.setText( d );
     }
 
     public void onClickOk( View v ) {
-	// TODO : check date
+	DateTime dte = DateTime.parse( this.buttonDate.getText().toString(), DATE_FORMAT );
+	if( !this.day.contains( dte ) )
+	{
+	    this.date = dte;
+	}
 	if( editTextAmount.getText().length() > 0 ) {
 	    if( isLinkedToAccount && account != null ) {
 		if( switchExpenseCredit.isChecked() == EXPENSE ) {
-		    account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
+		    account.expense( Double.valueOf( editTextAmount.getText().toString() ), this.date );
 		} else if( switchExpenseCredit.isChecked() == CREDIT ) {
-		    account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
+		    account.fill( Double.valueOf( editTextAmount.getText().toString() ), this.date );
 		}
 		finish();
 	    } else if( isExistingTransaction && transaction != null ) {
@@ -142,9 +154,9 @@ public class DialogCreditExpense extends Activity implements OnCheckedChangeList
 		account = (Account) spinnerAccount.getSelectedItem();
 		if( account != null ) {
 		    if( switchExpenseCredit.isChecked() == EXPENSE ) {
-			account.expense( Double.valueOf( editTextAmount.getText().toString() ) );
+			account.expense( Double.valueOf( editTextAmount.getText().toString() ), this.date );
 		    } else if( switchExpenseCredit.isChecked() == CREDIT ) {
-			account.fill( Double.valueOf( editTextAmount.getText().toString() ) );
+			account.fill( Double.valueOf( editTextAmount.getText().toString() ), this.date );
 		    }
 		    finish();
 		} else {
